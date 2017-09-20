@@ -1,12 +1,19 @@
 class binarytree(object):
-    def __init__(self, data, level_number, left_child = None, right_child = None):
+    def __init__(self, data, level_number, left_child = None, right_child = None, parent = None):
         self.node_number      = data
         self.level            = level_number
         self.root_node_number = None
         self.left_child       = left_child
         self.right_child      = right_child
+        self.parent_node      = parent
 
     # R:추천수당  S:후원수당  M:매트릭스 보너스
+
+    def Set_Parent_Node(self, node):
+        self.parent_node = node
+
+    def Get_Parent_Node(self, node):
+        return self.parent_node
 
     def Set_R_Money(self, money):
         self.r_money = money

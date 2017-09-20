@@ -61,11 +61,11 @@ def create_account():
 def connect_node_account():
 
     # 자식으로 추가될 계좌 노드를 구한다.
-    child_node = Account_Node_Dic[Last_Node_Key]
+    child_node_key = Last_Node_Key
+    child_node = Account_Node_Dic[child_node_key]
 
     if child_node.node_number == 0:
         return
-
 
     # 전달된 현재 레벨의 상위 단계 레벨안에 들어 있는 노드의 총 갯수를 구한다.
     index = Cur_Level_Value - 1
@@ -74,26 +74,32 @@ def connect_node_account():
     for i in range(0, node_count_in_level):
 
         # 구할 보모 노드의 키를 구한다.
-        node_key = Account_Level_Node_Key_Dic[index][i]
+        parent_node_key = Account_Level_Node_Key_Dic[index][i]
 
         # 부모 노드를 구한다.
-        parent_node = Account_Node_Dic[node_key]
+        parent_node = Account_Node_Dic[parent_node_key]
 
         # 해당 부모의 왼쪽에 노드가 있는지 검사하고 없다면 부모 노드의 left로 셋팅한다.
         if parent_node.left_child == None:
             parent_node.Set_Left_Child_Node(child_node)
-            Account_Node_Dic[node_key] = parent_node
+            Account_Node_Dic[parent_node_key] = parent_node
+
+            child_node.Set_Parent_Node(parent_node)
+            Account_Node_Dic[child_node_key] = child_node
             return
 
         # 해당 부모의 오른쪽에 노드가 있는지 검사하고 없다면 부모 노드의 right로 셋팅한다.
         elif parent_node.right_child == None:
             parent_node.Set_right_Child_Node(child_node)
-            Account_Node_Dic[node_key] = parent_node
+            Account_Node_Dic[parent_node_key] = parent_node
+
+            child_node.Set_Parent_Node(parent_node)
+            Account_Node_Dic[child_node_key] = child_node
             return
 
 
 def main():
-    for i in range(0, 10):
+    for i in range(0, 100):
         # print(i)
         create_account()
         connect_node_account()
