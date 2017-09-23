@@ -31,8 +31,6 @@ SUPPORT_ODD_MONEY = 80
 SUPPORT_EVEN_MONEY = 80
 
 
-
-
 # 계좌 생성 함수
 # 호출시 자동으로 레벨을 계산하며 순차적으로 배치가 된다.
 def create_account():
@@ -125,7 +123,7 @@ def connect_node_account():
 
 
 # 후원수당 계산
-def calc_support_money(base_node_index):
+def calc_support_money():
     # 현재 생성된 마지막 노드의 레벨
     child_node_object = _Account_Node_Dic[_Last_Node_Key]
     current_level = child_node_object.level
@@ -145,6 +143,11 @@ def calc_support_money(base_node_index):
     # 소실적 노드의 갯수가 홀수이면 80
     # 소실적 노드의 갯수가 짝수이면 90
 
+    #calc_left_right_node_count(1)
+
+
+# 해당 인자로 전달된 노드를 기준으로 좌측, 우측의 모든 연결된 모드들의 수를 계산한다.
+def calc_left_right_node_count(base_node_index):
     index = base_node_index
 
     # 검색 기준이 되는 키
@@ -164,6 +167,7 @@ def calc_support_money(base_node_index):
             w_count[lst] += 1
         except:
             w_count[lst] = 1
+    left_count = len(w_count)
     print("%d번 노드 왼쪽 노드의 총 갯수:%d " % (base_node_index, len(w_count)))
 
     w_count = {}
@@ -172,9 +176,14 @@ def calc_support_money(base_node_index):
             w_count[lst] += 1
         except:
             w_count[lst] = 1
+    right_count = len(w_count)
     print("%d번 노드 오른쪽 노드의 총 갯수:%d \n" % (base_node_index, len(w_count)))
 
     preorder_traverse()
+
+    return (left_count, right_count)
+
+
 
 
 def preorder_traverse(base_node_index=-1, tree_object=None, flag=None):
@@ -212,12 +221,12 @@ def main():
     create_account()
     create_account()
     create_account()
-    calc_support_money(0)
+    calc_left_right_node_count(0)
 
     create_account()
 
     create_account()
-    calc_support_money(1)
+    calc_left_right_node_count(1)
 
     CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
     CheckNodeInfo.show_node_information(0, _Account_Node_Dic)
