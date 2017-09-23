@@ -1,7 +1,6 @@
-def show_node_information(node_index, Account_Node_Dic):
-
+def show_node_information(node_index, account_node_dic):
     index_key = node_index
-    node_object = Account_Node_Dic[index_key]
+    node_object = account_node_dic[index_key]
 
     print("%d번 노드의 키 번호: %d \n" % (index_key, node_object.node_number))
     print("%d번 노드의 추천 수당 : %d \n" % (index_key, node_object.get_r_money()))
@@ -24,10 +23,11 @@ def show_node_information(node_index, Account_Node_Dic):
         parent_object = node_object.get_parent_node()
         print("%d번 노드의 부모번호: %d \n" % (index_key, parent_object.node_number))
 
-def show_all_node(Cur_Level_Value, Account_Level_Node_Key_Dic):
-    for index in range(0, Cur_Level_Value + 1):
 
-        if len(Account_Level_Node_Key_Dic[index]) > 0:
+def show_all_node(cur_level_value, account_level_node_key_dic):
+    for index in range(0, cur_level_value + 1):
+
+        if len(account_level_node_key_dic[index]) > 0:
             print("%d 대 계좌 목록" % index)
-            print(Account_Level_Node_Key_Dic[index])
+            print(account_level_node_key_dic[index])
             print("\n")
