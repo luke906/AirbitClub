@@ -124,7 +124,7 @@ def connect_node_account():
 
 # 후원수당 계산
 def calc_support_money():
-    # 현재 생성된 마지막 노드의 레벨
+    # 현재 생성된 마지막 노드를 제외한 모든 모드를 검사한다.
     child_node_object = _Account_Node_Dic[_Last_Node_Key]
     current_level = child_node_object.level
 
@@ -134,10 +134,6 @@ def calc_support_money():
     if _Last_Node_Key < 2:
         return
 
-    # 현재노드 레벨의 마로위 레벨의 마지막 생성 노드 번호
-    count = len(_Account_Level_Node_Key_Dic[current_level - 1])
-    before_level__Last_Node_Key = _Account_Level_Node_Key_Dic[current_level - 1][count - 1]
-    # print("현재 생성된 레벨 바로 상위 레벨의 마지막 노드 번호: %d", before_level__Last_Node_Key)
 
     # 모든 노드를 순회 하면서 대실적, 소실적을 구분한다.
     # 소실적 노드의 갯수가 홀수이면 80
