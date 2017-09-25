@@ -85,7 +85,7 @@ def connect_node_account():
 
     for i in range(0, node_count_in_level):
 
-        # 구할 보모 노드의 키를 구한다.
+        # 구할 부모 노드의 키를 구한다.
         parent_node_key = _Account_Level_Node_Key_Dic[index][i]
 
         # 부모 노드를 구한다.
@@ -104,6 +104,9 @@ def connect_node_account():
 
             # 매트리스 수당 계산
             CalcMoney.calc_matrix_money(child_node, MATRIX_BONUS)
+
+            # 후원수당 계산
+            calc_support_money(child_node)
             return
 
         # 해당 부모의 오른쪽에 노드가 있는지 검사하고 없다면 부모 노드의 right로 셋팅한다.
@@ -119,6 +122,9 @@ def connect_node_account():
 
             # 매트리스 수당 계산
             CalcMoney.calc_matrix_money(child_node, MATRIX_BONUS)
+
+            # 후원수당 계산
+            calc_support_money(child_node)
             return
 
 
