@@ -11,9 +11,10 @@ class BinaryTree(object):
         self.right_child = right_child
         self.right_child_have = False
 
-        self.r_money = 0
-        self.s_money = 0
-        self.m_money = 0
+        self.daily_money = 0
+        self.r_money     = 0
+        self.s_money     = 0
+        self.m_money     = 0
 
     # R:추천수당  S:후원수당  M:매트릭스 보너스
 
@@ -23,6 +24,9 @@ class BinaryTree(object):
     def get_parent_node(self):
         return self.parent_node
 
+    def set_daily_money(self, money):
+        self.daily_money = money
+
     def set_r_money(self, money):
         self.r_money = money
 
@@ -31,6 +35,9 @@ class BinaryTree(object):
 
     def set_m_money(self, money):
         self.m_money = money
+
+    def get_daily_money(self):
+        return self.daily_money
 
     def get_r_money(self):
         return self.r_money

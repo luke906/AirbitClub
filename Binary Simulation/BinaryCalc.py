@@ -92,7 +92,7 @@ def connect_node_account():
         parent_node = _Account_Node_Dic[parent_node_key]
 
         # 해당 부모의 왼쪽에 노드가 있는지 검사하고 없다면 부모 노드의 left로 셋팅한다.
-        if parent_node.left_child_have == False:
+        if not parent_node.left_child_have:
             parent_node.set_left_child_node(child_node)
             _Account_Node_Dic[parent_node_key] = parent_node
 
@@ -107,7 +107,7 @@ def connect_node_account():
             return
 
         # 해당 부모의 오른쪽에 노드가 있는지 검사하고 없다면 부모 노드의 right로 셋팅한다.
-        if parent_node.right_child_have == False:
+        if not parent_node.right_child_have:
             parent_node.set_right_child_node(child_node)
             _Account_Node_Dic[parent_node_key] = parent_node
 
@@ -123,7 +123,7 @@ def connect_node_account():
 
 
 # 후원수당 계산
-def calc_support_money():
+def calc_support_money(child_node):
     # 현재 생성된 마지막 노드를 제외한 모든 모드를 검사한다.
     child_node_object = _Account_Node_Dic[_Last_Node_Key]
     current_level = child_node_object.level
@@ -133,16 +133,16 @@ def calc_support_money():
 
     if _Last_Node_Key < 2:
         return
+        # 모든 노드를 순회 하면서 대실적, 소실적을 구분한다.
+        # 소실적 노드의 갯수가 홀수이면 80
+        # 소실적 노드의 갯수가 짝수이면 90
 
+    # 생성된 child_node 의 부모모
 
-    # 모든 노드를 순회 하면서 대실적, 소실적을 구분한다.
-    # 소실적 노드의 갯수가 홀수이면 80
-    # 소실적 노드의 갯수가 짝수이면 90
-
-    #calc_left_right_node_count(1)
 
 
 # 해당 인자로 전달된 노드를 기준으로 좌측, 우측의 모든 연결된 모드들의 수를 계산한다.
+
 def calc_left_right_node_count(base_node_index):
     index = base_node_index
 
@@ -164,7 +164,7 @@ def calc_left_right_node_count(base_node_index):
         except:
             w_count[lst] = 1
     left_count = len(w_count)
-    print("%d번 노드 왼쪽 노드의 총 갯수:%d " % (base_node_index, len(w_count)))
+    # print("%d번 노드 왼쪽 노드의 총 갯수:%d " % (base_node_index, len(w_count)))
 
     w_count = {}
     for lst in _Right_Side_Node_Count_List:
@@ -173,13 +173,11 @@ def calc_left_right_node_count(base_node_index):
         except:
             w_count[lst] = 1
     right_count = len(w_count)
-    print("%d번 노드 오른쪽 노드의 총 갯수:%d \n" % (base_node_index, len(w_count)))
+    # print("%d번 노드 오른쪽 노드의 총 갯수:%d \n" % (base_node_index, len(w_count)))
 
     preorder_traverse()
 
-    return (left_count, right_count)
-
-
+    return left_count, right_count
 
 
 def preorder_traverse(base_node_index=-1, tree_object=None, flag=None):
@@ -217,16 +215,21 @@ def main():
     create_account()
     create_account()
     create_account()
-    calc_left_right_node_count(0)
-
-    create_account()
-
-    create_account()
-    calc_left_right_node_count(1)
-
+    print("\n")
     CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
-    CheckNodeInfo.show_node_information(0, _Account_Node_Dic)
-    CalcMoney.show_all_money(_Account_Node_Dic, _Last_Node_Key)
+    (left_count, right_count) = calc_left_right_node_count(0)
+    print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
+    print("0번 노드의 오른쪽 노드의 총 갯수: %d" % right_count)
+
+    create_account()
+    create_account()
+    print("\n")
+    CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
+    (left_count, right_count) = calc_left_right_node_count(0)
+    print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
+    print("0번 노드의 오른쪽 노드의 총 갯수: %d" % right_count)
+    # CheckNodeInfo.show_node_information(0, _Account_Node_Dic)
+    # CalcMoney.show_all_money(_Account_Node_Dic, _Last_Node_Key)
 
 
 if __name__ == '__main__':

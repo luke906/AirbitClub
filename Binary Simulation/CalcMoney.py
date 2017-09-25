@@ -21,7 +21,7 @@ def calc_recommand_money(parent_node_object, recommand_money):
 
 
 # 매트리스 수당 계산
-# 매트리스 수당은 해당 계좌 노드가 생성될때 생성된 계좌를 기준으로 바로 상위로 연결된 모든 부모 계좌 노드에세 지급된다.
+# 매트리스 수당은 해당 계좌 노드가 생성될때 생성된 계좌를 기준으로 바로 상위로 연결된 모든 부모 계좌 노드에게 지급된다.
 def calc_matrix_money(child_node_object, matrix_bonus):
     # 인자로 전달받은 노드의 부모를 구한다.
     parent_node = child_node_object.get_parent_node()
