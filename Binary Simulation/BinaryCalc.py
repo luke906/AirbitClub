@@ -28,7 +28,7 @@ SAVING_RATIO = 0.2
 RECOMMAND_MONEY = 200
 MATRIX_BONUS = 10
 SUPPORT_ODD_MONEY = 80
-SUPPORT_EVEN_MONEY = 80
+SUPPORT_EVEN_MONEY = 90
 
 
 # 계좌 생성 함수
@@ -133,16 +133,62 @@ def calc_support_money(child_node):
 
     if _Last_Node_Key < 2:
         return
-        # 모든 노드를 순회 하면서 대실적, 소실적을 구분한다.
-        # 소실적 노드의 갯수가 홀수이면 80
-        # 소실적 노드의 갯수가 짝수이면 90
+    # 0레벨 부터 생성계좌의 상위 레벨까지의 모든 노드를 검사한다.
+    # 1. 해당 검사 노드의 LEFT, RIGHT 중 소실적에 포함되는 리스트를 구한다.
+    #    인자로 전달된 생성되는 계좌(child_node)가 해당 소실적 리스트에 포함이 되어 있다면
+    #    해당 노드의 s_money를 증가 시킨다.
+    #     - 소실적 노드의 갯수가 홀수이면 80. SUPPORT_ODD_MONEY
+    #     - 소실적 노드의 갯수가 짝수이면 90. SUPPORT_EVEN_MONEY
 
-    # 생성된 child_node 의 부모모
+    # 2. 인자로 전달된 생성되는 계좌(child_node)의 부모 노드가 FULL상태 이라면
+    #    해당 부모 노드의 s_money를 80 증가 시킨다.
 
+    # 생성된 계좌의 상위 레벨을 구한다.
+    level = child_node.level
+
+    # 소실적 계좌 리스트
+    small_side_list = []
+
+    # 0레벨 부터 생성계좌의 상위 레벨까지의 모든 노드를 검사한다.
+    for index in range(0, level):
+        # 해당 레벨안에 있는 노드의 갯수를 구한다.
+        for base_node_index in range(0, len(_Account_Level_Node_Key_Dic[index])):
+            # 해당 검사 노드의 LEFT, RIGHT 중 소실적에 포함되는 리스트를 구한다.
+            (left_count, right_count) = calc_left_right_node_count(base_node_index)
+            if left_count < right_count:
+                small_side_list = _Left_Side_Node_Count_List
+            elif left_count > right_count:
+                small_side_list = _Right_Side_Node_Count_List
+
+            preorder_traverse()
+
+            # 인자로 전달된 생성되는 계좌(child_node)가 해당 소실적 리스트에 포함이 되어 있다면
+            # 해당 노드의 s_money를 증가 시킨다.
+            for small_list_node in small_side_list:
+                if child_node.node_number == small_list_node:
+                    # 해당 노드의 s_money를 증가 시킨다.
+                    node_object = _Account_Node_Dic[base_node_index]
+                    temp_s_money = node_object.get_s_money()
+                    if (len(small_side_list)%2) == 0:
+                        temp_s_money += SUPPORT_EVEN_MONEY
+                    else:
+                        temp_s_money += SUPPORT_ODD_MONEY
+                    node_object.set_s_money(temp_s_money)
+                    _Account_Node_Dic[base_node_index] = node_object
+
+    # 2. 인자로 전달된 생성되는 계좌(child_node)의 부모 노드가 FULL상태 이라면
+    #    해당 부모 노드의 s_money를 80 증가 시킨다.
+    parent_object = child_node.get_parent_node()
+    if parent_object.left_child_have == True and parent_object.right_child_have == True:
+        temp_s_money = parent_object.get_s_money()
+        if (len(small_side_list) % 2) == 0:
+            temp_s_money += SUPPORT_EVEN_MONEY
+        else:
+            temp_s_money += SUPPORT_ODD_MONEY
+        parent_object.set_s_money(temp_s_money)
 
 
 # 해당 인자로 전달된 노드를 기준으로 좌측, 우측의 모든 연결된 모드들의 수를 계산한다.
-
 def calc_left_right_node_count(base_node_index):
     index = base_node_index
 
@@ -174,8 +220,6 @@ def calc_left_right_node_count(base_node_index):
             w_count[lst] = 1
     right_count = len(w_count)
     # print("%d번 노드 오른쪽 노드의 총 갯수:%d \n" % (base_node_index, len(w_count)))
-
-    preorder_traverse()
 
     return left_count, right_count
 
