@@ -44,22 +44,26 @@ def calc_matrix_money(child_node_object, matrix_bonus):
 
 
 # 후원수당 계산
-def calc_support_money(child_node, _Last_Node_Key,  _Account_Level_Node_Key_Dic, _Account_Node_Dic, SUPPORT_EVEN_MONEY, SUPPORT_ODD_MONEY):
+def calc_support_money(child_node, _last_node_key,
+                       _account_level_node_key_dic,
+                       _account_node_dic,
+                       support_even_money,
+                       support_odd_money):
     # 현재 생성된 마지막 노드를 제외한 모든 모드를 검사한다.
-    #child_node_object = _Account_Node_Dic[_Last_Node_Key]
+    # child_node_object = _account_node_dic[_last_node_key]
     current_level = child_node.level
 
     if current_level == 0:
         return
 
-    if _Last_Node_Key < 2:
+    if _last_node_key < 2:
         return
     # 0레벨 부터 생성계좌의 상위 레벨까지의 모든 노드를 검사한다.
     # 1. 해당 검사 노드의 LEFT, RIGHT 중 소실적에 포함되는 리스트를 구한다.
     #    인자로 전달된 생성되는 계좌(child_node)가 해당 소실적 리스트에 포함이 되어 있다면
     #    해당 노드의 s_money를 증가 시킨다.
-    #     - 소실적 노드의 갯수가 홀수이면 80. SUPPORT_ODD_MONEY
-    #     - 소실적 노드의 갯수가 짝수이면 90. SUPPORT_EVEN_MONEY
+    #     - 소실적 노드의 갯수가 홀수이면 80. support_odd_money
+    #     - 소실적 노드의 갯수가 짝수이면 90. support_even_money
 
     # 2. 인자로 전달된 생성되는 계좌(child_node)의 부모 노드가 FULL상태 이라면
     #    해당 부모 노드의 s_money를 80 증가 시킨다.
@@ -73,9 +77,9 @@ def calc_support_money(child_node, _Last_Node_Key,  _Account_Level_Node_Key_Dic,
     # 0레벨 부터 생성계좌의 상위 레벨까지의 모든 노드를 검사한다.
     for index in range(0, level):
         # 해당 레벨안에 있는 노드의 갯수를 구한다.
-        for base_node_index in _Account_Level_Node_Key_Dic[index]:
+        for base_node_index in _account_level_node_key_dic[index]:
             # 해당 검사 노드의 LEFT, RIGHT 중 소실적에 포함되는 리스트를 구한다.
-            (left_count, right_count) = calc_left_right_node_count(base_node_index, _Account_Node_Dic)
+            (left_count, right_count) = calc_left_right_node_count(base_node_index, _account_node_dic)
             if left_count < right_count:
                 small_side_list = _Left_Side_Node_Count_List
             elif left_count > right_count:
@@ -88,14 +92,14 @@ def calc_support_money(child_node, _Last_Node_Key,  _Account_Level_Node_Key_Dic,
             for small_list_node in small_side_list:
                 if child_node.node_number == small_list_node:
                     # 해당 노드의 s_money를 증가 시킨다.
-                    node_object = _Account_Node_Dic[base_node_index]
+                    node_object = _account_node_dic[base_node_index]
                     temp_s_money = node_object.get_s_money()
-                    if (len(small_side_list)%2) == 0:
-                        temp_s_money += SUPPORT_EVEN_MONEY
+                    if (len(small_side_list) % 2) == 0:
+                        temp_s_money += support_even_money
                     else:
-                        temp_s_money += SUPPORT_ODD_MONEY
+                        temp_s_money += support_odd_money
                     node_object.set_s_money(temp_s_money)
-                    _Account_Node_Dic[base_node_index] = node_object
+                    _account_node_dic[base_node_index] = node_object
 
     # 2. 인자로 전달된 생성되는 계좌(child_node)의 부모 노드가 FULL상태 이라면
     #    해당 부모 노드의 s_money를 80 증가 시킨다.
@@ -103,18 +107,18 @@ def calc_support_money(child_node, _Last_Node_Key,  _Account_Level_Node_Key_Dic,
     if parent_object.left_child_have == True and parent_object.right_child_have == True:
         temp_s_money = parent_object.get_s_money()
         if (len(small_side_list) % 2) == 0:
-            temp_s_money += SUPPORT_EVEN_MONEY
+            temp_s_money += support_even_money
         else:
-            temp_s_money += SUPPORT_ODD_MONEY
+            temp_s_money += support_odd_money
         parent_object.set_s_money(temp_s_money)
 
 
 # 해당 인자로 전달된 노드를 기준으로 좌측, 우측의 모든 연결된 모드들의 수를 계산한다.
-def calc_left_right_node_count(base_node_index, _Account_Node_Dic):
+def calc_left_right_node_count(base_node_index, _account_node_dic):
     index = base_node_index
 
     # 검색 기준이 되는 키
-    node_object = _Account_Node_Dic[index]
+    node_object = _account_node_dic[index]
 
     # 검색 기준이 되는 키의 좌측 모든 노드 갯수를 구한다.
     left_node_object = node_object.get_left_child_node()
