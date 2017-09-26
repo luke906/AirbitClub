@@ -150,7 +150,7 @@ def calc_support_money(child_node):
     #    해당 부모 노드의 s_money를 80 증가 시킨다.
 
     # 생성된 계좌의 상위 레벨을 구한다.
-    level = child_node.level
+    level = child_node.level - 1
 
     # 소실적 계좌 리스트
     small_side_list = []
@@ -265,20 +265,14 @@ def main():
     create_account()
     create_account()
     create_account()
+    create_account()
     print("\n")
-    CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
-    (left_count, right_count) = calc_left_right_node_count(0)
-    print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
-    print("0번 노드의 오른쪽 노드의 총 갯수: %d" % right_count)
+    #CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
+    #(left_count, right_count) = calc_left_right_node_count(0)
+    #print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
+    #print("0번 노드의 오른쪽 노드의 총 갯수: %d" % right_count)
 
-    create_account()
-    create_account()
-    print("\n")
-    CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
-    (left_count, right_count) = calc_left_right_node_count(0)
-    print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
-    print("0번 노드의 오른쪽 노드의 총 갯수: %d" % right_count)
-    # CheckNodeInfo.show_node_information(0, _Account_Node_Dic)
+        # CheckNodeInfo.show_node_information(0, _Account_Node_Dic)
     # CalcMoney.show_all_money(_Account_Node_Dic, _Last_Node_Key)
 
 
