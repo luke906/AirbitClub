@@ -73,6 +73,7 @@ def connect_node_account():
     child_node_key = _Last_Node_Key
     child_node = _Account_Node_Dic[child_node_key]
 
+    #최초 생성되는 계좌의 번호가 0 첫번째 계좌라면 노드 연결 과정을 생략한다.
     if child_node.node_number == 0:
         return
 
@@ -127,7 +128,7 @@ def connect_node_account():
 
 def main():
 
-    node_count = 10
+    node_count = 11
     for i in range(0, node_count):
         create_account()
 
