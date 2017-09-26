@@ -31,3 +31,23 @@ def show_all_node(cur_level_value, account_level_node_key_dic):
             print("%d 대 계좌 목록" % index)
             print(account_level_node_key_dic[index])
             print("\n")
+
+
+def show_node_recommand_money(node_index, account_node_dic):
+    index_key = node_index
+    node_object = account_node_dic[index_key]
+
+    print("%d번 노드의 추천 수당: %d" % (node_index, node_object.get_r_money()))
+
+def show_node_matrix_money(node_index, account_node_dic):
+    index_key = node_index
+    node_object = account_node_dic[index_key]
+
+    print("%d번 노드의 매트릭스 수당: %d" % (node_index, node_object.get_m_money()))
+
+
+def show_node_support_money(node_index, account_node_dic):
+    index_key = node_index
+    node_object = account_node_dic[index_key]
+
+    print("%d번 노드의 서포트 수당: %d" % (node_index, node_object.get_s_money()))

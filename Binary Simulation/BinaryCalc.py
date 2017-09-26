@@ -125,27 +125,25 @@ def connect_node_account():
             return
 
 
-
-
-
 def main():
-    """
-    for i in range(0, 15):
-        # print(i)
-        create_account()
-        connect_node_account()
-    """
-    create_account()
-    create_account()
-    create_account()
-    create_account()
-    print("\n")
-    #CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
-    #(left_count, right_count) = calc_left_right_node_count(0)
-    #print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
-    #print("0번 노드의 오른쪽 노드의 총 갯수: %d" % right_count)
 
-        # CheckNodeInfo.show_node_information(0, _Account_Node_Dic)
+    node_count = 10
+    for i in range(0, node_count):
+        create_account()
+
+
+    for i in range(0, node_count):
+        CheckNodeInfo.show_node_recommand_money(i, _Account_Node_Dic)
+        CheckNodeInfo.show_node_matrix_money(i, _Account_Node_Dic)
+        CheckNodeInfo.show_node_support_money(i, _Account_Node_Dic)
+        print("\n")
+
+    # CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
+    # (left_count, right_count) = calc_left_right_node_count(0)
+    # print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
+    # print("0번 노드의 오른쪽 노드의 총 갯수: %d" % right_count)
+
+    # CheckNodeInfo.show_node_information(0, _Account_Node_Dic)
     # CalcMoney.show_all_money(_Account_Node_Dic, _Last_Node_Key)
 
 
