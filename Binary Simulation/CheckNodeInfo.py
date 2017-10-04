@@ -50,4 +50,4 @@ def show_node_support_money(node_index, account_node_dic):
     index_key = node_index
     node_object = account_node_dic[index_key]
 
-    print("%d번 노드의 서포트 수당: %d" % (node_index, node_object.get_s_money()))
+    print("%d번 노드의 후원 수당: %d" % (node_index, node_object.get_s_money()))

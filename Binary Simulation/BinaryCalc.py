@@ -31,7 +31,7 @@ SUPPORT_EVEN_MONEY = 90
 # 계좌 생성 함수
 # 호출시 자동으로 레벨을 계산하며 순차적으로 배치가 된다.
 # create_flag   0:초기 계좌 전체 셋팅,  1: 한개씩 순차적으로 생성
-def create_account(create_flag):
+def create_account(create_flag=0):
     global _Level_Complete_Flag
     global _Last_Node_Key
     global _Cur_Level_Value
@@ -106,7 +106,12 @@ def connect_node_account(create_flag):
 
             if create_flag == 1:
                 # 후원수당 계산
-                CalcMoney.calc_support_money(child_node, _Last_Node_Key, _Account_Level_Node_Key_Dic, _Account_Node_Dic, SUPPORT_EVEN_MONEY, SUPPORT_ODD_MONEY)
+                CalcMoney.calc_support_money(child_node,
+                                                                    _Last_Node_Key,
+                                                                    _Account_Level_Node_Key_Dic,
+                                                                    _Account_Node_Dic,
+                                                                    SUPPORT_EVEN_MONEY,
+                                                                    SUPPORT_ODD_MONEY)
             return
 
         # 해당 부모의 오른쪽에 노드가 있는지 검사하고 없다면 부모 노드의 right로 셋팅한다.
@@ -125,19 +130,36 @@ def connect_node_account(create_flag):
 
             if create_flag == 1:
                 # 후원수당 계산
-                CalcMoney.calc_support_money(child_node, _Last_Node_Key, _Account_Level_Node_Key_Dic, _Account_Node_Dic, SUPPORT_EVEN_MONEY, SUPPORT_ODD_MONEY)
+                CalcMoney.calc_support_money(child_node,
+                                                                     _Last_Node_Key,
+                                                                    _Account_Level_Node_Key_Dic,
+                                                                     _Account_Node_Dic,
+                                                                    SUPPORT_EVEN_MONEY,
+                                                                    SUPPORT_ODD_MONEY)
             return
 
 
 def main():
 
-    # 초기 계좌 전체 셋팅
-    node_count = 10
+    # 초기 계좌 전체 셋팅(한번에 일괄 셋팅시 create_account()에 인자가 없음.)
+    node_count = 10000
     for i in range(0, node_count):
-        create_account(0)
-    # 전체 계좌 셋팅이 끝난 후 후원수당을 계산한다.
+        create_account()
+
+    #생성된 계좌를 레벨별로 표시한다.
+    object = _Account_Node_Dic[_Last_Node_Key]
+    level = object.level + 1
+    for index in range(0, level):
+        CheckNodeInfo.show_all_node(index, _Account_Level_Node_Key_Dic)
 
 
+    # 전체 계좌 셋팅이 끝난 후 후원수당을 마지막으로 계산한다.
+    CalcMoney.calc_support_money_setting(_Last_Node_Key,
+                                                                     _Account_Level_Node_Key_Dic,
+                                                                     _Account_Node_Dic)
+
+    print("\n")
+    print("\n")
     for i in range(0, node_count):
         CheckNodeInfo.show_node_recommand_money(i, _Account_Node_Dic)
         CheckNodeInfo.show_node_matrix_money(i, _Account_Node_Dic)
@@ -145,10 +167,7 @@ def main():
         print("\n")
 
 
-    object = _Account_Node_Dic[_Last_Node_Key]
-    level = object.level + 1
-    for index in range(0, level):
-        CheckNodeInfo.show_all_node(index, _Account_Level_Node_Key_Dic)
+
     # CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
     # (left_count, right_count) = calc_left_right_node_count(0)
     # print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
