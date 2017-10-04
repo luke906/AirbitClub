@@ -123,7 +123,8 @@ def calc_support_money(child_node, _last_node_key,
 # 계좌를 한꺼번에 셋팅하고 후원수당을 계산하는 함수.
 # 한번에 한계씩 계좌를 셋팅하는것이 아니라 한번에 원하는 수량만큼 계좌를 셋팅하는 경우의 함수
 # 계산 방식은
-def calc_support_money_setting(_last_node_key,
+def calc_support_money_setting(create_index,
+                                                    _last_node_key,
                                                     _account_level_node_key_dic,
                                                     _account_node_dic):
 
@@ -151,7 +152,7 @@ def calc_support_money_setting(_last_node_key,
         for base_node_index in _account_level_node_key_dic[index]:
             #print("레벨 %d 안의  %d 노드 검사" % (index, base_node_index))
             # 해당 노드의 LEFT, RIGHT 중 소실적에 포함되는 리스트와 갯수를 구한다.
-            (left_count, right_count) = calc_left_right_node_count(base_node_index, _account_node_dic)
+            (left_count, right_count) = calc_left_right_node_count(create_index, base_node_index, _account_node_dic)
             if left_count < right_count:
                 small_side_list = _Left_Side_Node_Count_List
                 #print("레벨 %d 안의  소실적 노드 리스트" % index)
@@ -165,7 +166,7 @@ def calc_support_money_setting(_last_node_key,
                 #print("레벨 %d 안의  소실적 노드 리스트" % index)
                 #print(small_side_list)
 
-            preorder_traverse()
+            preorder_traverse(create_index)
 
             small_side_list_count = len(small_side_list)
 
@@ -187,18 +188,18 @@ def calc_support_money_setting(_last_node_key,
 
 
 # 해당 인자로 전달된 노드를 기준으로 좌측, 우측의 모든 연결된 모드들의 수를 계산한다.
-def calc_left_right_node_count(base_node_index, _account_node_dic):
+def calc_left_right_node_count(create_index, base_node_index, _account_node_dic):
 
     # 검색 기준이 되는 키
     node_object = _account_node_dic[base_node_index]
 
     # 검색 기준이 되는 키의 좌측 모든 노드 갯수를 구한다.
     left_node_object = node_object.get_left_child_node()
-    preorder_traverse(base_node_index, left_node_object, "left")
+    preorder_traverse(create_index, base_node_index, left_node_object, "left")
 
     # 검색 기준이 되는 키의 우측 모든 노드 갯수를 구한다.
     right_node_object = node_object.get_right_child_node()
-    preorder_traverse(base_node_index, right_node_object, "right")
+    preorder_traverse(create_index, base_node_index, right_node_object, "right")
 
     w_count = {}
     for lst in _Left_Side_Node_Count_List:
@@ -221,7 +222,7 @@ def calc_left_right_node_count(base_node_index, _account_node_dic):
     return left_count, right_count
 
 
-def preorder_traverse(base_node_index=-1, tree_object=None, flag=None):
+def preorder_traverse(create_index, base_node_index=-1, tree_object=None, flag=None):
     global _Left_Side_Node_Count_List
     global _Right_Side_Node_Count_List
 
@@ -236,11 +237,13 @@ def preorder_traverse(base_node_index=-1, tree_object=None, flag=None):
 
     if flag is "left":
         # print("%d번 노드의 LEFT 하위 노드: %d" % (base_node_index, tree_object.node_number))
-        _Left_Side_Node_Count_List.append(tree_object.node_number)
+        if tree_object.create_index == create_index:
+            _Left_Side_Node_Count_List.append(tree_object.node_number)
 
     elif flag is "right":
         # print("%d번 노드의 RIGHT 하위 노드: %d" % (base_node_index, tree_object.node_number))
-        _Right_Side_Node_Count_List.append(tree_object.node_number)
+        if tree_object.create_index == create_index:
+            _Right_Side_Node_Count_List.append(tree_object.node_number)
 
-    preorder_traverse(base_node_index, tree_object.get_left_child_node(), flag)
-    preorder_traverse(base_node_index, tree_object.get_right_child_node(), flag)
+    preorder_traverse(create_index, base_node_index, tree_object.get_left_child_node(), flag)
+    preorder_traverse(create_index, base_node_index, tree_object.get_right_child_node(), flag)

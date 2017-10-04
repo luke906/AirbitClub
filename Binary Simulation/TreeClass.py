@@ -1,6 +1,13 @@
 class BinaryTree(object):
-    def __init__(self, node_number, node_level_number, parent_node_number=None, parent=None, left_child=None, right_child=None):
+    def __init__(self, node_number,
+                        node_create_index,
+                        node_level_number,
+                        parent_node_number=None,
+                        parent=None,
+                        left_child=None,
+                        right_child=None):
         self.node_number = node_number
+        self.create_index = node_create_index
         self.level = node_level_number
         self.parent_node = parent
         self.parent_node_number = parent_node_number

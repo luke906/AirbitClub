@@ -31,7 +31,8 @@ SUPPORT_EVEN_MONEY = 90
 # 계좌 생성 함수
 # 호출시 자동으로 레벨을 계산하며 순차적으로 배치가 된다.
 # create_flag   0:초기 계좌 전체 셋팅,  1: 한개씩 순차적으로 생성
-def create_account(create_flag=0):
+# create_index  생성되는 계좌가 어느 시점에 생성되는지 판별 그룹을 구분하기 위해서 (후원수당 계산시)
+def create_account(create_flag=0, create_index=0):
     global _Level_Complete_Flag
     global _Last_Node_Key
     global _Cur_Level_Value
@@ -47,7 +48,7 @@ def create_account(create_flag=0):
     _Level_Node_Count += 1
 
     # 신규 계좌 생성
-    new_node_account = BinaryTree(_Last_Node_Key, _Cur_Level_Value)
+    new_node_account = BinaryTree(_Last_Node_Key, create_index, _Cur_Level_Value)
 
     # 생성된 계좌 저장
     _Account_Node_Dic[_Last_Node_Key] = new_node_account
@@ -142,9 +143,9 @@ def connect_node_account(create_flag):
 def main():
 
     # 초기 계좌 전체 셋팅(한번에 일괄 셋팅시 create_account()에 인자가 없음.)
-    node_count = 10000
+    node_count = 100
     for i in range(0, node_count):
-        create_account()
+        create_account(0, 0)
 
     #생성된 계좌를 레벨별로 표시한다.
     object = _Account_Node_Dic[_Last_Node_Key]
@@ -154,7 +155,8 @@ def main():
 
 
     # 전체 계좌 셋팅이 끝난 후 후원수당을 마지막으로 계산한다.
-    CalcMoney.calc_support_money_setting(_Last_Node_Key,
+    CalcMoney.calc_support_money_setting(0,
+                                                                     _Last_Node_Key,
                                                                      _Account_Level_Node_Key_Dic,
                                                                      _Account_Node_Dic)
 
