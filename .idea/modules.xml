@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AirBitClub_Project.iml" filepath="$PROJECT_DIR$/.idea/AirBitClub_Project.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Gmail_API_Test/.idea/Gmail_API_Test.iml" filepath="$PROJECT_DIR$/../Gmail_API_Test/.idea/Gmail_API_Test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Gmail_Test/.idea/Gmail.iml" filepath="$PROJECT_DIR$/../Gmail_Test/.idea/Gmail.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Telegram/.idea/Telegram.iml" filepath="$PROJECT_DIR$/../Telegram/.idea/Telegram.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Uni-Edu/.idea/Uni-Edu.iml" filepath="$PROJECT_DIR$/../Uni-Edu/.idea/Uni-Edu.iml" />
     </modules>
   </component>
 </project>

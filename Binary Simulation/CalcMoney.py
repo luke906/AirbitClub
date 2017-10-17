@@ -124,9 +124,9 @@ def calc_support_money(child_node, _last_node_key,
 # 한번에 한계씩 계좌를 셋팅하는것이 아니라 한번에 원하는 수량만큼 계좌를 셋팅하는 경우의 함수
 # 계산 방식은
 def calc_support_money_setting(create_index,
-                                                    _last_node_key,
-                                                    _account_level_node_key_dic,
-                                                    _account_node_dic):
+                               _last_node_key,
+                               _account_level_node_key_dic,
+                               _account_node_dic):
 
     # 0레벨 부터 생성계좌의 상위 레벨까지의 모든 노드를 검사한다.
     # 1. 해당 검사 노드의 LEFT, RIGHT 중 소실적에 포함되는 리스트를 구한다.
