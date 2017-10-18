@@ -6,6 +6,7 @@ class BinaryTree(object):
                  parent=None,
                  left_child=None,
                  right_child=None):
+
         self.node_number = node_number
         self.level = node_level_number
         self.parent_node = parent

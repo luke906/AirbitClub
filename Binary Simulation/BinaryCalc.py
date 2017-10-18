@@ -125,7 +125,7 @@ def connect_node_account():
 def main():
 
     # 초기 계좌 전체 셋팅(한번에 일괄 셋팅시 create_account()에 인자가 없음.)
-    node_count = 5
+    node_count = 3
     for i in range(0, node_count):
         create_account()
 
@@ -135,9 +135,8 @@ def main():
     CheckNodeInfo.show_all_node(level, _Account_Level_Node_Key_Dic)
 
     # 전체 계좌 셋팅이 끝난 후 후원수당을 마지막으로 계산한다.
-    CalcMoney.calc_support_money_setting(_Last_Node_Key,
-                                         _Account_Level_Node_Key_Dic,
-                                         _Account_Node_Dic)
+    CalcMoney.support_money_setting(_Last_Node_Key,
+                                    _Account_Node_Dic)
 
     print("\n")
     print("\n")
