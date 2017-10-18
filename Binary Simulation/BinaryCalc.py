@@ -125,7 +125,7 @@ def connect_node_account():
 def main():
 
     # 초기 계좌 전체 셋팅(한번에 일괄 셋팅시 create_account()에 인자가 없음.)
-    node_count = 3
+    node_count = 6
     for i in range(0, node_count):
         create_account()
 
