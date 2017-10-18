@@ -1,13 +1,12 @@
 class BinaryTree(object):
-    def __init__(self, node_number,
-                        node_create_index,
-                        node_level_number,
-                        parent_node_number=None,
-                        parent=None,
-                        left_child=None,
-                        right_child=None):
+    def __init__(self,
+                 node_number,
+                 node_level_number,
+                 parent_node_number=None,
+                 parent=None,
+                 left_child=None,
+                 right_child=None):
         self.node_number = node_number
-        self.create_index = node_create_index
         self.level = node_level_number
         self.parent_node = parent
         self.parent_node_number = parent_node_number
@@ -18,10 +17,15 @@ class BinaryTree(object):
         self.right_child = right_child
         self.right_child_have = False
 
-        self.daily_money = 0
-        self.r_money     = 0
-        self.s_money     = 0
-        self.m_money     = 0
+        self.saving_money = 0  # 추천 후원 매트릭스 수당 발생시 20%가 차감되어 SAVING에 적립
+        self.daily_money  = 0  # 데일이 보너스
+        self.r_money      = 0  # 추천 수당
+        self.s_money      = 0  # 후원 수당
+        self.m_money      = 0  # 매트릭스 수당
+
+        # 후원수당 계산 적용 여부
+        # 후원수당 계산시 한번 적용 되었던 노드는 다음번 계산시 적용을 시키지 않는다.
+        self.support_calc_used = False
 
     # R:추천수당  S:후원수당  M:매트릭스 보너스
 
@@ -34,13 +38,13 @@ class BinaryTree(object):
     def set_daily_money(self, money):
         self.daily_money = money
 
-    def set_r_money(self, money):
+    def set_recommand_money(self, money):
         self.r_money = money
 
-    def set_s_money(self, money):
+    def set_support_money(self, money):
         self.s_money = money
 
-    def set_m_money(self, money):
+    def set_matrix_money(self, money):
         self.m_money = money
 
     def get_daily_money(self):

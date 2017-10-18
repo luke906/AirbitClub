@@ -25,8 +25,7 @@ def show_node_information(node_index, account_node_dic):
 
 
 def show_all_node(cur_level_value, account_level_node_key_dic):
-    for index in range(0, cur_level_value + 1):
-
+    for index in range(0, cur_level_value ):
         if len(account_level_node_key_dic[index]) > 0:
             print("%d 대 계좌 목록" % index)
             print(account_level_node_key_dic[index])
