@@ -30,7 +30,7 @@ SUPPORT_EVEN_MONEY = 90
 
 # 계좌 생성 함수
 # 호출시 자동으로 레벨을 계산하며 순차적으로 배치가 된다.
-def create_account(create_flag=0, create_index=0):
+def create_account():
     global _Level_Complete_Flag
     global _Last_Node_Key
     global _Cur_Level_Value
@@ -125,7 +125,7 @@ def connect_node_account():
 def main():
 
     # 초기 계좌 전체 셋팅
-    node_count = 3
+    node_count = 10
     for i in range(0, node_count):
         create_account()
 
@@ -151,7 +151,7 @@ def main():
 
     """"""
     # 초기 계좌 전체 셋팅
-    node_count = 2
+    node_count = 10
     for i in range(0, node_count):
         create_account()
 
