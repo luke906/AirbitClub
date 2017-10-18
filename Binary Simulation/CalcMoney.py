@@ -19,9 +19,7 @@ def show_all_money(account_node_dic, last_node_key):
 # 추천수당 계산
 # 추천수당은 바로 아래 본인 직계 노드가 생성될때만 받는다.
 def calc_recommand_money(parent_node_object, recommand_money):
-    cur_r_money = parent_node_object.get_r_money()
-    cur_r_money += recommand_money
-    parent_node_object.set_recommand_money(cur_r_money)
+    parent_node_object.set_recommand_money(recommand_money)
 
 
 # 매트리스 수당 계산
@@ -31,9 +29,7 @@ def calc_matrix_money(child_node_object, matrix_bonus):
     parent_node = child_node_object.get_parent_node()
 
     # 해당 부모의 매트릭스 수당을 더한다.
-    cur_m_money = parent_node.get_m_money()
-    cur_m_money += matrix_bonus
-    parent_node.set_matrix_money(cur_m_money)
+    parent_node.set_matrix_money(matrix_bonus)
 
     # 부모 노드의 번호가 0이라면 더이상 계산하지 않는다.
     if parent_node.node_number is 0:
@@ -177,10 +173,8 @@ def calc_support_money_setting(_last_node_key,
                 support_money = ((quotient * 2) * 90) + (remainder * 80)
 
             # 해당 노드의 s_money 를 증가 시킨다.
-            temp_s_money = _account_node_dic[base_node_index].get_s_money()
-            temp_s_money += support_money
             #print("%d번 계좌에 셋팅될  후원 수당은 : %d" % (base_node_index, temp_s_money))
-            _account_node_dic[base_node_index].set_support_money(temp_s_money)
+            _account_node_dic[base_node_index].set_support_money(support_money)
             small_side_list = []
 
 

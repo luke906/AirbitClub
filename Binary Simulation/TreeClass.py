@@ -39,13 +39,37 @@ class BinaryTree(object):
         self.daily_money = money
 
     def set_recommand_money(self, money):
-        self.r_money = money
+
+        if money is not 0:
+            # 20퍼센트 감소된 금액을 셋팅
+            result = money - (money * 0.2)
+            self.r_money += result
+
+            # 20프로를 SAVING에 적립
+            self.saving_money += (money * 0.2)
 
     def set_support_money(self, money):
-        self.s_money = money
+
+        if money is not 0:
+            # 20퍼센트 감소된 금액을 셋팅
+            result = money - (money * 0.2)
+            self.s_money += result
+
+            # 20프로를 SAVING에 적립
+            self.saving_money += (money * 0.2)
 
     def set_matrix_money(self, money):
-        self.m_money = money
+
+        if money is not 0:
+            # 20퍼센트 감소된 금액을 셋팅
+            result = money - (money * 0.2)
+            self.m_money += result
+
+            # 20프로를 SAVING에 적립
+            self.saving_money += (money * 0.2)
+
+    def get_saving_money(self):
+        return self.saving_money
 
     def get_daily_money(self):
         return self.daily_money
