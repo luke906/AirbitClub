@@ -40,7 +40,7 @@ def calc_matrix_money(child_node_object, matrix_bonus):
 
     calc_matrix_money(parent_node, matrix_bonus)
 
-
+"""
 # 후원수당 계산
 # child_node : 생성된 계좌
 # 계좌를 한개씩 셋팅할때 후원수당 계산하는 함수
@@ -119,7 +119,7 @@ def calc_support_money(child_node, _last_node_key,
         parent_object.set_s_money(temp_s_money)
 
 
-
+"""
 
 
 """"""
@@ -149,8 +149,8 @@ def support_money_setting(_last_node_key,
 
     # 0레벨 부터 생성계좌의 상위 레벨까지의 각각의 레벨의 모든 노드를 검사한다.
     # ( 단 자식 노드가 하나도 없을 경우 검사를 제외 한다 )
-    for index in range(0, _last_node_key):
-        node_object = _account_node_dic[index]
+    for index in range(0, _last_node_key+1):
+        # node_object = _account_node_dic[index]
 
         # 해당 노드의 LEFT, RIGHT 갯수 및 Left 신규노드 Right 신규노드 갯수를 구한다.
         (left_count, left_new_count, right_count, right_new_count) = calc_left_right_node_count(index,
@@ -168,7 +168,7 @@ def support_money_setting(_last_node_key,
                 small_side_list = _Right_Side_Node_Support_Calc_False_List
 
         # CASE 3
-        if (left_count > 1 and right_count > 1) and (left_count == right_count):
+        if (left_count > 1 or right_count > 1) and (left_count == right_count):
             if _Left_Side_Node_Support_Calc_False_List > _Right_Side_Node_Support_Calc_False_List:
                 small_side_list = _Left_Side_Node_Support_Calc_False_List
             elif _Left_Side_Node_Support_Calc_False_List < _Right_Side_Node_Support_Calc_False_List:
@@ -190,6 +190,7 @@ def support_money_setting(_last_node_key,
         # 해당 노드의 s_money 를 증가 시킨다.
         # print("%d번 계좌에 셋팅될  후원 수당은 : %d" % (base_node_index, temp_s_money))
         _account_node_dic[index].set_support_money(support_money)
+        _account_node_dic[index].support_calc_used = True
         small_side_list = []
 
 
@@ -271,14 +272,13 @@ def preorder_traverse(base_node_index=-1, tree_object=None, flag=None):
         _Left_Side_Node_Count_List.append(tree_object.node_number)
         if tree_object.support_calc_used == False:
             _Left_Side_Node_Support_Calc_False_List.append(tree_object.node_number)
-            tree_object.support_calc_used = True
+
 
     elif flag is "right":
         # print("%d번 노드의 RIGHT 하위 노드: %d" % (base_node_index, tree_object.node_number))
         _Right_Side_Node_Count_List.append(tree_object.node_number)
         if tree_object.support_calc_used == False:
             _Right_Side_Node_Support_Calc_False_List.append(tree_object.node_number)
-            tree_object.support_calc_used = True
 
     preorder_traverse(base_node_index, tree_object.get_left_child_node(), flag)
     preorder_traverse(base_node_index, tree_object.get_right_child_node(), flag)

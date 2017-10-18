@@ -140,7 +140,7 @@ def main():
 
     print("\n")
     print("\n")
-    for i in range(0, node_count):
+    for i in range(0, _Last_Node_Key+1):
         CheckNodeInfo.show_node_recommand_money(i, _Account_Node_Dic)
         CheckNodeInfo.show_node_matrix_money(i, _Account_Node_Dic)
         CheckNodeInfo.show_node_support_money(i, _Account_Node_Dic)
@@ -166,7 +166,7 @@ def main():
 
     print("\n")
     print("\n")
-    for i in range(1, 2):
+    for i in range(0, _Last_Node_Key+1):
         CheckNodeInfo.show_node_recommand_money(i, _Account_Node_Dic)
         CheckNodeInfo.show_node_matrix_money(i, _Account_Node_Dic)
         CheckNodeInfo.show_node_support_money(i, _Account_Node_Dic)
