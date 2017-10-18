@@ -124,8 +124,8 @@ def connect_node_account():
 
 def main():
 
-    # 초기 계좌 전체 셋팅(한번에 일괄 셋팅시 create_account()에 인자가 없음.)
-    node_count = 6
+    # 초기 계좌 전체 셋팅
+    node_count = 3
     for i in range(0, node_count):
         create_account()
 
@@ -147,6 +147,31 @@ def main():
         CheckNodeInfo.show_node_saving_money(i, _Account_Node_Dic)
         print("\n")
 
+
+
+    """"""
+    # 초기 계좌 전체 셋팅
+    node_count = 2
+    for i in range(0, node_count):
+        create_account()
+
+    # 생성된 계좌를 레벨별로 표시한다.
+    object = _Account_Node_Dic[_Last_Node_Key]
+    level = object.level + 1
+    CheckNodeInfo.show_all_node(level, _Account_Level_Node_Key_Dic)
+
+    # 전체 계좌 셋팅이 끝난 후 후원수당을 마지막으로 계산한다.
+    CalcMoney.support_money_setting(_Last_Node_Key,
+                                    _Account_Node_Dic)
+
+    print("\n")
+    print("\n")
+    for i in range(1, 2):
+        CheckNodeInfo.show_node_recommand_money(i, _Account_Node_Dic)
+        CheckNodeInfo.show_node_matrix_money(i, _Account_Node_Dic)
+        CheckNodeInfo.show_node_support_money(i, _Account_Node_Dic)
+        CheckNodeInfo.show_node_saving_money(i, _Account_Node_Dic)
+        print("\n")
 
     # CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
     # (left_count, right_count) = calc_left_right_node_count(0)

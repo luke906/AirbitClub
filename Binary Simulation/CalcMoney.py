@@ -161,7 +161,7 @@ def support_money_setting(_last_node_key,
             small_side_list = _Left_Side_Node_Support_Calc_False_List
 
         # CASE 2
-        if (left_count > 1 and right_count > 1) and (left_count != right_count):
+        if (left_count > 1 or right_count > 1) and (left_count != right_count):
             if left_count < right_count:
                 small_side_list = _Left_Side_Node_Support_Calc_False_List
             elif left_count > right_count:
