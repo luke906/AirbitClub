@@ -37,7 +37,7 @@ class BinaryTree(object):
         return self.parent_node
 
     def set_daily_money(self, money):
-        self.daily_money = money
+        self.daily_money += money
 
     def set_recommand_money(self, money):
 
@@ -75,13 +75,13 @@ class BinaryTree(object):
     def get_daily_money(self):
         return self.daily_money
 
-    def get_r_money(self):
+    def get_recommand_money(self):
         return self.r_money
 
-    def get_s_money(self):
+    def get_support_money(self):
         return self.s_money
 
-    def get_m_money(self):
+    def get_matrix_money(self):
         return self.m_money
 
     def set_node_number(self, data):

@@ -125,7 +125,7 @@ def connect_node_account():
 def main():
 
     # 초기 계좌 전체 셋팅
-    node_count = 10
+    node_count = 3
     for i in range(0, node_count):
         create_account()
 
@@ -151,7 +151,7 @@ def main():
 
     """"""
     # 초기 계좌 전체 셋팅
-    node_count = 10
+    node_count = 2
     for i in range(0, node_count):
         create_account()
 
