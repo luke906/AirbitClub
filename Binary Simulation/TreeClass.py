@@ -24,6 +24,8 @@ class BinaryTree(object):
         self.s_money      = 0  # 후원 수당
         self.m_money      = 0  # 매트릭스 수당
 
+        self.create_count = 0  # 수당을 지급하기위한 계좌 생성일 계산 (1 부터 3가지 수당지급, 7부터 리워드 지급)
+
         # 후원수당 계산 적용 여부
         # 후원수당 계산시 한번 적용 되었던 노드는 다음번 계산시 적용을 시키지 않는다.
         self.support_calc_used = False

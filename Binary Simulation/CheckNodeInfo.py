@@ -24,12 +24,17 @@ def show_node_information(node_index, account_node_dic):
         print("%d번 노드의 부모번호: %d \n" % (index_key, parent_object.node_number))
 
 
-def show_all_node(cur_level_value, account_level_node_key_dic):
-    for index in range(0, cur_level_value ):
-        if len(account_level_node_key_dic[index]) > 0:
-            print("%d 대 계좌 목록" % index)
-            print(account_level_node_key_dic[index])
-            print("\n")
+def show_all_node(Account_Info_table, node_count, _Account_Node_Dic):
+    Account_Info_table.setItem(0, 0, QTableWidgetItem("lsw120300"))
+    #for index in range(0, node_count ):
+        # self.Account_Info_table.setItem(0, 0, QTableWidgetItem("1"))
+        # '계좌명', '추천수당', '후원수당', '매트릭스수당', ' SAVING', '전체커미션(SAVING 제외)'
+
+        # 계좌명
+        # account_name = "lsw1203" + str(index).zfill(2)
+        # Account_Info_table.setItem(index, 0, QTableWidgetItem(account_name))
+
+
 
 def show_node_recommand_money(node_index, account_node_dic):
     index_key = node_index

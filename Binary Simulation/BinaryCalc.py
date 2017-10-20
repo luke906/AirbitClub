@@ -2,6 +2,11 @@ from TreeClass import BinaryTree
 import CalcMoney
 import CheckNodeInfo
 
+import sys
+from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtWidgets import *
+from PyQt5 import uic
+
 # 마지막으로 생성된 노드 키
 _Last_Node_Key = -1
 
@@ -122,7 +127,93 @@ def connect_node_account():
             return
 
 
+form_class = uic.loadUiType("airbitclub_simulator.ui")[0]
+
+class ABC_Simulator_Window(QMainWindow, form_class):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.Create_Account_Setup.clicked.connect(self.btn_clicked_Create_Account_Setup)
+        self.Account_Info_table.setRowCount(0)
+        self.Account_Info_table.setColumnCount(6)
+        self.setTableWidgetData()
+
+    def setTableWidgetData(self):
+
+        self.Account_Info_table.setHorizontalHeaderLabels(['계좌명', '추천수당', '후원수당', '매트릭스수당', ' SAVING', '전체커미션(SAVING 제외)'])
+
+        #self.Account_Info_table.setItem(0, 0, QTableWidgetItem("1"))
+
+
+        """
+        for k, v in kospi_top5.items():
+            col = column_idx_lookup[k]
+            for row, val in enumerate(v):
+                item = QTableWidgetItem(val)
+                if col == 2:
+                    item.setTextAlignment(Qt.AlignVCenter | Qt.AlignRight)
+
+                self.tableWidget.setItem(row, col, item)
+        """
+    """"""
+    def btn_clicked_Create_Account_Setup(self):
+
+        # 초기 계좌 전체 셋팅
+        w = QWidget()
+
+        check = str(self.Account_Count_ToSetup.text())
+        if check:
+            node_count = int(self.Account_Count_ToSetup.text())
+        else:
+            QMessageBox.warning(w, "확인", "생성될 계좌의 갯수를 입력하십시오.")
+            return
+
+        if node_count <=0:
+            QMessageBox.warning(w, "확인", "생성될 계좌의 갯수는 0보다 커야 합니다.")
+            return
+
+        for i in range(0, node_count):
+            create_account()
+
+        # 전체 계좌 셋팅이 끝난 후 후원수당을 마지막으로 계산한다.
+        CalcMoney.support_money_setting(_Last_Node_Key,
+                                        _Account_Node_Dic)
+        # self.Account_Info_table.setItem(0, 0, QTableWidgetItem("1"))
+        # 생성된 계좌를 테이블에 표시한다.
+        show_all_node(self.Account_Info_table, _Account_Node_Dic)
+
+
+def show_all_node(Account_Info_table, _Account_Node_Dic):
+
+    for index in range(0, _Last_Node_Key+1 ):
+
+        # '계좌명', '추천수당', '후원수당', '매트릭스수당', ' SAVING', '전체커미션(SAVING 제외)'
+
+        Account_Info_table.setRowCount(_Last_Node_Key+1)
+
+        # 계좌명
+        account_name = "lsw1203" + str(index).zfill(2)
+        Item = QTableWidgetItem(account_name)
+        Account_Info_table.setItem(index, 0, Item)
+        Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+        # 추천수당
+        account_name = "lsw1203" + str(index).zfill(2)
+        Item = QTableWidgetItem(account_name)
+        Account_Info_table.setItem(index, 1, Item)
+        Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+
 def main():
+    app = QApplication(sys.argv)
+    ABC_Window = ABC_Simulator_Window()
+    ABC_Window.show()
+    app.exec_()
+
+    return
+
+
+
 
     # 초기 계좌 전체 셋팅
     node_count = 3
@@ -148,31 +239,6 @@ def main():
         print("\n")
 
 
-
-    """"""
-    # 초기 계좌 전체 셋팅
-    node_count = 2
-    for i in range(0, node_count):
-        create_account()
-
-    # 생성된 계좌를 레벨별로 표시한다.
-    object = _Account_Node_Dic[_Last_Node_Key]
-    level = object.level + 1
-    CheckNodeInfo.show_all_node(level, _Account_Level_Node_Key_Dic)
-
-    # 전체 계좌 셋팅이 끝난 후 후원수당을 마지막으로 계산한다.
-    CalcMoney.support_money_setting(_Last_Node_Key,
-                                    _Account_Node_Dic)
-
-    print("\n")
-    print("\n")
-    for i in range(0, _Last_Node_Key+1):
-        CheckNodeInfo.show_node_recommand_money(i, _Account_Node_Dic)
-        CheckNodeInfo.show_node_matrix_money(i, _Account_Node_Dic)
-        CheckNodeInfo.show_node_support_money(i, _Account_Node_Dic)
-        CheckNodeInfo.show_node_saving_money(i, _Account_Node_Dic)
-        print("\n")
-
     # CheckNodeInfo.show_all_node(_Cur_Level_Value, _Account_Level_Node_Key_Dic)
     # (left_count, right_count) = calc_left_right_node_count(0)
     # print("0번 노드의 왼쪽 노드의 총 갯수: %d" % left_count)
@@ -185,7 +251,7 @@ def main():
     ttt = 0
     for i in range(0, node_count):
         object = _Account_Node_Dic[i]
-        total = object.get_s_money() + object.get_r_money() + object.get_m_money()
+        total = object.get_support_money() + object.get_r_money() + object.get_m_money()
         ttt += total
     print("총 수익 : %d" % ttt)
 
