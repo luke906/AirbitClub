@@ -9,6 +9,7 @@
     <orderEntry type="module" module-name="Telegram" />
     <orderEntry type="module" module-name="Uni-Edu" />
     <orderEntry type="module" module-name="UI_Test" />
+    <orderEntry type="module" module-name="File_Handling" />
   </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="Nosetests" />
