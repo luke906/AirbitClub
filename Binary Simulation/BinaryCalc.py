@@ -22,6 +22,8 @@ class ABC_Simulator_Window(QMainWindow, form_class):
 
     def setTableWidgetData(self):
         self.Account_Info_table.setHorizontalHeaderLabels(['계좌명', '리워드수당', '추천수당', '후원수당', '매트릭스수당', ' SAVING', '전체커미션(SAVING 제외)'])
+        stylesheet = "::section{Background-color:rgb(211,247,252);border-radius:14px;}"
+        self.Account_Info_table.horizontalHeader().setStyleSheet(stylesheet)
 
     def btn_clicked_Create_Account_Setup(self):
 
@@ -105,6 +107,7 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setItem(index, 3, QTableWidgetItem(" "))
             self.Account_Info_table.setItem(index, 4, QTableWidgetItem(" "))
             self.Account_Info_table.setItem(index, 5, QTableWidgetItem(" "))
+            self.Account_Info_table.setItem(index, 6, QTableWidgetItem(" "))
 
         CreateAccount.reset_all_account()
         self.Total_Commision.setText("0")
