@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>917</width>
-    <height>791</height>
+    <height>902</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,7 @@
       <x>10</x>
       <y>10</y>
       <width>261</width>
-      <height>101</height>
+      <height>121</height>
      </rect>
     </property>
     <property name="font">
@@ -55,15 +55,12 @@
     <property name="title">
      <string>한번에 셋팅할 계좌수 입력</string>
     </property>
-    <zorder>splitter</zorder>
-    <zorder>Account_Info_table</zorder>
-    <zorder>Account_Info_table</zorder>
    </widget>
    <widget class="QTableWidget" name="Account_Info_table">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>160</y>
+      <y>250</y>
       <width>901</width>
       <height>591</height>
      </rect>
@@ -93,7 +90,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>130</y>
+      <y>219</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -114,7 +111,7 @@
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>135</y>
+      <y>224</y>
       <width>161</width>
       <height>21</height>
      </rect>
@@ -135,7 +132,7 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>131</y>
+      <y>220</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -152,7 +149,7 @@
      <string>0</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -163,7 +160,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout"/>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -174,13 +171,13 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>40</y>
       <width>211</width>
-      <height>61</height>
+      <height>86</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -198,7 +195,22 @@
         </font>
        </property>
        <property name="text">
-        <string>계좌생성</string>
+        <string>1. 계좌생성</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Btn_Deposit_Commision">
+       <property name="font">
+        <font>
+         <family>Agency FB</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>2. 커미션 지갑으로 이동</string>
        </property>
       </widget>
      </item>

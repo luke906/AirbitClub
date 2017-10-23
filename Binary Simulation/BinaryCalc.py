@@ -16,6 +16,7 @@ class ABC_Simulator_Window(QMainWindow, form_class):
         self.setupUi(self)
         self.Btn_Create_Account_Setup.clicked.connect(self.btn_clicked_Create_Account_Setup)
         self.Btn_Reset_Account.clicked.connect(self.btn_clicked_Reset_Account)
+        self.Btn_Deposit_Commision.clicked.connect(self.btn_clicked_Deposit_Commision)
         self.Account_Info_table.setRowCount(0)
         self.Account_Info_table.setColumnCount(7)
         self.setTableWidgetData()
@@ -25,7 +26,60 @@ class ABC_Simulator_Window(QMainWindow, form_class):
         stylesheet = "::section{Background-color:rgb(211,247,252);border-radius:14px;}"
         self.Account_Info_table.horizontalHeader().setStyleSheet(stylesheet)
 
+    #  추천 후원 매트릭스 각각 수당을 커미션 지갑으로 이동 시킨다.
+    def btn_clicked_Deposit_Commision(self):
+
+        CreateAccount.deposit_commision_wallet()
+
+        # 생성된 계좌를 테이블에 표시한다.
+        count = CreateAccount.get_last_node_key() + 1
+        account_list = CreateAccount.get_Account_Node_Dic()
+
+        total_commision = 0
+
+        for index in range(0, count):
+            self.Account_Info_table.setRowCount(CreateAccount.get_last_node_key() + 1)
+
+            # 계좌명
+            account_name = "lsw1203" + str(index).zfill(2)
+            Item = QTableWidgetItem(account_name)
+            self.Account_Info_table.setItem(index, 0, Item)
+            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+            # 추천수당
+            account_r_money = str(floor(account_list[index].get_recommand_money()))
+            Item = QTableWidgetItem(account_r_money)
+            self.Account_Info_table.setItem(index, 1, Item)
+            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+            # 후원수당
+            account_s_money = str(floor(account_list[index].get_support_money()))
+            Item = QTableWidgetItem(account_s_money)
+            self.Account_Info_table.setItem(index, 2, Item)
+            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+            # 매트릭스수당
+            account_m_money = str(floor(account_list[index].get_matrix_money()))
+            Item = QTableWidgetItem(account_m_money)
+            self.Account_Info_table.setItem(index, 3, Item)
+            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+            # 커미션(추천 + 후원 + 매트릭스)
+            account_total_commision = str(floor(account_list[index].get_total_comision()))
+            Item = QTableWidgetItem(account_total_commision)
+            self.Account_Info_table.setItem(index, 4, Item)
+            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+            # SAVING
+            account_sav_money = str(floor(account_list[index].get_saving_money()))
+            Item = QTableWidgetItem(account_sav_money)
+            self.Account_Info_table.setItem(index, 6, Item)
+            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+        self.Total_Commision.setText(str(total_commision))
+
     def btn_clicked_Create_Account_Setup(self):
+        pass
 
         # 초기 계좌 전체 셋팅
         w = QWidget()

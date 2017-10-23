@@ -135,15 +135,27 @@ def connect_node_account():
 """"""
 
 def get_last_node_key():
+    global _Last_Node_Key
+
     return _Last_Node_Key
 
 def get_Account_Node_Dic():
+    global _Account_Node_Dic
+
     return _Account_Node_Dic
 
 def calc_support_money():
+    global _Account_Node_Dic
+    global _Last_Node_Key
+
     # 전체 계좌 셋팅이 끝난 후 후원수당을 마지막으로 계산한다.
     CalcMoney.support_money_setting(_Last_Node_Key, _Account_Node_Dic)
 
+def deposit_commision_wallet():
+    global _Account_Node_Dic
+    global _Last_Node_Key
+
+    CalcMoney.deposit_commision_wallet(_Last_Node_Key, _Account_Node_Dic)
 
 def reset_all_account():
     global _Level_Complete_Flag

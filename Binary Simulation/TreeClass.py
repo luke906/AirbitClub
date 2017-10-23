@@ -18,11 +18,13 @@ class BinaryTree(object):
         self.right_child = right_child
         self.right_child_have = False
 
-        self.saving_money = 0  # 추천 후원 매트릭스 수당 발생시 20%가 차감되어 SAVING에 적립
-        self.daily_money  = 0  # 데일이 보너스
-        self.r_money      = 0  # 추천 수당
-        self.s_money      = 0  # 후원 수당
-        self.m_money      = 0  # 매트릭스 수당
+        self.commision_wallet = 0  # 커미션 월릿
+        self.reward_wallet = 0  # 데일리 보너스
+        self.saving_wallet = 0  # 추천 후원 매트릭스 수당 발생시 20%가 차감되어 SAVING에 적립
+
+        self.r_money          = 0  # 추천 수당
+        self.s_money          = 0  # 후원 수당
+        self.m_money          = 0  # 매트릭스 수당
 
         self.create_count = 0  # 수당을 지급하기위한 계좌 생성일 계산 (1 부터 3가지 수당지급, 7부터 리워드 지급)
 
@@ -38,8 +40,16 @@ class BinaryTree(object):
     def get_parent_node(self):
         return self.parent_node
 
-    def set_daily_money(self, money):
-        self.daily_money += money
+    # 추천 후원 매트릭스 모든 수당을 commsion wallet으로 이동시킨다.
+    def set_commision_wallet(self):
+        self.commision_wallet += (self.r_money + self.s_money + self.m_money)
+
+        self.r_money = 0
+        self.s_money = 0
+        self.m_money = 0
+
+    def set_reward_wallet(self, money):
+        self.reward_wallet += money
 
     def set_recommand_money(self, money):
 
@@ -49,7 +59,7 @@ class BinaryTree(object):
             self.r_money += result
 
             # 20프로를 SAVING에 적립
-            self.saving_money += (money * 0.2)
+            self.saving_wallet += (money * 0.2)
 
     def set_support_money(self, money):
 
@@ -59,7 +69,7 @@ class BinaryTree(object):
             self.s_money += result
 
             # 20프로를 SAVING에 적립
-            self.saving_money += (money * 0.2)
+            self.saving_wallet += (money * 0.2)
 
     def set_matrix_money(self, money):
 
@@ -69,16 +79,17 @@ class BinaryTree(object):
             self.m_money += result
 
             # 20프로를 SAVING에 적립
-            self.saving_money += (money * 0.2)
+            self.saving_wallet += (money * 0.2)
 
     def get_total_comision(self):  #saving 제외
-        return (self.r_money + self.s_money + self.m_money)
+        return self.commision_wallet
+        # return (self.r_money + self.s_money + self.m_money)
 
     def get_saving_money(self):
-        return self.saving_money
+        return self.saving_wallet
 
-    def get_daily_money(self):
-        return self.daily_money
+    def get_reward_money(self):
+        return self.reward_wallet
 
     def get_recommand_money(self):
         return self.r_money
