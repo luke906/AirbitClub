@@ -116,6 +116,12 @@ def support_money_setting(_last_node_key,
 # 해당 인자로 전달된 노드를 기준으로 좌측, 우측의 모든 연결된 모드들의 수를 계산한다.
 def calc_left_right_node_count(base_node_index, _account_node_dic):
 
+    global _Left_Side_Node_Count_List
+    global _Right_Side_Node_Count_List
+
+    global _Left_Side_Node_Support_Calc_False_List
+    global _Right_Side_Node_Support_Calc_False_List
+
     # 검색 기준이 되는 키
     node_object = _account_node_dic[base_node_index]
 
