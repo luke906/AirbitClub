@@ -41,7 +41,7 @@ class BinaryTree(object):
         return self.parent_node
 
     def set_day_count(self, day):
-        self.day_count = day
+        self.day_count += day
 
     # 추천 후원 매트릭스 모든 수당을 commsion wallet으로 이동시킨다.
     def set_commision_wallet(self):

@@ -195,6 +195,7 @@ class ABC_Simulator_Window(QMainWindow, form_class):
         self.Total_Commision.setText("0")
         self.Total_Reward.setText("0")
         self.Total_Days.setText("0")
+        self.Days = 0
 
 def main():
     app = QApplication(sys.argv)
