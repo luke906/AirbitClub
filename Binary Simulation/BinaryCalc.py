@@ -41,7 +41,8 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setRowCount(CreateAccount.get_last_node_key() + 1)
 
             # 계좌명
-            account_name = "lsw1203" + str(index).zfill(2)
+            # account_name = "lsw1203" + str(index).zfill(2)
+            account_name = str(index+1) + " 번 계좌"
             Item = QTableWidgetItem(account_name)
             self.Account_Info_table.setItem(index, 0, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
@@ -111,7 +112,8 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setRowCount(CreateAccount.get_last_node_key() + 1)
 
             # 계좌명
-            account_name = "lsw1203" + str(index).zfill(2)
+            # account_name = "lsw1203" + str(index).zfill(2)
+            account_name = str(index + 1) + " 번 계좌"
             Item = QTableWidgetItem(account_name)
             self.Account_Info_table.setItem(index, 0, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
