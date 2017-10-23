@@ -21,7 +21,7 @@ class ABC_Simulator_Window(QMainWindow, form_class):
         self.setTableWidgetData()
 
     def setTableWidgetData(self):
-        self.Account_Info_table.setHorizontalHeaderLabels(['계좌명', '리워드수당', '추천수당', '후원수당', '매트릭스수당', ' SAVING', '전체커미션(SAVING 제외)'])
+        self.Account_Info_table.setHorizontalHeaderLabels(['계좌명', '추천', '후원', '매트릭스', '커미션', '리워드', 'SAVING'])
         stylesheet = "::section{Background-color:rgb(211,247,252);border-radius:14px;}"
         self.Account_Info_table.horizontalHeader().setStyleSheet(stylesheet)
 
@@ -53,7 +53,6 @@ class ABC_Simulator_Window(QMainWindow, form_class):
         total_commision = 0
 
         for index in range(0, count):
-            # '계좌명', '추천수당', '후원수당', '매트릭스수당', ' SAVING', '전체커미션(SAVING 제외)'
 
             self.Account_Info_table.setRowCount(CreateAccount.get_last_node_key() + 1)
 
@@ -66,31 +65,30 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             # 추천수당
             account_r_money = str(floor(account_list[index].get_recommand_money()))
             Item = QTableWidgetItem(account_r_money)
-            self.Account_Info_table.setItem(index, 2, Item)
+            self.Account_Info_table.setItem(index, 1, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
             # 후원수당
             account_s_money = str(floor(account_list[index].get_support_money()))
             Item = QTableWidgetItem(account_s_money)
-            self.Account_Info_table.setItem(index, 3, Item)
+            self.Account_Info_table.setItem(index, 2, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
             # 매트릭스수당
             account_m_money = str(floor(account_list[index].get_matrix_money()))
             Item = QTableWidgetItem(account_m_money)
+            self.Account_Info_table.setItem(index, 3, Item)
+            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
+            # 커미션(추천 + 후원 + 매트릭스)
+            account_total_commision = str(floor(account_list[index].get_total_comision()))
+            Item = QTableWidgetItem(account_total_commision)
             self.Account_Info_table.setItem(index, 4, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
             # SAVING
             account_sav_money = str(floor(account_list[index].get_saving_money()))
             Item = QTableWidgetItem(account_sav_money)
-            self.Account_Info_table.setItem(index, 5, Item)
-            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
-
-            # SAVING 을 제외한 전체 합산
-            total_commision += floor(account_list[index].get_total_comision())
-            account_total_money = str(floor(account_list[index].get_total_comision()))
-            Item = QTableWidgetItem(account_total_money)
             self.Account_Info_table.setItem(index, 6, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 

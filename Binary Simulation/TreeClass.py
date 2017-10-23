@@ -23,6 +23,7 @@ class BinaryTree(object):
         self.r_money      = 0  # 추천 수당
         self.s_money      = 0  # 후원 수당
         self.m_money      = 0  # 매트릭스 수당
+        self.commision_money = 0
 
         self.create_count = 0  # 수당을 지급하기위한 계좌 생성일 계산 (1 부터 3가지 수당지급, 7부터 리워드 지급)
 
@@ -47,6 +48,7 @@ class BinaryTree(object):
             # 20퍼센트 감소된 금액을 셋팅
             result = money - (money * 0.2)
             self.r_money += result
+            self.commision_money += self.r_money
 
             # 20프로를 SAVING에 적립
             self.saving_money += (money * 0.2)
@@ -57,6 +59,7 @@ class BinaryTree(object):
             # 20퍼센트 감소된 금액을 셋팅
             result = money - (money * 0.2)
             self.s_money += result
+            self.commision_money += self.s_money
 
             # 20프로를 SAVING에 적립
             self.saving_money += (money * 0.2)
@@ -67,12 +70,13 @@ class BinaryTree(object):
             # 20퍼센트 감소된 금액을 셋팅
             result = money - (money * 0.2)
             self.m_money += result
+            self.commision_money += self.m_money
 
             # 20프로를 SAVING에 적립
             self.saving_money += (money * 0.2)
 
     def get_total_comision(self):  #saving 제외
-        return (self.r_money + self.s_money + self.m_money)
+        return (self.commision_money)
 
     def get_saving_money(self):
         return self.saving_money
