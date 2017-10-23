@@ -22,6 +22,8 @@ class ABC_Simulator_Window(QMainWindow, form_class):
         self.Account_Info_table.setColumnCount(7)
         self.setTableWidgetData()
 
+        self.Days = 0
+
     def setTableWidgetData(self):
         self.Account_Info_table.setHorizontalHeaderLabels(['계좌명', '추천', '후원', '매트릭스', '커미션', '리워드', 'SAVING'])
         stylesheet = "::section{Background-color:rgb(211,247,252);border-radius:14px;}"
@@ -43,7 +45,9 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setItem(index, 5, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
-        self.Total_Reward.setText(str(CreateAccount.get_total_reward()))
+        self.Total_Reward.setText(str(floor(CreateAccount.get_total_reward())))
+        self.Days += 1
+        self.Total_Days.setText(str(self.Days))
 
 
     #  추천 후원 매트릭스 각각 수당을 커미션 지갑으로 이동 시킨다.
@@ -97,7 +101,7 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setItem(index, 6, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
-        self.Total_Commision.setText(str(CreateAccount.get_total_account_commision()))
+        self.Total_Commision.setText(str(floor(CreateAccount.get_total_account_commision())))
 
     def btn_clicked_Create_Account_Setup(self):
 
@@ -169,6 +173,9 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setItem(index, 6, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
+        self.Days += 2
+        CreateAccount.set_day_count(self.Days)
+        self.Total_Days.setText(str(self.Days))
 
 
     def btn_clicked_Reset_Account(self):
@@ -186,6 +193,8 @@ class ABC_Simulator_Window(QMainWindow, form_class):
 
         CreateAccount.reset_all_account()
         self.Total_Commision.setText("0")
+        self.Total_Reward.setText("0")
+        self.Total_Days.setText("0")
 
 def main():
     app = QApplication(sys.argv)
