@@ -17,6 +17,7 @@ class ABC_Simulator_Window(QMainWindow, form_class):
         self.Btn_Create_Account_Setup.clicked.connect(self.btn_clicked_Create_Account_Setup)
         self.Btn_Reset_Account.clicked.connect(self.btn_clicked_Reset_Account)
         self.Btn_Deposit_Commision.clicked.connect(self.btn_clicked_Deposit_Commision)
+        self.Btn_Reward_Calc.clicked.connect(self.btn_clicked_Reward_Calc)
         self.Account_Info_table.setRowCount(0)
         self.Account_Info_table.setColumnCount(7)
         self.setTableWidgetData()
@@ -25,6 +26,23 @@ class ABC_Simulator_Window(QMainWindow, form_class):
         self.Account_Info_table.setHorizontalHeaderLabels(['계좌명', '추천', '후원', '매트릭스', '커미션', '리워드', 'SAVING'])
         stylesheet = "::section{Background-color:rgb(211,247,252);border-radius:14px;}"
         self.Account_Info_table.horizontalHeader().setStyleSheet(stylesheet)
+
+    def btn_clicked_Reward_Calc(self):
+        CreateAccount.set_reward_wallet()
+
+        # 생성된 계좌를 테이블에 표시한다.
+        count = CreateAccount.get_last_node_key() + 1
+        account_list = CreateAccount.get_Account_Node_Dic()
+
+        total_commision = 0
+
+        for index in range(0, count):
+            # 리워드
+            account_reward_money = str(floor(account_list[index].get_reward_money()))
+            Item = QTableWidgetItem(account_reward_money)
+            self.Account_Info_table.setItem(index, 5, Item)
+            Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+
 
     #  추천 후원 매트릭스 각각 수당을 커미션 지갑으로 이동 시킨다.
     def btn_clicked_Deposit_Commision(self):

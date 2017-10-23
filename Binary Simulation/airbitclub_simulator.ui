@@ -195,7 +195,7 @@
         </font>
        </property>
        <property name="text">
-        <string>1. 계좌생성</string>
+        <string>1. 계좌생성(+2일)</string>
        </property>
       </widget>
      </item>
@@ -215,6 +215,69 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="Btn_Reward_Calc">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>100</y>
+      <width>171</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Agency FB</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>리워드 계산(+ 1일)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>224</y>
+      <width>161</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>전체 계좌 리워드 합계</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Total_Reward">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>220</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

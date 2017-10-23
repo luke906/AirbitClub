@@ -48,7 +48,7 @@ class BinaryTree(object):
         self.s_money = 0
         self.m_money = 0
 
-    def set_reward_wallet(self, money):
+    def set_reward_wallet(self, money=7):
         self.reward_wallet += money
 
     def set_recommand_money(self, money):

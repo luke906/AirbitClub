@@ -157,6 +157,13 @@ def deposit_commision_wallet():
 
     CalcMoney.deposit_commision_wallet(_Last_Node_Key, _Account_Node_Dic)
 
+def set_reward_wallet():
+    global _Account_Node_Dic
+    global _Last_Node_Key
+
+    CalcMoney.set_reward_wallet(_Last_Node_Key, _Account_Node_Dic)
+
+
 def reset_all_account():
     global _Level_Complete_Flag
     global _Last_Node_Key
