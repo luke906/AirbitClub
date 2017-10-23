@@ -43,6 +43,8 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setItem(index, 5, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
+        self.Total_Reward.setText(str(CreateAccount.get_total_reward()))
+
 
     #  추천 후원 매트릭스 각각 수당을 커미션 지갑으로 이동 시킨다.
     def btn_clicked_Deposit_Commision(self):
@@ -84,7 +86,7 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
             # 커미션(추천 + 후원 + 매트릭스)
-            account_total_commision = str(floor(account_list[index].get_total_comision()))
+            account_total_commision = str(floor(account_list[index].get_comision_money()))
             Item = QTableWidgetItem(account_total_commision)
             self.Account_Info_table.setItem(index, 4, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
@@ -95,10 +97,9 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setItem(index, 6, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
-        self.Total_Commision.setText(str(total_commision))
+        self.Total_Commision.setText(str(CreateAccount.get_total_account_commision()))
 
     def btn_clicked_Create_Account_Setup(self):
-        pass
 
         # 초기 계좌 전체 셋팅
         w = QWidget()
@@ -154,11 +155,13 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setItem(index, 3, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
+            """
             # 커미션(추천 + 후원 + 매트릭스)
             account_total_commision = str(floor(account_list[index].get_total_comision()))
             Item = QTableWidgetItem(account_total_commision)
             self.Account_Info_table.setItem(index, 4, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+            """
 
             # SAVING
             account_sav_money = str(floor(account_list[index].get_saving_money()))
@@ -166,7 +169,7 @@ class ABC_Simulator_Window(QMainWindow, form_class):
             self.Account_Info_table.setItem(index, 6, Item)
             Item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
-        self.Total_Commision.setText(str(total_commision))
+
 
     def btn_clicked_Reset_Account(self):
 

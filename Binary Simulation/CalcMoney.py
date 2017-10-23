@@ -46,9 +46,23 @@ def deposit_commision_wallet(_last_node_key, _account_node_dic):
     for index in range(0, _last_node_key + 1):
         _account_node_dic[index].set_commision_wallet()
 
+def get_total_account_commision(_last_node_key, _account_node_dic):
+    total_account_commision = 0
+    for index in range(0, _last_node_key + 1):
+        total_account_commision += _account_node_dic[index].get_comision_money()
+
+    return total_account_commision
+
 def set_reward_wallet(_last_node_key, _account_node_dic):
     for index in range(0, _last_node_key + 1):
         _account_node_dic[index].set_reward_wallet()
+
+def get_total_reward(_last_node_key, _account_node_dic):
+    total_reward = 0
+    for index in range(0, _last_node_key + 1):
+        total_reward += _account_node_dic[index].get_reward_money()
+
+    return total_reward
 
 # 계좌를 한꺼번에 셋팅하고 후원수당을 계산하는 함수. 두번째 버전
 def support_money_setting(_last_node_key, _account_node_dic):

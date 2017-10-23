@@ -81,7 +81,7 @@ class BinaryTree(object):
             # 20프로를 SAVING에 적립
             self.saving_wallet += (money * 0.2)
 
-    def get_total_comision(self):  #saving 제외
+    def get_comision_money(self):  #saving 제외
         return self.commision_wallet
         # return (self.r_money + self.s_money + self.m_money)
 
