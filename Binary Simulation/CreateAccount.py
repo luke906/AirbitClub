@@ -180,6 +180,21 @@ def set_day_count(day_count):
     for index in range(0, _Last_Node_Key + 1):
         _Account_Node_Dic[index].set_day_count(day_count)
 
+def commision_reward_move_to_first_account():
+    global _Account_Node_Dic
+    global _Last_Node_Key
+
+    commision_total = 0
+    reward_total = 0
+    for index in range(1, _Last_Node_Key + 1):
+        commision_total += _Account_Node_Dic[index].get_comision_money()
+        reward_total += _Account_Node_Dic[index].get_reward_money()
+        _Account_Node_Dic[index].reset_reward_commision()
+
+    _Account_Node_Dic[0].add_commision_wallet(commision_total)
+    _Account_Node_Dic[0].add_reward_wallet(reward_total)
+
+
 def reset_all_account():
     global _Level_Complete_Flag
     global _Last_Node_Key

@@ -19,8 +19,8 @@ class BinaryTree(object):
         self.right_child_have = False
 
         self.commision_wallet = 0  # 커미션 월릿
-        self.reward_wallet = 0  # 데일리 보너스
-        self.saving_wallet = 0  # 추천 후원 매트릭스 수당 발생시 20%가 차감되어 SAVING에 적립
+        self.reward_wallet = 0     # 데일리 보너스
+        self.saving_wallet = 0     # 추천 후원 매트릭스 수당 발생시 20%가 차감되어 SAVING에 적립
 
         self.r_money          = 0  # 추천 수당
         self.s_money          = 0  # 후원 수당
@@ -51,10 +51,23 @@ class BinaryTree(object):
         self.s_money = 0
         self.m_money = 0
 
+    def get_comision_money(self):  #saving 제외
+        return self.commision_wallet
+        # return (self.r_money + self.s_money + self.m_money)
+
     def set_reward_wallet(self, money=7):
-        self.day_count += 1
         if self.day_count >= 7:
             self.reward_wallet += money
+
+    def reset_reward_commision(self):
+        self.commision_wallet = 0  # 커미션 월릿
+        self.reward_wallet = 0  # 데일리 보너스
+
+    def add_commision_wallet(self, money):
+        self.commision_wallet += money
+
+    def add_reward_wallet(self, money):
+        self.reward_wallet += money
 
     def set_recommand_money(self, money):
 
@@ -86,9 +99,7 @@ class BinaryTree(object):
             # 20프로를 SAVING에 적립
             self.saving_wallet += (money * 0.2)
 
-    def get_comision_money(self):  #saving 제외
-        return self.commision_wallet
-        # return (self.r_money + self.s_money + self.m_money)
+
 
     def get_saving_money(self):
         return self.saving_wallet

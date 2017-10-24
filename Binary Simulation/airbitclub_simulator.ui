@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>917</width>
+    <width>918</width>
     <height>902</height>
    </rect>
   </property>
@@ -55,12 +55,75 @@
     <property name="title">
      <string>한번에 셋팅할 계좌수 입력</string>
     </property>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>10</y>
+       <width>261</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial Black</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>한번에 셋팅할 계좌수 입력</string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>261</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial Black</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>한번에 셋팅할 계좌수 입력</string>
+     </property>
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>10</y>
+        <width>261</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial Black</family>
+        <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>한번에 셋팅할 계좌수 입력</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
    <widget class="QTableWidget" name="Account_Info_table">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>250</y>
+      <y>269</y>
       <width>901</width>
       <height>591</height>
      </rect>
@@ -133,7 +196,7 @@
      <rect>
       <x>300</x>
       <y>220</y>
-      <width>111</width>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
@@ -216,31 +279,10 @@
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="Btn_Reward_Calc">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>100</y>
-      <width>171</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Agency FB</family>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>리워드 계산(+ 1일)</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>366</x>
       <y>224</y>
       <width>161</width>
       <height>21</height>
@@ -261,9 +303,9 @@
    <widget class="QLabel" name="Total_Reward">
     <property name="geometry">
      <rect>
-      <x>644</x>
+      <x>550</x>
       <y>220</y>
-      <width>111</width>
+      <width>91</width>
       <height>31</height>
      </rect>
     </property>
@@ -282,8 +324,8 @@
    <widget class="QLabel" name="Total_Days">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>6</y>
+      <x>520</x>
+      <y>20</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -303,8 +345,8 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>10</y>
+      <x>300</x>
+      <y>24</y>
       <width>201</width>
       <height>21</height>
      </rect>
@@ -321,13 +363,252 @@
      <string>전체 진행 일수 : </string>
     </property>
    </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>261</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>리워드 계산 ( +1 일씩 증가 )</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <widget class="QGroupBox" name="groupBox_6">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>10</y>
+       <width>261</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial Black</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>한번에 셋팅할 계좌수 입력</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Btn_Reward_Calc">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>29</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Agency FB</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>리워드 계산 ( + 1일 )</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_8">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>10</y>
+      <width>301</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>1번 계좌의 커미션 리워드로 계좌추가</string>
+    </property>
+    <widget class="QPushButton" name="Btn_Create_Additional_Account">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>120</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>추가 계좌 생성</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>171</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>1번 계좌의 커미션+리워드</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Total_Commision_Reward_First_Account">
+     <property name="geometry">
+      <rect>
+       <x>185</x>
+       <y>85</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Btn_Transfer_To_First_Account">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>30</y>
+       <width>281</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>1번 계좌로 모두 이체</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>70</y>
+      <width>201</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>굴림체</family>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>생성된 계좌 수 :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Total_Account_Number">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>65</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>굴림체</family>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Total_Reward_2">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>218</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>총합</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Total">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>219</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>917</width>
+     <width>918</width>
      <height>21</height>
     </rect>
    </property>
