@@ -240,12 +240,21 @@
       <x>20</x>
       <y>40</y>
       <width>211</width>
-      <height>86</height>
+      <height>90</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QLineEdit" name="Account_Count_ToSetup"/>
+      <widget class="QLineEdit" name="Account_Count_ToSetup">
+       <property name="font">
+        <font>
+         <family>Agency FB</family>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="Btn_Create_Account_Setup">
@@ -435,7 +444,7 @@
       <x>610</x>
       <y>10</y>
       <width>301</width>
-      <height>161</height>
+      <height>201</height>
      </rect>
     </property>
     <property name="font">
@@ -453,7 +462,7 @@
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>120</y>
+       <y>160</y>
        <width>181</width>
        <height>31</height>
       </rect>
@@ -465,8 +474,8 @@
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>90</y>
+       <x>60</x>
+       <y>59</y>
        <width>171</width>
        <height>21</height>
       </rect>
@@ -486,9 +495,9 @@
     <widget class="QLabel" name="Total_Commision_Reward_First_Account">
      <property name="geometry">
       <rect>
-       <x>185</x>
-       <y>85</y>
-       <width>91</width>
+       <x>235</x>
+       <y>54</y>
+       <width>71</width>
        <height>31</height>
       </rect>
      </property>
@@ -515,6 +524,68 @@
      </property>
      <property name="text">
       <string>1번 계좌로 모두 이체</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>사용할 커미션 금액</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>119</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>사용할 리워드 금액</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="Commision_Amount_To_Setup">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>90</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="Commision_Amount_To_Setup_2">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>120</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
      </property>
     </widget>
    </widget>
