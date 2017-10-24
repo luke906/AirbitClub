@@ -461,9 +461,9 @@
     <widget class="QPushButton" name="Btn_Create_Additional_Account">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>20</x>
        <y>160</y>
-       <width>181</width>
+       <width>271</width>
        <height>31</height>
       </rect>
      </property>
@@ -551,7 +551,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>119</y>
+       <y>114</y>
        <width>121</width>
        <height>21</height>
       </rect>
@@ -582,7 +582,7 @@
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>120</y>
+       <y>115</y>
        <width>113</width>
        <height>20</height>
       </rect>
