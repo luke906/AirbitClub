@@ -441,10 +441,10 @@
    <widget class="QGroupBox" name="groupBox_8">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>580</x>
       <y>10</y>
-      <width>301</width>
-      <height>201</height>
+      <width>331</width>
+      <height>221</height>
      </rect>
     </property>
     <property name="font">
@@ -462,13 +462,18 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>160</y>
-       <width>271</width>
+       <y>186</y>
+       <width>131</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>추가 계좌 생성</string>
+      <string>1. 추가 계좌 생성</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_5">
@@ -578,7 +583,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="Commision_Amount_To_Setup_2">
+    <widget class="QLineEdit" name="Reward_Amount_To_Setup">
      <property name="geometry">
       <rect>
        <x>140</x>
@@ -586,6 +591,61 @@
        <width>113</width>
        <height>20</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>21</x>
+       <y>155</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>생성가능 계좌수 :</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Additional_Account_Count">
+     <property name="geometry">
+      <rect>
+       <x>146</x>
+       <y>155</y>
+       <width>56</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Btn_Deposit_Commision_2">
+     <property name="geometry">
+      <rect>
+       <x>154</x>
+       <y>186</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Agency FB</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>2. 커미션 지갑으로 이동</string>
      </property>
     </widget>
    </widget>

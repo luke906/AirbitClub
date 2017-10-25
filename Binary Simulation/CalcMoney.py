@@ -44,7 +44,7 @@ def calc_matrix_money(child_node_object, matrix_bonus):
 # 각 계좌별로 추천, 후원, 매트릭스 수당을 커미션 지갑으로 이동시킨다.
 def deposit_commision_wallet(_last_node_key, _account_node_dic):
     for index in range(0, _last_node_key + 1):
-        _account_node_dic[index].set_commision_wallet()
+        _account_node_dic[index].move_commision_wallet()
 
 def get_total_account_commision(_last_node_key, _account_node_dic):
     total_account_commision = 0
@@ -55,7 +55,7 @@ def get_total_account_commision(_last_node_key, _account_node_dic):
 
 def set_reward_wallet(_last_node_key, _account_node_dic):
     for index in range(0, _last_node_key + 1):
-        _account_node_dic[index].set_reward_wallet()
+        _account_node_dic[index].calc_reward_wallet()
 
 def get_total_reward(_last_node_key, _account_node_dic):
     total_reward = 0

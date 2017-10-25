@@ -43,8 +43,14 @@ class BinaryTree(object):
     def set_day_count(self, day):
         self.day_count += day
 
-    # 추천 후원 매트릭스 모든 수당을 commsion wallet으로 이동시킨다.
-    def set_commision_wallet(self):
+    def set_reward_wallet(self, money):
+        self.reward_wallet = money
+
+    def set_commision_wallet(self, money):
+        self.commision_wallet = money
+
+        # 추천 후원 매트릭스 모든 수당을 commsion wallet으로 이동시킨다.
+    def move_commision_wallet(self):
         self.commision_wallet += (self.r_money + self.s_money + self.m_money)
 
         self.r_money = 0
@@ -55,7 +61,7 @@ class BinaryTree(object):
         return self.commision_wallet
         # return (self.r_money + self.s_money + self.m_money)
 
-    def set_reward_wallet(self, money=7):
+    def calc_reward_wallet(self, money=7):
         if self.day_count >= 7:
             self.reward_wallet += money
 

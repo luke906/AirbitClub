@@ -194,6 +194,17 @@ def commision_reward_move_to_first_account():
     _Account_Node_Dic[0].add_commision_wallet(commision_total)
     _Account_Node_Dic[0].add_reward_wallet(reward_total)
 
+# 1번 계좌에서 원하는 금액 만큼을 차감 시킨다.
+def minus_reward_commision_money_from_first_account(m_commision, m_reward):
+    global _Account_Node_Dic
+
+    deposit_commision = _Account_Node_Dic[0].get_comision_money()
+    deposit_reward = _Account_Node_Dic[0].get_reward_money()
+
+    _Account_Node_Dic[0].reset_reward_commision()
+    _Account_Node_Dic[0].set_commision_wallet(deposit_commision - m_commision)
+    _Account_Node_Dic[0].set_reward_wallet(deposit_reward - m_reward)
+
 
 def reset_all_account():
     global _Level_Complete_Flag
