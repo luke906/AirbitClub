@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AirBitClub_Project.iml" filepath="$PROJECT_DIR$/.idea/AirBitClub_Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Coin_Project/.idea/Coin_Project.iml" filepath="$PROJECT_DIR$/../Coin_Project/.idea/Coin_Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../CoinProject/.idea/CryptoCoin.iml" filepath="$PROJECT_DIR$/../CoinProject/.idea/CryptoCoin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../File_Handling/.idea/File_Handling.iml" filepath="$PROJECT_DIR$/../File_Handling/.idea/File_Handling.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Gmail_Test/.idea/Gmail.iml" filepath="$PROJECT_DIR$/../Gmail_Test/.idea/Gmail.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Telegram/.idea/Telegram.iml" filepath="$PROJECT_DIR$/../Telegram/.idea/Telegram.iml" />

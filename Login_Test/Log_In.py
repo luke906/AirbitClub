@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-str_Chrome_Path = "C:/Users\Lule LEE/PycharmProjects/Selenium_Driver/chromedriver_win32/chromedriver"
+str_Chrome_Path = "./chromedriver"
 
 # str_NaverLogin_URL = "https://nid.naver.com/nidlogin.login"
 str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
