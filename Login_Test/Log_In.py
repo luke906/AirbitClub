@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-str_Chrome_Path = "./chromedriver"
+str_Chrome_Path = "../Driver/chromedriver"
 
 # str_NaverLogin_URL = "https://nid.naver.com/nidlogin.login"
 str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
@@ -17,7 +17,7 @@ browser.implicitly_wait(3)
 # driver.set_window_size(1120, 550)
 
 browser.get(str_AirBitClub_Login_URL)
-print("Driver Inititalized")
+print(browser.page_source)
 
 # browser.implicitly_wait(3)
 # driver.get(str_NaverLogin_URL)
@@ -33,6 +33,7 @@ browser.find_element_by_xpath('//*[@id="new_user"]/button').click()
 # Move to Wallets
 Wallet_Path = "https://www.bitbackoffice.com/wallets"
 browser.get(Wallet_Path)
+#print(browser.page_source)
 
 
 # print("Airbit Club Login Succeed!!")
