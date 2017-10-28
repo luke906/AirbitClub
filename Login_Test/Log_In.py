@@ -2,7 +2,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from Telegram_Class import Telegram_Manager
+# from Telegram_Class import Telegram_Manager
 
 str_Chrome_Path = "../Driver/chromedriver"
 str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
@@ -84,7 +84,7 @@ def show_all_money():
     print("REWARDS : %f" % rewards)
     print("SAVINGS : %f" % savings)
 
-
+    """
     Telegram_Mng = Telegram_Manager()
 
     str_commisions = "Total COMMISIONS : " + str(commissions)
@@ -101,7 +101,7 @@ def show_all_money():
 
     str_total = "Total Available Money : " + str(commissions+rewards)
     Telegram_Mng.send_message(str_total)
-
+    """
 
 
 if __name__   == "__main__":
