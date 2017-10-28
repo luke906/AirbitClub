@@ -1,14 +1,4 @@
-import requests
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-str_Chrome_Path = "../Driver/chromedriver"
-
-
-
-from Selenium2Library import Selenium2Library
-sl = Selenium2Library()
-sl.open_browser('chrome')
+import telegram
 
 
 """
