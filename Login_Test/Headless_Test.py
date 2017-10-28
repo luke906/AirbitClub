@@ -4,9 +4,18 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 str_Chrome_Path = "../Driver/chromedriver"
 
-# str_NaverLogin_URL = "https://nid.naver.com/nidlogin.login"
-# str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
-str_AirBitClub_Login_URL = "https://www.naver.com"
+
+
+from Selenium2Library import Selenium2Library
+sl = Selenium2Library()
+sl.open_browser('chrome')
+
+
+"""
+
+
+str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+
 
 chrome_options = Options()
 
@@ -43,3 +52,5 @@ print(browser.page_source)
 # print(html_source)
 
 # driver.quit()
+
+"""
