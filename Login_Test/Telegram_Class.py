@@ -1,4 +1,4 @@
-"""
+
 import telegram
 
 class Telegram_Manager:
@@ -10,4 +10,4 @@ class Telegram_Manager:
 
     def send_message(self, message):
         self.bot.sendMessage(chat_id='468017156', text=message)
-"""
+

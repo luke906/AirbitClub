@@ -1,4 +1,3 @@
-
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -16,14 +15,13 @@ chrome_options = Options()
 chrome_options.add_argument("--disable-infobars")
 
 commissions = 0
-cash        = 0
-rewards     = 0
-savings     = 0
+cash = 0
+rewards = 0
+savings = 0
 
-browser = None
+browser = webdriver.Chrome(executable_path=str_Chrome_Path, chrome_options=chrome_options)
 
 def get_id_password():
-
     global id_list
     try:
         with open('./ID_List.txt', 'r') as f:
@@ -34,13 +32,11 @@ def get_id_password():
     except FileNotFoundError as e:
         print(str(e))
 
-def open_login_browser(str_id, str_password):
 
+def open_login_browser(str_id, str_password):
     global browser
     global browser_list
     global str_AirBitClub_Login_URL
-
-    browser = webdriver.Chrome(executable_path=str_Chrome_Path, chrome_options=chrome_options)
 
     browser.implicitly_wait(3)
     browser.get(str_AirBitClub_Login_URL)
@@ -48,14 +44,15 @@ def open_login_browser(str_id, str_password):
     browser.find_element_by_name("user[password]").send_keys(str_password)
     browser.find_element_by_xpath('//*[@id="new_user"]/button').click()
 
-def open_wallet_browser():
 
+def open_wallet_browser():
     global browser
     global commissions
     global cash
     global rewards
     global savings
     global str_Wallet_URL
+    global str_AirBitClub_Login_URL
 
     browser.implicitly_wait(3)
     browser.get(str_Wallet_URL)
@@ -64,17 +61,22 @@ def open_wallet_browser():
     soup = BeautifulSoup(html, 'html.parser')
 
     commissions += float(soup.find_all(class_='dll-quantity dll-container')[0].get_text())
-    cash        += float(soup.find_all(class_='dll-quantity dll-container')[1].get_text())
-    rewards     += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
-    savings     += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
+    cash += float(soup.find_all(class_='dll-quantity dll-container')[1].get_text())
+    rewards += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
+    savings += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
-    browser.quit()
+    browser.implicitly_wait(3)
+    browser.get('https://www.google.com')
+
+    browser.implicitly_wait(3)
+    browser.get(str_AirBitClub_Login_URL)
+
 
 def get_account_count():
     return len(id_list)
 
-def all_browser_quit():
 
+def all_browser_quit():
     """
     global browser_list
 
@@ -82,16 +84,14 @@ def all_browser_quit():
         browser_list[index].quit()
     """
 
-def show_all_money():
 
+def show_all_money():
     global id_list
 
     print("COMMISSIONS : %f" % commissions)
     print("CASH : %f" % cash)
     print("REWARDS : %f" % rewards)
     print("SAVINGS : %f" % savings)
-
-
 
     Telegram_Mng = Telegram_Manager()
 
@@ -110,10 +110,11 @@ def show_all_money():
     str_total = "생성된 계좌의 총 갯수 : %d" % (len(id_list))
     Telegram_Mng.send_message(str_total)
 
-    str_total = "전체 모든 계좌 총 합계(커미션 + 리워드) : %.2f" % (commissions+rewards)
+    str_total = "전체 모든 계좌 총 합계(커미션 + 리워드) : %.2f" % (commissions + rewards)
     Telegram_Mng.send_message(str_total)
 
-if __name__   == "__main__":
+
+if __name__ == "__main__":
 
     get_id_password()
 
@@ -122,7 +123,6 @@ if __name__   == "__main__":
     for index in range(0, account_count):
         open_login_browser(id_list[index], password_list[index])
         open_wallet_browser()
-
 
     show_all_money()
 
