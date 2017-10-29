@@ -24,7 +24,7 @@ browser = webdriver.Chrome(executable_path=str_Chrome_Path, chrome_options=chrom
 def get_id_password():
     global id_list
     try:
-        with open('./ID_List.txt', 'r') as f:
+        with open('./lsw_ID_List.txt', 'r') as f:
             for read_line in f:
                 id_list.append(read_line.split('/')[0])
                 password_list.append(read_line.split('/')[1][:-1])
@@ -66,11 +66,9 @@ def open_wallet_browser():
     savings += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
     browser.implicitly_wait(3)
-    browser.get('https://www.google.com')
-
-    browser.implicitly_wait(3)
-    browser.get(str_AirBitClub_Login_URL)
-
+    #browser.find_element_by_partial_link_text('Logout').click()
+    #browser.find_element_by_xpath('//a[@href="/auth/logout"]').click()
+    browser.execute_script("logout();")
 
 def get_account_count():
     return len(id_list)
