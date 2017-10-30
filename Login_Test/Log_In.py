@@ -62,7 +62,7 @@ def process_browser(str_id, str_password, commissions, cash, rewards, savings):
     global str_Chrome_Path
 
     browser = webdriver.Chrome(executable_path=str_Chrome_Path, chrome_options=chrome_options)
-    browser.set_window_size(10, 10)
+    #browser.set_window_size(10, 10)
     #browser.set_window_position(-10000, 0)
 
     # 원래 메인페이지를 안거치고 곳바로 로그인 페이지로 갔을때  Incapsula페이지가 자주 나옴
@@ -140,9 +140,9 @@ if __name__   == "__main__":
     get_id_password()
 
     account_count = get_account_count()
-
-    for index in range(0, account_count):
-        process_browser(id_list[index], password_list[index], commissions, cash, rewards, savings)
+    for i in range(0,6):
+        for index in range(0, account_count):
+            process_browser(id_list[index], password_list[index], commissions, cash, rewards, savings)
 
         #proc = Process(target=process_browser, args=(id_list[index], password_list[index], commissions, cash, rewards, savings))
         #procs.append(proc)
