@@ -24,16 +24,23 @@ savings = 0
 browser = webdriver.Chrome(executable_path=str_Chrome_Path, chrome_options=chrome_options)
 
 def get_id_password():
+
     global id_list
+    global password_list
+
     try:
-        with open('./ID_List.txt', 'r') as f:
-            for read_line in f:
-                id_list.append(read_line.split('/')[0])
-                password_list.append(read_line.split('/')[1][:-1])
+        f = open("./ID_List.txt", 'r')
+        read_line = f.readlines()
+
+        for line in read_line:
+            if len(line) > 0 and line != '\n':
+                id_list.append(line.split('/')[0])
+                password_list.append(line.split('/')[1].rstrip('\n'))
+
+        f.close()
 
     except FileNotFoundError as e:
         print(str(e))
-
 
 def open_login_browser(str_id, str_password):
     global browser
@@ -41,7 +48,12 @@ def open_login_browser(str_id, str_password):
     global str_AirBitClub_Login_URL
 
     browser.implicitly_wait(3)
+    browser.get('https://www.bitbackoffice.com')
+    #browser.find_element_by_xpath('//*[@id="nav-bar-signin"]').click()
+
+    browser.implicitly_wait(3)
     browser.get(str_AirBitClub_Login_URL)
+
     browser.find_element_by_name("user[username]").send_keys(str_id)
     browser.find_element_by_name("user[password]").send_keys(str_password)
     browser.find_element_by_xpath('//*[@id="new_user"]/button').click()

@@ -1,5 +1,4 @@
-
-
+import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -17,8 +16,13 @@ browser_list = []
 
 chrome_options = Options()
 chrome_options.add_argument("--disable-infobars")
-chrome_options.add_argument("--ignore-ssl-errors=true")
-chrome_options.add_argument("--ssl-protocol=TLSv1")
+#chrome_options.add_argument("--ignore-ssl-errors=true")
+#chrome_options.add_argument("--ssl-protocol=TLSv1")
+#chrome_options.add_argument('--ignore-certificate-errors')
+
+prefs = {'safebrowsing.enabled': 'true'}
+chrome_options.add_experimental_option("prefs", prefs)
+#chrome_options.add_argument("--window-size=10x10")
 
 
 commissions = Value('d', 0.0)
@@ -58,14 +62,23 @@ def process_browser(str_id, str_password, commissions, cash, rewards, savings):
     global str_Chrome_Path
 
     browser = webdriver.Chrome(executable_path=str_Chrome_Path, chrome_options=chrome_options)
+    browser.set_window_size(10, 10)
+    #browser.set_window_position(-10000, 0)
 
-    browser.implicitly_wait(3)
+    # 원래 메인페이지를 안거치고 곳바로 로그인 페이지로 갔을때  Incapsula페이지가 자주 나옴
+    # 메인 페이지를 거치고 로그인 페이지로 가도록 처리 함.
+    #browser.implicitly_wait(10)
+    #browser.get('https://www.bitbackoffice.com')
+    #browser.find_element_by_xpath('//*[@id="nav-bar-signin"]').click()
+
+    browser.implicitly_wait(10)
     browser.get(str_AirBitClub_Login_URL)
     browser.find_element_by_name("user[username]").send_keys(str_id)
     browser.find_element_by_name("user[password]").send_keys(str_password)
     browser.find_element_by_xpath('//*[@id="new_user"]/button').click()
+    #browser.find_element_by_xpath('// *[ @ id = "login"] / div[2] / div / div[2] / form / button').click()
 
-    browser.implicitly_wait(3)
+    browser.implicitly_wait(10)
     browser.get(str_Wallet_URL)
 
     html = browser.page_source
@@ -129,15 +142,15 @@ if __name__   == "__main__":
     account_count = get_account_count()
 
     for index in range(0, account_count):
-        #process_browser(id_list[index], password_list[index])
+        process_browser(id_list[index], password_list[index], commissions, cash, rewards, savings)
 
-        proc = Process(target=process_browser, args=(id_list[index], password_list[index], commissions, cash, rewards, savings))
-        procs.append(proc)
-        proc.start()
+        #proc = Process(target=process_browser, args=(id_list[index], password_list[index], commissions, cash, rewards, savings))
+        #procs.append(proc)
+        #proc.start()
 
 
-    for proc in procs:
-        proc.join()
+    #for proc in procs:
+    #   proc.join()
 
 
     show_all_money()
