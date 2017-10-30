@@ -1,3 +1,5 @@
+
+
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -24,7 +26,7 @@ browser = webdriver.Chrome(executable_path=str_Chrome_Path, chrome_options=chrom
 def get_id_password():
     global id_list
     try:
-        with open('./lsw_ID_List.txt', 'r') as f:
+        with open('./ID_List.txt', 'r') as f:
             for read_line in f:
                 id_list.append(read_line.split('/')[0])
                 password_list.append(read_line.split('/')[1][:-1])
