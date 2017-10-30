@@ -140,7 +140,7 @@ if __name__   == "__main__":
     get_id_password()
 
     account_count = get_account_count()
-    for i in range(0,6):
+    for i in range(0,20):
         for index in range(0, account_count):
             process_browser(id_list[index], password_list[index], commissions, cash, rewards, savings)
 
