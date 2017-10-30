@@ -16,6 +16,9 @@ browser_list = []
 
 chrome_options = Options()
 chrome_options.add_argument("--disable-infobars")
+chrome_options.add_argument("--ignore-ssl-errors=true")
+chrome_options.add_argument("--ssl-protocol=TLSv1")
+
 
 commissions = 0
 cash        = 0
@@ -130,16 +133,16 @@ if __name__   == "__main__":
     account_count = get_account_count()
 
     for index in range(0, account_count):
-        process_browser(id_list[index], password_list[index])
+        #process_browser(id_list[index], password_list[index])
 
-        """
         proc = Process(target=process_browser, args=(id_list[index], password_list[index]))
         procs.append(proc)
         proc.start()
-        """
+
+    for proc in procs:
+        proc.join()
+
     show_all_money()
-    #for proc in procs:
-    #    proc.join()
 
 
 
