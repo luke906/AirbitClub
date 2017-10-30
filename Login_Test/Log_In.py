@@ -1,9 +1,10 @@
 
+
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from Telegram_Class import Telegram_Manager
-from multiprocessing import Process
+from multiprocessing import Process, Value
 
 
 str_Chrome_Path = "../Driver/chromedriver"
@@ -20,10 +21,10 @@ chrome_options.add_argument("--ignore-ssl-errors=true")
 chrome_options.add_argument("--ssl-protocol=TLSv1")
 
 
-commissions = 0
-cash        = 0
-rewards     = 0
-savings     = 0
+commissions = Value('d', 0.0)
+cash        = Value('d', 0.0)
+rewards     = Value('d', 0.0)
+savings     = Value('d', 0.0)
 
 browser = None
 
@@ -47,14 +48,10 @@ def get_id_password():
         print(str(e))
 
 
-def process_browser(str_id, str_password):
+def process_browser(str_id, str_password, commissions, cash, rewards, savings):
 
     global browser
     global browser_list
-    global commissions
-    global cash
-    global rewards
-    global savings
     global str_AirBitClub_Login_URL
     global str_Wallet_URL
     global chrome_options
@@ -74,14 +71,13 @@ def process_browser(str_id, str_password):
     html = browser.page_source
     soup = BeautifulSoup(html, 'html.parser')
 
-    commissions += float(soup.find_all(class_='dll-quantity dll-container')[0].get_text())
-    cash += float(soup.find_all(class_='dll-quantity dll-container')[1].get_text())
-    rewards += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
-    savings += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
+
+    commissions.value += float(soup.find_all(class_='dll-quantity dll-container')[0].get_text())
+    cash.value += float(soup.find_all(class_='dll-quantity dll-container')[1].get_text())
+    rewards.value += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
+    savings.value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
     browser.quit()
-
-
 
 
 def get_account_count():
@@ -100,12 +96,12 @@ def show_all_money():
 
     global id_list
 
-    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions
-    str_cash = "전체계좌 CASH 합계 : %.2f" % cash
-    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards
-    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % savings
+    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value
+    str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value
+    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards.value
+    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % savings.value
     str_total_account = "생성된 계좌의 총 갯수 : %d" % (len(id_list))
-    str_total = "전체 모든 계좌 총 합계(커미션 + 리워드) : %.2f" % (commissions + rewards)
+    str_total = "전체 모든 계좌 총 합계(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value)
 
     print(str_commisions)
     print(str_cash)
@@ -135,12 +131,14 @@ if __name__   == "__main__":
     for index in range(0, account_count):
         #process_browser(id_list[index], password_list[index])
 
-        proc = Process(target=process_browser, args=(id_list[index], password_list[index]))
+        proc = Process(target=process_browser, args=(id_list[index], password_list[index], commissions, cash, rewards, savings))
         procs.append(proc)
         proc.start()
 
+
     for proc in procs:
         proc.join()
+
 
     show_all_money()
 
