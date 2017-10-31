@@ -71,14 +71,14 @@ def process_browser(str_id, str_password, commissions, cash, rewards, savings):
     #browser.get('https://www.bitbackoffice.com')
     #browser.find_element_by_xpath('//*[@id="nav-bar-signin"]').click()
 
-    browser.implicitly_wait(10)
+    #browser.implicitly_wait(10)
     browser.get(str_AirBitClub_Login_URL)
     browser.find_element_by_name("user[username]").send_keys(str_id)
     browser.find_element_by_name("user[password]").send_keys(str_password)
     browser.find_element_by_xpath('//*[@id="new_user"]/button').click()
     #browser.find_element_by_xpath('// *[ @ id = "login"] / div[2] / div / div[2] / form / button').click()
 
-    browser.implicitly_wait(10)
+    #browser.implicitly_wait(10)
     browser.get(str_Wallet_URL)
 
     html = browser.page_source
@@ -135,12 +135,14 @@ def show_all_money():
 
 if __name__   == "__main__":
 
+    start_time = time.time()
+
     procs = []
 
     get_id_password()
 
     account_count = get_account_count()
-    for i in range(0,20):
+    for i in range(0,50):
         for index in range(0, account_count):
             process_browser(id_list[index], password_list[index], commissions, cash, rewards, savings)
 
@@ -148,7 +150,11 @@ if __name__   == "__main__":
         #procs.append(proc)
         #proc.start()
 
+    end_time = time.time()
 
+    # print processing time
+
+    print(end_time - start_time)
     #for proc in procs:
     #   proc.join()
 
