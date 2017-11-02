@@ -1,9 +1,17 @@
+import os
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from Telegram_Class import Telegram_Manager
 from multiprocessing import Process, Value
+
+
+BASE_DIR = os.path.abspath('.')
+TARGET_DIR = os.path.join(BASE_DIR, "DB")
+TARGET_FILE = 'test.db'
+TARGET_FILE_FULL_PATH = os.path.join(TARGET_DIR, TARGET_FILE)
+
 
 
 str_Chrome_Path = "../Driver/chromedriver"
@@ -36,6 +44,7 @@ def get_id_password():
 
     global id_list
     global password_list
+
 
     try:
         f = open("./lsw_ID_List.txt", 'r')
