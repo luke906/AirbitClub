@@ -74,20 +74,14 @@ def process_browser(str_id, str_password, commissions, cash, rewards, savings):
     #browser.set_window_size(10, 10)
     #browser.set_window_position(-10000, 0)
 
-    # 원래 메인페이지를 안거치고 곳바로 로그인 페이지로 갔을때  Incapsula페이지가 자주 나옴
-    # 메인 페이지를 거치고 로그인 페이지로 가도록 처리 함.
-    #browser.implicitly_wait(10)
-    #browser.get('https://www.bitbackoffice.com')
-    #browser.find_element_by_xpath('//*[@id="nav-bar-signin"]').click()
-
-    #browser.implicitly_wait(10)
+    browser.implicitly_wait(2)
     browser.get(str_AirBitClub_Login_URL)
     browser.find_element_by_name("user[username]").send_keys(str_id)
     browser.find_element_by_name("user[password]").send_keys(str_password)
     browser.find_element_by_xpath('//*[@id="new_user"]/button').click()
     #browser.find_element_by_xpath('// *[ @ id = "login"] / div[2] / div / div[2] / form / button').click()
 
-    #browser.implicitly_wait(10)
+    browser.implicitly_wait(2)
     browser.get(str_Wallet_URL)
 
     html = browser.page_source
