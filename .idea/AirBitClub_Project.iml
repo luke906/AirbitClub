@@ -14,6 +14,7 @@
     <orderEntry type="module" module-name="File_Handling" />
     <orderEntry type="module" module-name="CryptoCoin" />
     <orderEntry type="module" module-name="Coin_Project" />
+    <orderEntry type="module" module-name="Uni-Edu" />
   </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="Nosetests" />
