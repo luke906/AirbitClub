@@ -89,8 +89,6 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id):
     cash = float(soup.find_all("small")[2].get_text())
     rewards = float(soup.find_all("small")[3].get_text())
 
-
-
     print("commissions: %f" % commissions)
     print("cash: %f" % cash)
     print("rewards: %f" % rewards)
