@@ -12,15 +12,13 @@ TARGET_FILE_FULL_PATH = os.path.join(TARGET_DIR, TARGET_FILE)
 
 id_list = []
 password_list = []
-browser_list = []
+email_list = []
 
 # shared memory 사용 (멀티 프로세스간 변수값 공유)
 commissions = Value('d', 0.0)
 cash = Value('d', 0.0)
 rewards = Value('d', 0.0)
 savings = Value('d', 0.0)
-
-browser = None
 
 
 def get_id_password():
@@ -34,7 +32,8 @@ def get_id_password():
         for line in read_line:
             if len(line) > 0 and line != '\n':
                 id_list.append(line.split('/')[0])
-                password_list.append(line.split('/')[1].rstrip('\n'))
+                password_list.append(line.split('/')[1])
+                email_list.append(line.split('/')[2].rstrip('\n'))
 
         f.close()
 
@@ -42,11 +41,7 @@ def get_id_password():
         print(str(e))
 
 
-def process_browser_to_get_money_with_userid(str_id, str_password, commissions, cash, rewards, savings):
-    global browser
-    global browser_list
-    global str_AirBitClub_Login_URL
-    global str_Wallet_URL
+def process_browser_to_get_money_with_userid(str_login_id, str_login_password, commissions, cash, rewards, savings):
 
     str_Chrome_Path = "../Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
@@ -55,8 +50,8 @@ def process_browser_to_get_money_with_userid(str_id, str_password, commissions, 
     AirWebDriver = WebDriver(str_Chrome_Path)
 
     AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
-    AirWebDriver.send_key_by_name("user[username]", str_id)
-    AirWebDriver.send_key_by_name("user[password]", str_password)
+    AirWebDriver.send_key_by_name("user[username]", str_login_id)
+    AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
     AirWebDriver.move_to_url(str_Wallet_URL)
 
@@ -69,6 +64,36 @@ def process_browser_to_get_money_with_userid(str_id, str_password, commissions, 
 
 #    AirWebDriver.quit_browser()
 
+def transfer_money_to(str_login_id, str_login_password, str_destination_id):
+    str_Chrome_Path = "../Driver/chromedriver"
+    str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+    str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
+
+    AirWebDriver = WebDriver(str_Chrome_Path)
+
+    AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
+    AirWebDriver.send_key_by_name("user[username]", str_login_id)
+    AirWebDriver.send_key_by_name("user[password]", str_login_password)
+    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+    AirWebDriver.move_to_url(str_Transfer_URL)
+
+    # 트랜스퍼할 아이디를 입력한다.
+    AirWebDriver.send_key_by_id("search-user", str_destination_id)
+
+    # 검색버튼을 누른다.
+    AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
+
+    # 현재 해당 계정의 월릿 금액을 구한다.
+    soup = AirWebDriver.get_soup_object()
+    commissions = float(soup.find_all("small")[1].get_text())
+    cash = float(soup.find_all("small")[2].get_text())
+    rewards = float(soup.find_all("small")[3].get_text())
+
+
+
+    print("commissions: %f" % commissions)
+    print("cash: %f" % cash)
+    print("rewards: %f" % rewards)
 
 
 def get_account_count():
@@ -131,9 +156,15 @@ def get_total_commission_rewards_money():
 
 if __name__ == "__main__":
 
+    """
     get_id_password()
     get_total_commission_rewards_money()
     show_all_money()
+    """
+    transfer_money_to("lsw120300", "lsw8954!", "lsw120301")
+
+    time.sleep(600)
+
 
 
 
