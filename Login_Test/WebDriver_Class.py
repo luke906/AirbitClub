@@ -22,7 +22,7 @@ class WebDriver:
     def send_key_by_id(self, name_key, send_value):
         self.browser.find_element_by_id(name_key).send_keys(send_value)
 
-    def send_click_event(self, strxpath):
+    def send_click_event_with_xpath(self, strxpath):
         self.browser.find_element_by_xpath(strxpath).click()
 
     def return_browser(self):

@@ -57,7 +57,7 @@ def process_browser_to_get_money_with_userid(str_id, str_password, commissions, 
     AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
     AirWebDriver.send_key_by_name("user[username]", str_id)
     AirWebDriver.send_key_by_name("user[password]", str_password)
-
+    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
     AirWebDriver.move_to_url(str_Wallet_URL)
 
     soup = AirWebDriver.get_soup_object()
@@ -67,7 +67,8 @@ def process_browser_to_get_money_with_userid(str_id, str_password, commissions, 
     rewards.value += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
     savings.value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
-    AirWebDriver.quit_browser()
+#    AirWebDriver.quit_browser()
+
 
 
 def get_account_count():
@@ -107,13 +108,13 @@ def get_total_commission_rewards_money():
 
     start_time = time.time()
 
-    get_id_password()
-
-    account_count = get_account_count()
-    for i in range(0, 50):
-        for index in range(0, account_count):
-            process_browser_to_get_money_with_userid(id_list[index], password_list[index], commissions, cash, rewards,
-                                                     savings)
+    for index in range(0, get_account_count()):
+        process_browser_to_get_money_with_userid(id_list[index],
+                                                 password_list[index],
+                                                 commissions,
+                                                 cash,
+                                                 rewards,
+                                                 savings)
 
             # proc = Process(target=process_browser, args=(id_list[index], password_list[index], commissions, cash, rewards, savings))
             # procs.append(proc)
@@ -129,6 +130,8 @@ def get_total_commission_rewards_money():
 
 
 if __name__ == "__main__":
+
+    get_id_password()
     get_total_commission_rewards_money()
     show_all_money()
 
