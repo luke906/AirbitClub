@@ -123,8 +123,13 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id):
     if rewards > 0:
         # 커미션 지갑 선택
         AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[3]')
+
         # 전송할 커미션 입력
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(rewards))
+
+        # 토큰을 요청하고 토큰을 받아온다.
+
+
 
 def get_account_count():
     return len(id_list)
