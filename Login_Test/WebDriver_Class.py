@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import Select
 
 class WebDriver:
 
@@ -24,6 +25,12 @@ class WebDriver:
 
     def send_click_event_with_xpath(self, strxpath):
         self.browser.find_element_by_xpath(strxpath).click()
+
+    def get_object_by_xpath(self, strxpath):
+        return Select(self.browser.find_element_by_xpath(strxpath))
+
+    def select_option_by_index(self, select, index):
+        select.select_by_index(index)
 
     def return_browser(self):
         return self.browser

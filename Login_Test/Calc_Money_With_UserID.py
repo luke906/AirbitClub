@@ -49,7 +49,12 @@ def get_id_password():
     DB.execute_sql(sql)
     results = DB.get_db_result()
 
-    print(results)
+    for index in range(0, len(results)):
+        id_list.append(results[index]['user_id'])
+        password_list.append(results[index]['user_password'])
+        email_list.append(results[index]['user_email'])
+
+    #print(results[0])
 
 
 def process_browser_to_get_money_with_userid(str_login_id, str_login_password, commissions, cash, rewards, savings):
@@ -73,7 +78,7 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password, c
     rewards.value += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
     savings.value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
-#    AirWebDriver.quit_browser()
+    AirWebDriver.quit_browser()
 
 def transfer_money_to(str_login_id, str_login_password, str_destination_id):
     str_Chrome_Path = "../Driver/chromedriver"
@@ -97,13 +102,29 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id):
     # 현재 해당 계정의 월릿 금액을 구한다.
     soup = AirWebDriver.get_soup_object()
     commissions = float(soup.find_all("small")[1].get_text())
-    cash = float(soup.find_all("small")[2].get_text())
     rewards = float(soup.find_all("small")[3].get_text())
+    cash = float(soup.find_all("small")[2].get_text())
+
 
     print("commissions: %f" % commissions)
     print("cash: %f" % cash)
     print("rewards: %f" % rewards)
 
+    # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
+    # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
+    if commissions > 0:
+        # 커미션 지갑 선택
+        AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[2]')
+        # 전송할 커미션 입력
+        AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(commissions))
+
+    # 리워드에 금액이 있다면 리워드 이체를 한다.(1)
+    # //*[@id="partition_transfer_partition_user_wallet_id"]/option[3]
+    if rewards > 0:
+        # 커미션 지갑 선택
+        AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[3]')
+        # 전송할 커미션 입력
+        AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(rewards))
 
 def get_account_count():
     return len(id_list)
@@ -165,21 +186,15 @@ def get_total_commission_rewards_money():
 
 if __name__ == "__main__":
 
-    get_id_password()
-
     """
     get_id_password()
     get_total_commission_rewards_money()
     show_all_money()
     """
-
-    """
     
-    transfer_money_to("lsw120300", "lsw8954!", "lsw120301")
+    transfer_money_to("lsw120301", "lsw8954!", "lsw120300")
 
     time.sleep(600)
-    """
-
 
 
 
