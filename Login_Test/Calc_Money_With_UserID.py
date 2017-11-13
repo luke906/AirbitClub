@@ -3,6 +3,7 @@ import time
 from Telegram_Class import Telegram_Manager
 from multiprocessing import Process, Value
 from WebDriver_Class import WebDriver
+from DB_Manager_Class import DB_Manager
 from bs4 import BeautifulSoup
 
 BASE_DIR = os.path.abspath('.')
@@ -22,6 +23,8 @@ savings = Value('d', 0.0)
 
 
 def get_id_password():
+
+    """
     global id_list
     global password_list
 
@@ -39,6 +42,14 @@ def get_id_password():
 
     except FileNotFoundError as e:
         print(str(e))
+    """
+    DB = DB_Manager()
+
+    sql = "select * from USER_LOGIN_INFO"
+    DB.execute_sql(sql)
+    results = DB.get_db_result()
+
+    print(results)
 
 
 def process_browser_to_get_money_with_userid(str_login_id, str_login_password, commissions, cash, rewards, savings):
@@ -154,14 +165,20 @@ def get_total_commission_rewards_money():
 
 if __name__ == "__main__":
 
+    get_id_password()
+
     """
     get_id_password()
     get_total_commission_rewards_money()
     show_all_money()
     """
+
+    """
+    
     transfer_money_to("lsw120300", "lsw8954!", "lsw120301")
 
     time.sleep(600)
+    """
 
 
 
