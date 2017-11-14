@@ -22,7 +22,10 @@ for i in range(numMessages):
                 break
     # not multipart - i.e. plain text, no attachments, keeping fingers crossed
     else:
-        body_contents = b.get_payload(decode=True)
+        body_contents = parsed_email.get_payload(decode=True)
 
 
 print(body_contents)
+
+Mailbox.rset()
+Mailbox.quit()
