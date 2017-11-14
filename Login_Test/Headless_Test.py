@@ -1,4 +1,5 @@
 import getpass, poplib, email
+import base64
 
 Mailbox = poplib.POP3('pop.naver.com')
 
@@ -24,8 +25,8 @@ for i in range(numMessages):
     else:
         body_contents = parsed_email.get_payload(decode=True)
 
+print(body_contents.decode('utf-8'))
 
-print(body_contents)
 
 Mailbox.rset()
 Mailbox.quit()
