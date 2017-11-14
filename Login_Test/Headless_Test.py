@@ -1,11 +1,16 @@
 import getpass, poplib, email
 import base64
 
-Mailbox = poplib.POP3('pop.naver.com')
+Mailbox = poplib.POP3_SSL('pop.naver.com')
 
 Mailbox.user("luke906")
 Mailbox.pass_('newlife8661!')
 numMessages = len(Mailbox.list()[1])
+
+## get mail box stats; returns an array
+pop3_stat = Mailbox.stat()
+print("Total New Mails : %s (%s bytes)" % pop3_stat)
+
 body_contents = ""
 
 for i in range(numMessages):
@@ -25,8 +30,13 @@ for i in range(numMessages):
     else:
         body_contents = parsed_email.get_payload(decode=True)
 
-print(body_contents.decode('utf-8'))
 
 
-Mailbox.rset()
+
+if numMessages > 0:
+    print(body_contents.decode('utf-8'))
+    #메일을 읽은 상태로 표시한다.
+    Mailbox.dele(numMessages)
+
+
 Mailbox.quit()
