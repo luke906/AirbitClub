@@ -43,18 +43,21 @@ def get_id_password():
     except FileNotFoundError as e:
         print(str(e))
     """
+
+    # 가비아 DB 접속
     DB = DB_Manager()
 
+    # 사용자 로그인 정보를 가지고 온다.
     sql = "select * from USER_LOGIN_INFO"
-    DB.execute_sql(sql)
-    results = DB.get_db_result()
+    results = DB.get_object_execute_sql(sql)
 
+    # SELECT한 로그인 정보를 리스트에 저장한다.
     for index in range(0, len(results)):
         id_list.append(results[index]['user_id'])
         password_list.append(results[index]['user_password'])
         email_list.append(results[index]['user_email'])
 
-    #print(results[0])
+    print(results[0])
 
 
 def process_browser_to_get_money_with_userid(str_login_id, str_login_password, commissions, cash, rewards, savings):
@@ -191,13 +194,14 @@ def get_total_commission_rewards_money():
 
 if __name__ == "__main__":
 
+
     """
     get_id_password()
     get_total_commission_rewards_money()
     show_all_money()
     """
     
-    transfer_money_to("lsw120301", "lsw8954!", "lsw120300")
+    #transfer_money_to("lsw120301", "lsw8954!", "lsw120300")
 
     time.sleep(600)
 
