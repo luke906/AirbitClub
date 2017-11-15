@@ -16,6 +16,7 @@
     <orderEntry type="module" module-name="Coin_Project" />
     <orderEntry type="module" module-name="Uni-Edu" />
     <orderEntry type="module" module-name="DB_Handling" />
+    <orderEntry type="module" module-name="Naver_Mail_Test" />
   </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="Nosetests" />

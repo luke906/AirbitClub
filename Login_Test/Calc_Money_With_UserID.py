@@ -4,6 +4,7 @@ from Telegram_Class import Telegram_Manager
 from multiprocessing import Process, Value
 from WebDriver_Class import WebDriver
 from DB_Manager_Class import DB_Manager
+from apscheduler.schedulers.blocking import BlockingScheduler
 from bs4 import BeautifulSoup
 
 BASE_DIR = os.path.abspath('.')
@@ -14,6 +15,8 @@ TARGET_FILE_FULL_PATH = os.path.join(TARGET_DIR, TARGET_FILE)
 id_list = []
 password_list = []
 email_list = []
+gmail_secret_json = []
+email_kind = []
 
 # shared memory 사용 (멀티 프로세스간 변수값 공유)
 commissions = Value('d', 0.0)
@@ -22,7 +25,13 @@ rewards = Value('d', 0.0)
 savings = Value('d', 0.0)
 
 
-def get_id_password():
+def get_id_password(person_name):
+
+    global id_list
+    global password_list
+    global email_list
+    global gmail_secret_json
+    global email_kind
 
     """
     global id_list
@@ -48,7 +57,7 @@ def get_id_password():
     DB = DB_Manager()
 
     # 사용자 로그인 정보를 가지고 온다.
-    sql = "select * from USER_LOGIN_INFO"
+    sql = "select * from USER_LOGIN_INFO where user_name = person_name"
     results = DB.get_object_execute_sql(sql)
 
     # SELECT한 로그인 정보를 리스트에 저장한다.
@@ -56,6 +65,8 @@ def get_id_password():
         id_list.append(results[index]['user_id'])
         password_list.append(results[index]['user_password'])
         email_list.append(results[index]['user_email'])
+        gmail_secret_json.append(results[index]['user_gmail_secret_json'])
+        email_kind.append(results[index]['user_email_kind'])
 
     print(results[0])
 
@@ -83,7 +94,7 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password, c
 
     AirWebDriver.quit_browser()
 
-def transfer_money_to(str_login_id, str_login_password, str_destination_id):
+def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_email_kind, str_credential_filename):
     str_Chrome_Path = "../Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
@@ -121,16 +132,25 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id):
         # 전송할 커미션 입력
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(commissions))
 
+        # 토큰을 요청하고 메일에서 토큰을 받아온다.(수신한 토큰 입력)
+
+        # 트랜스퍼 실행
+
     # 리워드에 금액이 있다면 리워드 이체를 한다.(1)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[3]
     if rewards > 0:
-        # 커미션 지갑 선택
+        # 리워드 지갑 선택
         AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[3]')
 
-        # 전송할 커미션 입력
+        # 전송할 리워드 입력
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(rewards))
 
-        # 토큰을 요청하고 토큰을 받아온다.
+        # 토큰을 요청하고 메일에서 토큰을 받아온다.(수신한 토큰 입력)
+
+        # 트랜스퍼 실행
+
+
+
 
 
 
@@ -169,6 +189,9 @@ def show_all_money():
 def get_total_commission_rewards_money():
     # procs = []
 
+    global id_list
+    global password_list
+
     start_time = time.time()
 
     for index in range(0, get_account_count()):
@@ -194,6 +217,7 @@ def get_total_commission_rewards_money():
 
 if __name__ == "__main__":
 
+    get_id_password('이성원')
 
     """
     get_id_password()
