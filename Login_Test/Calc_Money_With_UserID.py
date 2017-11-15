@@ -57,7 +57,7 @@ def get_id_password(person_name):
     DB = DB_Manager()
 
     # 사용자 로그인 정보를 가지고 온다.
-    sql = "select * from USER_LOGIN_INFO where user_name = person_name"
+    sql = "select * from USER_LOGIN_INFO where user_name = " + "'" + person_name + "'"
     results = DB.get_object_execute_sql(sql)
 
     # SELECT한 로그인 정보를 리스트에 저장한다.
@@ -71,7 +71,7 @@ def get_id_password(person_name):
     print(results[0])
 
 
-def process_browser_to_get_money_with_userid(str_login_id, str_login_password, commissions, cash, rewards, savings):
+def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
 
     str_Chrome_Path = "../Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
@@ -92,7 +92,7 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password, c
     rewards.value += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
     savings.value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
-    AirWebDriver.quit_browser()
+    #AirWebDriver.quit_browser()
 
 def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_email_kind, str_credential_filename):
     str_Chrome_Path = "../Driver/chromedriver"
@@ -195,13 +195,7 @@ def get_total_commission_rewards_money():
     start_time = time.time()
 
     for index in range(0, get_account_count()):
-        process_browser_to_get_money_with_userid(id_list[index],
-                                                 password_list[index],
-                                                 commissions,
-                                                 cash,
-                                                 rewards,
-                                                 savings)
-
+        process_browser_to_get_money_with_userid(id_list[index], password_list[index])
             # proc = Process(target=process_browser, args=(id_list[index], password_list[index], commissions, cash, rewards, savings))
             # procs.append(proc)
             # proc.start()
@@ -218,6 +212,7 @@ def get_total_commission_rewards_money():
 if __name__ == "__main__":
 
     get_id_password('이성원')
+    get_total_commission_rewards_money()
 
     """
     get_id_password()
