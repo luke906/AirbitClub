@@ -7,11 +7,6 @@ from DB_Manager_Class import DB_Manager
 from apscheduler.schedulers.blocking import BlockingScheduler
 from bs4 import BeautifulSoup
 
-BASE_DIR = os.path.abspath('.')
-TARGET_DIR = os.path.join(BASE_DIR, "DB")
-TARGET_FILE = 'test.db'
-TARGET_FILE_FULL_PATH = os.path.join(TARGET_DIR, TARGET_FILE)
-
 id_list = []
 password_list = []
 email_list = []
@@ -74,12 +69,14 @@ def get_id_password(person_name):
 def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
 
     str_Chrome_Path = "../Driver/chromedriver"
+    #str_Chrome_Path = "../Driver/geckodriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
     AirWebDriver = WebDriver(str_Chrome_Path)
 
     AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
+
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
@@ -92,10 +89,12 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     rewards.value += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
     savings.value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
-    #AirWebDriver.quit_browser()
+    AirWebDriver.quit_browser()
+
 
 def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_email_kind, str_credential_filename):
-    str_Chrome_Path = "../Driver/chromedriver"
+    #str_Chrome_Path = "../Driver/chromedriver"
+    str_Chrome_Path = "../Driver/geckodriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
 
@@ -175,7 +174,7 @@ def show_all_money():
     print(str_total_account)
     print(str_total)
 
-    """
+
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_message(str_commisions)
     Telegram_Mng.send_message(str_cash)
@@ -183,7 +182,7 @@ def show_all_money():
     Telegram_Mng.send_message(str_savings)
     Telegram_Mng.send_message(str_total_account)
     Telegram_Mng.send_message(str_total)
-    """
+
 
 
 def get_total_commission_rewards_money():
@@ -193,8 +192,8 @@ def get_total_commission_rewards_money():
     global password_list
 
     start_time = time.time()
-
-    for index in range(0, get_account_count()):
+    count = get_account_count()
+    for index in range(0, count):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
             # proc = Process(target=process_browser, args=(id_list[index], password_list[index], commissions, cash, rewards, savings))
             # procs.append(proc)
@@ -213,13 +212,14 @@ if __name__ == "__main__":
 
     get_id_password('이성원')
     get_total_commission_rewards_money()
+    show_all_money()
 
     """
     get_id_password()
     get_total_commission_rewards_money()
-    show_all_money()
-    """
     
+    """
+
     #transfer_money_to("lsw120301", "lsw8954!", "lsw120300")
 
     time.sleep(600)
