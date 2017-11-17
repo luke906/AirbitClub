@@ -10,11 +10,6 @@ from Gmail_Manager_Class import Gmail_Manager
 from Schedule_Manager_Class import Schedule_Manager
 
 
-BASE_DIR = os.path.abspath('.')
-TARGET_DIR = os.path.join(BASE_DIR, "DB")
-TARGET_FILE = 'test.db'
-TARGET_FILE_FULL_PATH = os.path.join(TARGET_DIR, TARGET_FILE)
-
 id_list = []
 password_list = []
 email_list = []
@@ -29,6 +24,8 @@ savings = Value('d', 0.0)
 
 # 트랜스퍼 하기위한 토큰 값
 _REQUEST_TOKEN_VALUE = None
+
+scheduler = Schedule_Manager()
 
 def get_id_password(person_name):
 
@@ -99,7 +96,10 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password, c
 
     AirWebDriver.quit_browser()
 
-def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_login_email, str_credential_filename):
+def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_credential_filename):
+    global scheduler
+    global _REQUEST_TOKEN_VALUE
+
     str_Chrome_Path = "../Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
@@ -137,9 +137,18 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_
         # 전송할 커미션 입력
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(commissions))
 
-        # 토큰을 요청하고 메일에서 토큰을 받아온다.(수신한 토큰 입력)
+        # 토큰을 요청하고 메일에서 토큰을 받아온다.
+        scheduler.start_scheduler(get_airbit_token_value, 'interval', "token_job", 3, str_credential_filename)
+
+        # 이메일 확인 후 토큰을 얻어 올때 까지 대기
+        while 1:
+            if _REQUEST_TOKEN_VALUE != None and len(_REQUEST_TOKEN_VALUE) == 32:
+                break
 
         # 트랜스퍼 실행
+
+        # 웹페이지가 다시 로딩 될때까지 대기
+        time.sleep(5)
 
     # 리워드에 금액이 있다면 리워드 이체를 한다.(1)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[3]
@@ -150,14 +159,56 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_
         # 전송할 리워드 입력
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(rewards))
 
-        # 토큰을 요청하고 메일에서 토큰을 받아온다.(수신한 토큰 입력)
+        # 이메일 확인 후 토큰을 얻어 올때 까지 대기
+        while 1:
+            if _REQUEST_TOKEN_VALUE != None and len(_REQUEST_TOKEN_VALUE) == 32:
+                break
+
+        # 토큰을 요청하고 메일에서 토큰을 받아온다.
+        scheduler.start_scheduler(get_airbit_token_value, 'interval', "token_job", 3, str_credential_filename)
+
+        # 이메일 확인 후 토큰을 얻어 올때 까지 대기
+        while 1:
+            if _REQUEST_TOKEN_VALUE != None and len(_REQUEST_TOKEN_VALUE) == 32:
+                break
 
         # 트랜스퍼 실행
 
+        # 웹페이지가 다시 로딩 될때까지 대기
+        time.sleep(5)
 
+def get_airbit_token_value(secret_json_file):
 
+    print("get_airbit_token_value JOB START!")
 
+    global scheduler
+    global _REQUEST_TOKEN_VALUE
 
+    _REQUEST_TOKEN_VALUE = None
+    Gmail = Gmail_Manager()
+    Gmail.get_credentials(secret_json_file)
+
+    unread_message_count = Gmail.get_unread_message_count()
+
+    # 읽지 않은 메세지가 존재 한다면
+    if unread_message_count > 0:
+        #print(message_list[0]['Snippet'])
+        #print(message_list[0]['Sender'])
+
+        message_list = Gmail.get_unread_message()
+        # 32자리 토큰을 구한다.
+        # 가장 최신의 첫번째 메일의 메세지 간략 보기 내용을 스페이스로 구분하여 모두 검사한다.
+        for sub in message_list[0]['Snippet'].split(' '):
+            #수신 메일의 제목에 "Token"이 들어가 있는지 검사, 전송자가 에어비트이고 메세지 본문중 32자리 토큰 이라면
+            if message_list[0]['Subject'][0:5] == "Token" and \
+                     message_list[0]['Sender'] == "<servers@bitbackoffice.com>" and \
+                                      len(sub) == 32:
+                _REQUEST_TOKEN_VALUE = sub
+                scheduler.kill_scheduler("token_job")
+                # scheduler.shutdown_schedule()
+                print("Request Token is : %s" % _REQUEST_TOKEN_VALUE)
+                print("get_airbit_token_value JOB STOP!")
+                break
 
 def get_account_count():
     return len(id_list)

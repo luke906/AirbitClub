@@ -1,5 +1,6 @@
 from apscheduler.jobstores.base import JobLookupError
 from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 import time
 
@@ -7,7 +8,8 @@ class Schedule_Manager(object):
 
     # 클래스 생성시 스케쥴러 데몬을 생성합니다.
     def __init__(self):
-        self.sched = BlockingScheduler()
+        self.sched = BackgroundScheduler()
+
         self.job_id=''
 
     # 클래스가 종료될때, 모든 job들을 종료시켜줍니다.
@@ -17,7 +19,7 @@ class Schedule_Manager(object):
     # 모든 job들을 종료시켜주는 함수입니다.
     def shutdown(self):
         print("stop all scheduler")
-        self.sched.shutdown()
+        self.sched.shutdown(wait=True)
 
 
     # 특정 job을 종료시켜줍니다.
@@ -31,6 +33,10 @@ class Schedule_Manager(object):
 
     def hello(self, type, job_id):
         print("%s scheduler process_id[%s] : %d" % (type, job_id, time.localtime().tm_sec))
+
+    def shutdown_schedule(self):
+        self.sched.shutdown()
+
 
     # 스케쥴러입니다. 스케쥴러가 실행되면서 hello를 실행시키는 쓰레드가 생성되어집니다.
     # 그리고 다음 함수는 type 인수 값에 따라 cron과 interval 형식으로 지정할 수 있습니다.
