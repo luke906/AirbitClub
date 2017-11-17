@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 #from selenium.webdriver.firefox.options import Options
-from pyvirtualdisplay import Display
+
 
 class WebDriver:
 
