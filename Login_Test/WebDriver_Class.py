@@ -58,6 +58,9 @@ class WebDriver:
     def execute_javascript(self, strcommand):
         self.browser.execute_script(strcommand)
 
+    def save_screenshot(self, filename):
+        self.browser.save_screenshot(filename)
+
     def close_latest_tab(self):
         driver = self.browser
         driver.switch_to.window(driver.window_handles[-1])

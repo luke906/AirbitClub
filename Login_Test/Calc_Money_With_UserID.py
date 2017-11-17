@@ -124,10 +124,7 @@ def get_airbit_token_value(secret_json_file):
                      message_list[0]['Sender'] == "<servers@bitbackoffice.com>" and \
                                       len(sub) == 32:
                 _REQUEST_TOKEN_VALUE = sub
-                scheduler.kill_scheduler("token_job")
                 # scheduler.shutdown_schedule()
-                print("Request Token is : %s" % _REQUEST_TOKEN_VALUE)
-                print("get_airbit_token_value JOB STOP!")
                 break
 
 
@@ -163,9 +160,18 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_
     print("cash: %f" % cash)
     print("rewards: %f" % rewards)
 
+    AirWebDriver.save_screenshot("lsw120324.png")
+
+    # 만일 트랜스퍼할 금액이 없다면 종료 한다.
+    if (commissions + rewards) <= 0 :
+        print("There is no money to transfer")
+        AirWebDriver.quit_browser()
+
     # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
     if commissions > 0:
+
+
         # 커미션 지갑 선택
         AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[2]')
         # 전송할 커미션 입력
@@ -181,6 +187,9 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
             if _REQUEST_TOKEN_VALUE != None and len(_REQUEST_TOKEN_VALUE) == 32:
+                scheduler.kill_scheduler("token_job")
+                print("Request Token for commissions is : %s" % _REQUEST_TOKEN_VALUE)
+                print("get_airbit_token_value JOB STOP!")
                 break
 
         # 트랜스퍼할 금액 입력
@@ -213,6 +222,9 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
             if _REQUEST_TOKEN_VALUE != None and len(_REQUEST_TOKEN_VALUE) == 32:
+                scheduler.kill_scheduler("token_job")
+                print("Request Token for rewards is : %s" % _REQUEST_TOKEN_VALUE)
+                print("get_airbit_token_value JOB STOP!")
                 break
 
         # 트랜스퍼할 금액 입력
@@ -293,7 +305,7 @@ if __name__ == "__main__":
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_message(end_time - start_time)
     """
-    transfer_money_to("lsw120301", "lsw8954!", "lsw120300", "gmail-python-chargerunit01.json")
+    transfer_money_to("lsw120324", "lsw8954!", "lsw120300", "gmail-python-chargerunit01.json")
 
     time.sleep(600)
 
