@@ -6,6 +6,14 @@ from WebDriver_Class import WebDriver
 from DB_Manager_Class import DB_Manager
 from apscheduler.schedulers.blocking import BlockingScheduler
 from bs4 import BeautifulSoup
+from Gmail_Manager_Class import Gmail_Manager
+from Schedule_Manager_Class import Schedule_Manager
+
+
+BASE_DIR = os.path.abspath('.')
+TARGET_DIR = os.path.join(BASE_DIR, "DB")
+TARGET_FILE = 'test.db'
+TARGET_FILE_FULL_PATH = os.path.join(TARGET_DIR, TARGET_FILE)
 
 id_list = []
 password_list = []
@@ -19,6 +27,8 @@ cash = Value('d', 0.0)
 rewards = Value('d', 0.0)
 savings = Value('d', 0.0)
 
+# 트랜스퍼 하기위한 토큰 값
+_REQUEST_TOKEN_VALUE = None
 
 def get_id_password(person_name):
 
@@ -66,17 +76,15 @@ def get_id_password(person_name):
     print(results[0])
 
 
-def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
+def process_browser_to_get_money_with_userid(str_login_id, str_login_password, commissions, cash, rewards, savings):
 
     str_Chrome_Path = "../Driver/chromedriver"
-    #str_Chrome_Path = "../Driver/geckodriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
     AirWebDriver = WebDriver(str_Chrome_Path)
 
     AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
-
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
@@ -91,10 +99,8 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
 
     AirWebDriver.quit_browser()
 
-
-def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_email_kind, str_credential_filename):
-    #str_Chrome_Path = "../Driver/chromedriver"
-    str_Chrome_Path = "../Driver/geckodriver"
+def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_login_email, str_credential_filename):
+    str_Chrome_Path = "../Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
 
@@ -157,7 +163,7 @@ def get_account_count():
     return len(id_list)
 
 
-def show_all_money():
+def report_all_money():
     global id_list
 
     str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value
@@ -183,46 +189,45 @@ def show_all_money():
     Telegram_Mng.send_message(str_total_account)
     Telegram_Mng.send_message(str_total)
 
-
-
-def get_total_commission_rewards_money():
+def get_total_bonus_money():
     # procs = []
 
     global id_list
     global password_list
 
-    start_time = time.time()
-    count = get_account_count()
-    for index in range(0, count):
-        process_browser_to_get_money_with_userid(id_list[index], password_list[index])
+    for index in range(0, get_account_count()):
+        process_browser_to_get_money_with_userid(id_list[index],
+                                                 password_list[index],
+                                                 commissions,
+                                                 cash,
+                                                 rewards,
+                                                 savings)
+
             # proc = Process(target=process_browser, args=(id_list[index], password_list[index], commissions, cash, rewards, savings))
             # procs.append(proc)
             # proc.start()
 
-    end_time = time.time()
-
     # print processing time
 
-    print(end_time - start_time)
     # for proc in procs:
     #   proc.join()
 
 
 if __name__ == "__main__":
 
+    """
+    start_time = time.time()
     get_id_password('이성원')
-    get_total_commission_rewards_money()
-    show_all_money()
+    get_total_bonus_money()
+    report_all_money()
+    end_time = time.time()
 
+    Telegram_Mng = Telegram_Manager()
+    Telegram_Mng.send_message(end_time - start_time)
     """
-    get_id_password()
-    get_total_commission_rewards_money()
-    
-    """
 
-    #transfer_money_to("lsw120301", "lsw8954!", "lsw120300")
+    transfer_money_to("lsw120301", "lsw8954!", "lsw120300", "asas", "asas")
 
-    time.sleep(600)
 
 
 
