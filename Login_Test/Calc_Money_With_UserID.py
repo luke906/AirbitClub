@@ -352,7 +352,7 @@ def transfer_all_money_to_main_account():
     for index in range(1, get_account_count()):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
 
-    # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
+    # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     for index in range(1, get_account_count()):
         transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
 
@@ -402,7 +402,10 @@ if __name__ == "__main__":
     Telegram_Mng.send_message(end_time - start_time)
     """
 
-    #transfer_all_money_to_main_account()
+    #get_total_bonus_money()
+    #report_all_money()
+
+    transfer_all_money_to_main_account()
 
     get_screent_shot_with_login_id("lsw120300", "lsw8954!")
     #test()
