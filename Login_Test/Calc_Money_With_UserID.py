@@ -119,8 +119,8 @@ def get_airbit_token_value(secret_json_file):
         # 32자리 토큰을 구한다.
         # 가장 최신의 첫번째 메일의 메세지 간략 보기 내용을 스페이스로 구분하여 모두 검사한다.
         for sub in message_list[0]['Snippet'].split(' '):
-            #수신 메일의 제목에 "Token"이 들어가 있는지 검사, 전송자가 에어비트이고 메세지 본문중 32자리 토큰 이라면
-            if message_list[0]['Subject'][0:5] == "Token" and \
+            #수신 메일의 제목이 "Token for your OPEN TICKET" 인지 검사, 전송자가 에어비트이고 메세지 본문중 32자리 토큰 이라면
+            if message_list[0]['Subject'][0:26] == "Token for your OPEN TICKET" and \
                      message_list[0]['Sender'] == "<servers@bitbackoffice.com>" and \
                                       len(sub) == 32:
                 _REQUEST_TOKEN_VALUE = sub
@@ -295,7 +295,7 @@ def get_total_bonus_money():
 
 if __name__ == "__main__":
 
-    """
+
     start_time = time.time()
     get_id_password('이성원')
     get_total_bonus_money()
@@ -304,8 +304,8 @@ if __name__ == "__main__":
 
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_message(end_time - start_time)
-    """
-    transfer_money_to("lsw120324", "lsw8954!", "lsw120300", "gmail-python-chargerunit01.json")
+
+    #transfer_money_to("lsw120324", "lsw8954!", "lsw120300", "gmail-python-chargerunit01.json")
 
     time.sleep(600)
 
