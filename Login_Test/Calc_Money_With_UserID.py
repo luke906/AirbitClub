@@ -25,8 +25,6 @@ savings = Value('d', 0.0)
 # 트랜스퍼 하기위한 토큰 값
 _REQUEST_TOKEN_VALUE = None
 
-scheduler = Schedule_Manager()
-
 def get_id_password(person_name):
 
     global id_list
@@ -119,8 +117,8 @@ def get_airbit_token_value(secret_json_file):
         # 32자리 토큰을 구한다.
         # 가장 최신의 첫번째 메일의 메세지 간략 보기 내용을 스페이스로 구분하여 모두 검사한다.
         for sub in message_list[0]['Snippet'].split(' '):
-            #수신 메일의 제목이 "Token for your OPEN TICKET" 인지 검사, 전송자가 에어비트이고 메세지 본문중 32자리 토큰 이라면
-            if message_list[0]['Subject'][0:26] == "Token for your OPEN TICKET" and \
+            #수신 메일의 제목이 "Token for your TRANSFER" 인지 검사, 전송자가 에어비트이고 메세지 본문중 32자리 토큰 이라면
+            if message_list[0]['Subject'][0:23] == "Token for your TRANSFER" and \
                      message_list[0]['Sender'] == "<servers@bitbackoffice.com>" and \
                                       len(sub) == 32:
                 _REQUEST_TOKEN_VALUE = sub
@@ -128,10 +126,11 @@ def get_airbit_token_value(secret_json_file):
                 break
 
 
-def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_credential_filename):
+def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_password, str_credential_filename):
     global scheduler
     global _REQUEST_TOKEN_VALUE
 
+    print("start transfer %s" % str_login_id)
     str_Chrome_Path = "../Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
@@ -144,37 +143,44 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
     AirWebDriver.move_to_url(str_Transfer_URL)
 
-    # 트랜스퍼할 아이디를 입력한다.
-    AirWebDriver.send_key_by_id("search-user", str_destination_id)
-
-    # 검색버튼을 누른다.
-    AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
-
     # 현재 해당 계정의 월릿 금액을 구한다.
     soup = AirWebDriver.get_soup_object()
     commissions = float(soup.find_all("small")[1].get_text())
-    rewards = float(soup.find_all("small")[3].get_text())
     cash = float(soup.find_all("small")[2].get_text())
+    rewards = float(soup.find_all("small")[3].get_text())
 
     print("commissions: %f" % commissions)
     print("cash: %f" % cash)
     print("rewards: %f" % rewards)
 
-    AirWebDriver.save_screenshot("lsw120324.png")
-
-    # 만일 트랜스퍼할 금액이 없다면 종료 한다.
-    if (commissions + rewards) <= 0 :
-        print("There is no money to transfer")
+    # 만일 이체할 금액이 없다면 종료한다.
+    if (rewards + commissions) <= 0:
+        print("there is no money to transfer")
         AirWebDriver.quit_browser()
+        return
+
+    #AirWebDriver.save_screenshot("lsw120324.png")
 
     # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
-    if commissions > 0:
 
+
+    if commissions > 0 and wallet == "commissions":
+
+        scheduler = Schedule_Manager()
+
+        # 트랜스퍼할 아이디를 입력한다.
+        AirWebDriver.send_key_by_id("search-user", str_destination_id)
+
+        # 검색버튼을 누른다.
+        AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
 
         # 커미션 지갑 선택
-        AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[2]')
-        # 전송할 커미션 입력
+        # //*[@id="partition_transfer_partition_user_wallet_id"]/option[4]
+        AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[4]')
+        AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "commissions")
+        
+        # 전송할 커미션 금액 입력
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(commissions))
 
         # 토큰 요청 버튼을 누른다.
@@ -182,34 +188,51 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
-        scheduler.start_scheduler(get_airbit_token_value, 'interval', "token_job", 3, str_credential_filename)
+        scheduler.start_scheduler(get_airbit_token_value, 'interval', "token_job_commissions", 3, str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
             if _REQUEST_TOKEN_VALUE != None and len(_REQUEST_TOKEN_VALUE) == 32:
-                scheduler.kill_scheduler("token_job")
+                scheduler.kill_scheduler("token_job_commissions")
                 print("Request Token for commissions is : %s" % _REQUEST_TOKEN_VALUE)
                 print("get_airbit_token_value JOB STOP!")
                 break
 
-        # 트랜스퍼할 금액 입력
+        # 토큰 입력
         # id = partition_transfer_partition_token
         AirWebDriver.send_key_by_id('partition_transfer_partition_token', str(_REQUEST_TOKEN_VALUE))
+        _REQUEST_TOKEN_VALUE = None #다음번 조회를 위해서 토큰 초기화
 
         # 트랜스퍼 실행
         # //*[@id="submit-transfer"]
-        #AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
+        print("send rewards money : %f" % commissions)
+        AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
-        # 웹페이지가 다시 로딩 될때까지 대기
-        time.sleep(5)
+        # 트랜스퍼 실행 후 잠시 대기
+        time.sleep(3)
+        AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
+
+        # 종료
+        AirWebDriver.quit_browser()
 
     # 리워드에 금액이 있다면 리워드 이체를 한다.(1)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[3]
-    if rewards > 0:
-        # 리워드 지갑 선택
-        AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[3]')
+    if rewards > 0 and wallet == "rewards":
 
-        # 전송할 리워드 입력
+        scheduler = Schedule_Manager()
+
+        # 트랜스퍼할 아이디를 입력한다.
+        AirWebDriver.send_key_by_id("search-user", str_destination_id)
+
+        # 검색버튼을 누른다.
+        AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
+
+        # 리워드 지갑 선택
+        # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
+        #AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[2]')
+        AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "rewards")
+
+        # 전송할 리워드 금액 입력
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(rewards))
 
         # 토큰 요청 버튼을 누른다.
@@ -217,27 +240,35 @@ def transfer_money_to(str_login_id, str_login_password, str_destination_id, str_
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
-        scheduler.start_scheduler(get_airbit_token_value, 'interval', "token_job", 3, str_credential_filename)
+        scheduler.start_scheduler(get_airbit_token_value, 'interval', "token_job_rewards", 3, str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
             if _REQUEST_TOKEN_VALUE != None and len(_REQUEST_TOKEN_VALUE) == 32:
-                scheduler.kill_scheduler("token_job")
+                scheduler.kill_scheduler("token_job_rewards")
                 print("Request Token for rewards is : %s" % _REQUEST_TOKEN_VALUE)
                 print("get_airbit_token_value JOB STOP!")
                 break
 
-        # 트랜스퍼할 금액 입력
+        # 토큰 입력
         # id = partition_transfer_partition_token
         AirWebDriver.send_key_by_id('partition_transfer_partition_token', str(_REQUEST_TOKEN_VALUE))
+        _REQUEST_TOKEN_VALUE = None #다음번 조회를 위해서 토큰 초기화
 
         # 트랜스퍼 실행
         # //*[@id="submit-transfer"]
-        # AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
+        print("send rewards money : %f" % rewards )
+        AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
+        # 트랜스퍼 실행 후 잠시 대기
+        time.sleep(3)
+        AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
 
+        # 종료
+        AirWebDriver.quit_browser()
 
-
+    # 종료
+    AirWebDriver.quit_browser()
 
 def get_account_count():
     return len(id_list)
@@ -292,10 +323,58 @@ def get_total_bonus_money():
     # for proc in procs:
     #   proc.join()
 
+def transfer_all_money_to_main_account():
+
+    global id_list
+    global password_list
+    global gmail_secret_json
+
+    #transfer_money_to(main_account, "lsw120302", "lsw8954!", "gmail-python-chargerunit01.json")
+
+    # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
+    for index in range(1, get_account_count()):
+        transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
+
+    # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
+    for index in range(1, get_account_count()):
+        transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
+
+def test():
+    global scheduler
+    global _REQUEST_TOKEN_VALUE
+
+    str_Chrome_Path = "../Driver/chromedriver"
+    str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+    str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
+
+    AirWebDriver = WebDriver(str_Chrome_Path)
+
+    AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
+    AirWebDriver.send_key_by_name("user[username]", "lsw120317")
+    AirWebDriver.send_key_by_name("user[password]", "lsw8954!")
+    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+    AirWebDriver.move_to_url(str_Transfer_URL)
+
+    # 현재 해당 계정의 월릿 금액을 구한다.
+    soup = AirWebDriver.get_soup_object()
+    commissions = float(soup.find_all("small")[1].get_text())
+    cash = float(soup.find_all("small")[2].get_text())
+    rewards = float(soup.find_all("small")[3].get_text())
+
+    #AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "commissions")
+    #AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "rewards")
+
+    # 커미션 지갑 선택
+    #AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[4]')
+
+    # 리워드 지갑 선택
+    #AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[2]')
 
 if __name__ == "__main__":
 
+    get_id_password('이성원')
 
+    """
     start_time = time.time()
     get_id_password('이성원')
     get_total_bonus_money()
@@ -304,10 +383,12 @@ if __name__ == "__main__":
 
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_message(end_time - start_time)
+    """
 
-    #transfer_money_to("lsw120324", "lsw8954!", "lsw120300", "gmail-python-chargerunit01.json")
+    transfer_all_money_to_main_account()
+    #test()
 
-    time.sleep(600)
+
 
 
 

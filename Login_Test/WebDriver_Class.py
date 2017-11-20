@@ -1,6 +1,7 @@
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
 class WebDriver:
 
@@ -33,8 +34,19 @@ class WebDriver:
     def get_object_by_xpath(self, strxpath):
         return Select(self.browser.find_element_by_xpath(strxpath))
 
-    def select_option_by_index(self, select, index):
-        select.select_by_index(index)
+    def select_option_by_id_text(self, id, text):
+        el = self.browser.find_element_by_id(id)
+        for option in el.find_elements_by_tag_name('option'):
+            if text == "commissions":
+                #print(option.text[0:11])
+                if option.text[0:11] == text:
+                    option.click()  # select() in earlier versions of webdriver
+                    break
+            elif text == "rewards":
+                #print(option.text[0:7])
+                if option.text[0:7] == text:
+                    option.click()  # select() in earlier versions of webdriver
+                    break
 
     def return_browser(self):
         return self.browser
@@ -57,7 +69,10 @@ class WebDriver:
         driver.close()
 
     def quit_browser(self):
-        self.browser.quit()
+        try:
+            self.browser.quit()
+        except Exception:
+            pass
 
 
 

@@ -14,7 +14,8 @@ class Schedule_Manager(object):
 
     # 클래스가 종료될때, 모든 job들을 종료시켜줍니다.
     def __del__(self):
-        self.shutdown()
+        pass
+        # self.shutdown()
 
     # 모든 job들을 종료시켜주는 함수입니다.
     def shutdown(self):
