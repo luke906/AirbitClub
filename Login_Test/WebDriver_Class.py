@@ -9,6 +9,7 @@ class WebDriver:
 
         self.DriverPath = driver_path
         self.chrome_options = Options()
+        self.chrome_options.add_argument("--start-maximized")
         self.chrome_options.add_argument("--disable-infobars")
         self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
 

@@ -94,6 +94,25 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password, c
 
     AirWebDriver.quit_browser()
 
+def get_screent_shot_with_login_id(str_login_id, str_login_password):
+    str_Chrome_Path = "../Driver/chromedriver"
+    str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+    str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
+
+    AirWebDriver = WebDriver(str_Chrome_Path)
+
+    AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
+    AirWebDriver.send_key_by_name("user[username]", str_login_id)
+    AirWebDriver.send_key_by_name("user[password]", str_login_password)
+    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+    AirWebDriver.move_to_url(str_Wallet_URL)
+
+    AirWebDriver.save_screenshot("main_account.jpg")
+
+    Telegram_Mng = Telegram_Manager()
+    Telegram_Mng.send_image("main_account.jpg")
+
+
 
 def get_airbit_token_value(secret_json_file):
 
@@ -158,8 +177,6 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
         print("there is no money to transfer")
         AirWebDriver.quit_browser()
         return
-
-    #AirWebDriver.save_screenshot("lsw120324.png")
 
     # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
@@ -385,7 +402,9 @@ if __name__ == "__main__":
     Telegram_Mng.send_message(end_time - start_time)
     """
 
-    transfer_all_money_to_main_account()
+    #transfer_all_money_to_main_account()
+
+    get_screent_shot_with_login_id("lsw120300", "lsw8954!")
     #test()
 
 
