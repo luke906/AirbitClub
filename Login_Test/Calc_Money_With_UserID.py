@@ -13,6 +13,7 @@ email_list = []
 gmail_secret_json = []
 email_kind = []
 
+# 프로세스를 이용하여 다중 로그인을 할 경우 사용할 메모리 변수
 # shared memory 사용 (멀티 프로세스간 변수값 공유)
 commissions = Value('d', 0.0)
 cash = Value('d', 0.0)
@@ -108,6 +109,12 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_image("main_account.jpg")
+
+def clear_mail_box_before_transfer(secret_json_file):
+
+    Gmail = Gmail_Manager()
+    Gmail.get_credentials(secret_json_file)
+    Gmail.get_unread_message()
 
 
 
@@ -339,6 +346,12 @@ def transfer_all_money_to_main_account():
 
     #transfer_money_to(main_account, "lsw120302", "lsw8954!", "gmail-python-chargerunit01.json")
 
+    # 트랜스퍼 하기전에 메일을 청소 한다.
+    clear_mail_box_before_transfer("gmail-python-chargerunit01.json")
+    clear_mail_box_before_transfer("gmail-python-chargerunit03.json")
+    clear_mail_box_before_transfer("gmail-python-chargerunit05.json")
+    clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
+
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(1, get_account_count()):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
@@ -396,10 +409,11 @@ if __name__ == "__main__":
     #get_total_bonus_money()
     #report_all_money()
 
+
     transfer_all_money_to_main_account()
 
     get_screent_shot_with_login_id("lsw120300", "lsw8954!")
-    #test()
+
 
 
 
