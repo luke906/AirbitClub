@@ -13,6 +13,9 @@ email_list = []
 gmail_secret_json = []
 email_kind = []
 
+#트랜스퍼 속도 개선을 위해서 커미션리스트를 만든다.
+comissions_list = []
+
 # 프로세스를 이용하여 다중 로그인을 할 경우 사용할 메모리 변수
 # shared memory 사용 (멀티 프로세스간 변수값 공유)
 commissions = Value('d', 0.0)
@@ -329,6 +332,12 @@ def get_total_bonus_money():
     for index in range(0, get_account_count()):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
 
+    # 집계를 마치고 변수를 초기화 한다.
+    commissions.value = 0
+    cash.value = 0
+    rewards.value = 0
+    savings.value = 0
+
             # proc = Process(target=process_browser, args=(id_list[index], password_list[index])
             # procs.append(proc)
             # proc.start()
@@ -394,6 +403,9 @@ def test():
 if __name__ == "__main__":
 
     get_id_password('이성원')
+
+    get_total_bonus_money()
+    report_all_money()
 
     """
     start_time = time.time()
