@@ -14,7 +14,7 @@ gmail_secret_json = []
 email_kind = []
 
 #트랜스퍼 속도 개선을 위해서 커미션리스트를 만든다.
-comissions_list = []
+comissions_list_dic = {}
 
 # 프로세스를 이용하여 다중 로그인을 할 경우 사용할 메모리 변수
 # shared memory 사용 (멀티 프로세스간 변수값 공유)
@@ -307,13 +307,18 @@ def report_all_money():
     str_total_account = "생성된 계좌의 총 갯수 : %d" % (len(id_list))
     str_total = "전체 모든 계좌 총 합계(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value)
 
+    # 집계를 마치고 변수를 초기화 한다.
+    commissions.value = 0
+    cash.value = 0
+    rewards.value = 0
+    savings.value = 0
+
     print(str_commisions)
     print(str_cash)
     print(str_rewards)
     print(str_savings)
     print(str_total_account)
     print(str_total)
-
 
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_message(str_commisions)
@@ -332,11 +337,7 @@ def get_total_bonus_money():
     for index in range(0, get_account_count()):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
 
-    # 집계를 마치고 변수를 초기화 한다.
-    commissions.value = 0
-    cash.value = 0
-    rewards.value = 0
-    savings.value = 0
+
 
             # proc = Process(target=process_browser, args=(id_list[index], password_list[index])
             # procs.append(proc)
@@ -404,8 +405,8 @@ if __name__ == "__main__":
 
     get_id_password('이성원')
 
-    get_total_bonus_money()
-    report_all_money()
+    #get_total_bonus_money()
+    #report_all_money()
 
     """
     start_time = time.time()
