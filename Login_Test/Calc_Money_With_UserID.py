@@ -415,39 +415,24 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    start_time = time.time()
-    get_id_password('이성원')
-
-    get_total_bonus_money()
-    report_all_money()
-
-    end_time = time.time()
     Telegram_Mng = Telegram_Manager()
-    Telegram_Mng.send_message(end_time - start_time)
-
-    """
-    start_time = time.time()
     get_id_password('이성원')
+
+    start_time = time.time()
     get_total_bonus_money()
     report_all_money()
     end_time = time.time()
+    strmsg = "계좌 함산 프로세스 소요시간 : " + (end_time - start_time)
+    Telegram_Mng.send_message(strmsg)
 
-    Telegram_Mng = Telegram_Manager()
-    Telegram_Mng.send_message(end_time - start_time)
     """
-
-    #get_total_bonus_money()
-    #report_all_money()
-
     start_time = time.time()
-
     transfer_all_money_to_main_account()
-
     end_time = time.time()
     Telegram_Mng = Telegram_Manager()
-    Telegram_Mng.send_message(end_time - start_time)
-
+    strmsg = "트랜스퍼 프로세스 소요시간 : " + (end_time - start_time)
     get_screent_shot_with_login_id("lsw120300", "lsw8954!")
+    """
 
 
 
