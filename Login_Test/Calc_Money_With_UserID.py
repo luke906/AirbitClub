@@ -422,17 +422,17 @@ if __name__ == "__main__":
     get_total_bonus_money()
     report_all_money()
     end_time = time.time()
-    strmsg = "계좌 함산 프로세스 소요시간 : " + (end_time - start_time)
+    strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
     Telegram_Mng.send_message(strmsg)
 
-    """
+
     start_time = time.time()
     transfer_all_money_to_main_account()
     end_time = time.time()
     Telegram_Mng = Telegram_Manager()
-    strmsg = "트랜스퍼 프로세스 소요시간 : " + (end_time - start_time)
+    strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
     get_screent_shot_with_login_id("lsw120300", "lsw8954!")
-    """
+
 
 
 
