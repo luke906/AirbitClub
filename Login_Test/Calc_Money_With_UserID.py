@@ -323,6 +323,9 @@ def get_total_bonus_money():
     global id_list
     global password_list
 
+    Telegram_Mng = Telegram_Manager()
+    start_time = time.time()
+
     for index in range(22, get_account_count()):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
 
@@ -335,12 +338,19 @@ def get_total_bonus_money():
     # for proc in procs:
     #   proc.join()
 
+    end_time = time.time()
+    strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
+    Telegram_Mng.send_message(strmsg)
+
 def transfer_all_money_to_main_account():
 
     global id_list
     global password_list
     global gmail_secret_json
     global comissions_list_dic
+
+    Telegram_Mng = Telegram_Manager()
+    start_time = time.time()
 
     #transfer_money_to(main_account, "lsw120302", "lsw8954!", "gmail-python-chargerunit01.json")
 
@@ -359,6 +369,12 @@ def transfer_all_money_to_main_account():
     for index in range(1, get_account_count()):
         if comissions_list_dic[index] > 0:
             transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
+
+    end_time = time.time()
+    strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
+    Telegram_Mng.send_message(strmsg)
+
+    get_screent_shot_with_login_id(id_list[0], "lsw8954!")
 
 def test():
 
@@ -413,23 +429,15 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    Telegram_Mng = Telegram_Manager()
     get_id_password('이성원')
 
-    start_time = time.time()
     get_total_bonus_money()
     report_all_money()
-    end_time = time.time()
-    strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
-    Telegram_Mng.send_message(strmsg)
 
-"""
-    start_time = time.time()
     transfer_all_money_to_main_account()
-    end_time = time.time()
-    strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
-    get_screent_shot_with_login_id("lsw120300", "lsw8954!")
-"""
+
+
+
 
 
 
