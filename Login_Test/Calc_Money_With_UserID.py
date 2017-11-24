@@ -323,10 +323,8 @@ def get_total_bonus_money():
     global id_list
     global password_list
 
-    for index in range(0, get_account_count()):
+    for index in range(22, get_account_count()):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
-
-
 
             # proc = Process(target=process_browser, args=(id_list[index], password_list[index])
             # procs.append(proc)
@@ -425,14 +423,13 @@ if __name__ == "__main__":
     strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
     Telegram_Mng.send_message(strmsg)
 
-
+"""
     start_time = time.time()
     transfer_all_money_to_main_account()
     end_time = time.time()
-
     strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
     get_screent_shot_with_login_id("lsw120300", "lsw8954!")
-
+"""
 
 
 
