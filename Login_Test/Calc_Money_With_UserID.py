@@ -429,7 +429,7 @@ if __name__ == "__main__":
     start_time = time.time()
     transfer_all_money_to_main_account()
     end_time = time.time()
-    Telegram_Mng = Telegram_Manager()
+
     strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
     get_screent_shot_with_login_id("lsw120300", "lsw8954!")
 
