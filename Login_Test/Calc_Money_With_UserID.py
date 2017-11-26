@@ -200,7 +200,8 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
-        mail_scheduler.start_scheduler(get_airbit_token_value, 'interval', "token_job_commissions", 3, str_credential_filename)
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 3, str_credential_filename)
+
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
@@ -252,7 +253,7 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
-        mail_scheduler.start_scheduler(get_airbit_token_value, 'interval', "token_job_rewards", 3, str_credential_filename)
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 3, str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
@@ -376,7 +377,7 @@ def transfer_all_money_to_main_account():
 
     get_screent_shot_with_login_id(id_list[0], "lsw8954!")
 
-def test():
+def test(temp):
 
     global _REQUEST_TOKEN_VALUE
 
@@ -397,6 +398,8 @@ def test():
     commissions_ = float(soup.find_all("small")[1].get_text())
     cash_ = float(soup.find_all("small")[2].get_text())
     rewards_ = float(soup.find_all("small")[3].get_text())
+
+    AirWebDriver.quit_browser()
 
     #AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "commissions")
     #AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "rewards")
@@ -429,12 +432,28 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
+    """
     get_id_password('이성원')
 
     get_total_bonus_money()
     report_all_money()
 
     transfer_all_money_to_main_account()
+    """
+
+    scheduler = Schedule_Manager()
+    scheduler.start_scheduler_cron(test, 'mon-sat', 14, 58)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
