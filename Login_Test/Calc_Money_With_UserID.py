@@ -327,7 +327,7 @@ def get_total_bonus_money():
     Telegram_Mng = Telegram_Manager()
     start_time = time.time()
 
-    for index in range(22, get_account_count()):
+    for index in range(0, get_account_count()):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
 
             # proc = Process(target=process_browser, args=(id_list[index], password_list[index])
