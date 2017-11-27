@@ -318,7 +318,7 @@ def report_all_money():
     Telegram_Mng.send_message(str_total_account)
     Telegram_Mng.send_message(str_total)
 
-def get_total_bonus_money():
+def get_total_bonus_money(args):
     # procs = []
 
     global id_list
