@@ -34,26 +34,6 @@ def get_id_password(person_name):
     global gmail_secret_json
     global email_kind
 
-    """
-    global id_list
-    global password_list
-
-    try:
-        f = open("./ID_List.txt", 'r')
-        read_line = f.readlines()
-
-        for line in read_line:
-            if len(line) > 0 and line != '\n':
-                id_list.append(line.split('/')[0])
-                password_list.append(line.split('/')[1])
-                email_list.append(line.split('/')[2].rstrip('\n'))
-
-        f.close()
-
-    except FileNotFoundError as e:
-        print(str(e))
-    """
-
     # 가비아 DB 접속
     DB = DB_Manager()
 
