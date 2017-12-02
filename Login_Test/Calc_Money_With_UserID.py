@@ -52,6 +52,7 @@ def get_id_password(person_name):
     print(results[0])
 
 
+# 각 아이디 별로 로그인을 하여 금액을 합산한다.
 def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
 
     str_Chrome_Path = "../Driver/chromedriver"
