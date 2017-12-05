@@ -1,10 +1,16 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+
 import time
 from multiprocessing import Value
 
 from DB_Manager_Class import DB_Manager
+from Telegram_Class import Telegram_Manager
+
 from Gmail_Manager_Class import Gmail_Manager
 from Schedule_Manager_Class import Schedule_Manager
-from Telegram_Class import Telegram_Manager
 from WebDriver_Class import WebDriver
 
 id_list = []
@@ -426,7 +432,7 @@ if __name__ == "__main__":
 
     scheduler = Schedule_Manager()
     #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
-    #print("start scheduler transfer")
+    print("start scheduler transfer")
 
     scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 00)
     print("start scheduler get_total_bonus_money")

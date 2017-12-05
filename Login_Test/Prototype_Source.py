@@ -1,6 +1,6 @@
 from multiprocessing import Process
+
 from WebDriver_Class import WebDriver
-import time
 
 
 def process_browser_login():
