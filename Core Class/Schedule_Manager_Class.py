@@ -15,6 +15,7 @@ class Schedule_Manager(object):
         self.block_sched = BlockingScheduler()
 
         self.job_id=''
+        print("class")
 
     # 클래스가 종료될때, 모든 job들을 종료시켜줍니다.
     def __del__(self):
