@@ -3,10 +3,11 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../Coin_Project" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../CoinProject" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../DB_Handling" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Gmail_Test" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../Naver_Mail_Test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Google_Vision_API" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Naver_Mail_Manager" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Telegram" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Uni-Edu" vcs="Git" />
   </component>

@@ -2,21 +2,10 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/Login_Test" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Core Class" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6.2 (C:\Users\USER\Anaconda3\python.exe)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.6.1 (C:\ProgramData\Anaconda3\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Gmail_API_Test" />
-    <orderEntry type="module" module-name="Gmail" />
-    <orderEntry type="module" module-name="Telegram" />
-    <orderEntry type="module" module-name="Uni-Edu" />
-    <orderEntry type="module" module-name="UI_Test" />
-    <orderEntry type="module" module-name="File_Handling" />
-    <orderEntry type="module" module-name="CryptoCoin" />
-    <orderEntry type="module" module-name="Coin_Project" />
-    <orderEntry type="module" module-name="Uni-Edu" />
-    <orderEntry type="module" module-name="DB_Handling" />
-    <orderEntry type="module" module-name="Naver_Mail_Test" />
   </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="Nosetests" />
