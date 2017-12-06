@@ -57,7 +57,7 @@ def get_id_password(person_name):
 # 각 아이디 별로 로그인을 하여 금액을 합산한다.
 def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
 
-    str_Chrome_Path = "../Driver/chromedriver"
+    str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
@@ -124,7 +124,7 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     global comissions_list_dic
 
     print("start transfer %s" % str_login_id)
-    str_Chrome_Path = "../Driver/chromedriver"
+    str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
 
@@ -366,7 +366,7 @@ def test(temp):
 
     global _REQUEST_TOKEN_VALUE
 
-    str_Chrome_Path = "../Driver/chromedriver"
+    str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
 
@@ -397,7 +397,7 @@ def test(temp):
 
 
 def get_screent_shot_with_login_id(str_login_id, str_login_password):
-    str_Chrome_Path = "../Driver/chromedriver"
+    str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
