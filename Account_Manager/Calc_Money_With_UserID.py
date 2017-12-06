@@ -1,7 +1,3 @@
-import os
-import sys
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-
 
 import time
 from multiprocessing import Value
@@ -434,7 +430,7 @@ if __name__ == "__main__":
     #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
     print("start scheduler transfer")
 
-    scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 00)
+    scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 7, 00)
     print("start scheduler get_total_bonus_money")
 
 
