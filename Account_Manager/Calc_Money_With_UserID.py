@@ -430,7 +430,7 @@ if __name__ == "__main__":
     #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
     print("start scheduler transfer")
 
-    scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 15, 54)
+    scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 18, 48)
     print("start scheduler get_total_bonus_money")
 
 
