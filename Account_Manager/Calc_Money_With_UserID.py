@@ -362,39 +362,6 @@ def transfer_all_money_to_main_account():
 
     get_screent_shot_with_login_id(id_list[0], "lsw8954!")
 
-def test(temp):
-
-    global _REQUEST_TOKEN_VALUE
-
-    str_Chrome_Path = "../Selenium_Driver/chromedriver"
-    str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
-    str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
-
-    AirWebDriver = WebDriver(str_Chrome_Path)
-
-    AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
-    AirWebDriver.send_key_by_name("user[username]", "lsw120317")
-    AirWebDriver.send_key_by_name("user[password]", "lsw8954!")
-    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
-    AirWebDriver.move_to_url(str_Transfer_URL)
-
-    # 현재 해당 계정의 월릿 금액을 구한다.
-    soup = AirWebDriver.get_soup_object()
-    commissions_ = float(soup.find_all("small")[1].get_text())
-    cash_ = float(soup.find_all("small")[2].get_text())
-    rewards_ = float(soup.find_all("small")[3].get_text())
-
-    AirWebDriver.quit_browser()
-
-    #AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "commissions")
-    #AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "rewards")
-
-    # 커미션 지갑 선택
-    #AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[4]')
-
-    # 리워드 지갑 선택
-    #AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[2]')
-
 
 def get_screent_shot_with_login_id(str_login_id, str_login_password):
     str_Chrome_Path = "../Selenium_Driver/chromedriver"
