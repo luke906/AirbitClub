@@ -301,7 +301,7 @@ def report_all_money():
     Telegram_Mng.send_message(str_total_account)
     Telegram_Mng.send_message(str_total)
 
-def get_total_bonus_money(args):
+def get_total_bonus_money():
     # procs = []
 
     global id_list
@@ -326,9 +326,9 @@ def get_total_bonus_money(args):
     strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
     Telegram_Mng.send_message(strmsg)
 
-    transfer_all_money_to_main_account(args)
+    transfer_all_money_to_main_account()
 
-def transfer_all_money_to_main_account(args):
+def transfer_all_money_to_main_account():
 
     global id_list
     global password_list
@@ -416,15 +416,11 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 
 if __name__ == "__main__":
+
     get_id_password('이성원')
 
-    """
-    get_id_password('이성원')
+    #transfer_all_money_to_main_account()
 
-    get_total_bonus_money()
-
-    transfer_all_money_to_main_account()
-    """
 
     scheduler = Schedule_Manager()
     #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
@@ -432,6 +428,7 @@ if __name__ == "__main__":
 
     scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 0)
     print("start scheduler get_total_bonus_money")
+
 
 
 
