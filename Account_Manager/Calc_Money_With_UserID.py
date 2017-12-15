@@ -1,5 +1,6 @@
 
 import time
+import pyautogui
 from multiprocessing import Value
 
 from DB_Manager_Class import DB_Manager
@@ -67,6 +68,10 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+
+    pyautogui.click(100, 100)
+
+    time.sleep(100)
     AirWebDriver.move_to_url(str_Wallet_URL)
 
     soup = AirWebDriver.get_soup_object()
@@ -77,6 +82,35 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     savings.value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
     AirWebDriver.quit_browser()
+
+
+# 각 아이디 별로 남은 리워드 지급일수, 재구매일 여부 판별
+def process_browser_to_get_left_day(str_login_id, str_login_password):
+
+    str_Chrome_Path = "../Selenium_Driver/chromedriver"
+    str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+
+    AirWebDriver = WebDriver(str_Chrome_Path)
+    AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+    AirWebDriver.send_key_by_name("user[username]", str_login_id)
+    AirWebDriver.send_key_by_name("user[password]", str_login_password)
+    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+
+    # 75일 시점에서 재구매 창이 최상단으로 POPUP 될 경우 하단의 엘리먼트로 접근이 안되기 때문에
+    # 강제로 마우스 클릭을 하여 POPUP 창을 닫는다.
+    pyautogui.click(100, 100)
+
+    time.sleep(100)
+
+    soup = AirWebDriver.get_soup_object()
+
+    potential_revenue_day = int(soup.find_all(class_='counter-container')[0].get_text())
+    left_time_to_rewards  = int(soup.find_all(class_='counter-container')[1].get_text())
+    remain_business_day   = int(soup.find_all(class_='counter-container')[2].get_text())
+    remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get_text())
+
+
+
 
 
 
@@ -385,16 +419,18 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 if __name__ == "__main__":
 
     get_id_password('이성원')
+    get_total_bonus_money()
 
     #transfer_all_money_to_main_account()
 
-
+    """
     scheduler = Schedule_Manager()
     #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
     print("start scheduler transfer")
 
     scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 0)
     print("start scheduler get_total_bonus_money")
+    """
 
 
 
