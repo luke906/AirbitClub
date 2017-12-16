@@ -99,19 +99,20 @@ def process_browser_to_get_left_day(str_login_id, str_login_password):
 
     # 75일 시점에서 재구매 창이 최상단으로 POPUP 될 경우 하단의 엘리먼트로 접근이 안되기 때문에
     # 강제로 마우스 클릭을 하여 POPUP 창을 닫는다.
-    pyautogui.click(100, 100)
-    AirWebDriver.move_to_url(str_Wallet_URL)
+    #pyautogui.click(100, 100)
+    #AirWebDriver.move_to_url(str_Wallet_URL)
     #time.sleep(100)
 
     soup = AirWebDriver.get_soup_object()
 
-    potential_revenue_day = int(soup.find_all(class_='counter-container')[0].countdown)
-    left_time_to_rewards  = int(soup.find_all(class_='counter-container')[1].countdown)
-    remain_business_day   = int(soup.find_all(class_='counter-container')[2].countdown)
-    remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].countdown)
 
-    print("remain_business_day : %d", remain_business_day)
-    print("remain_repurchase_day : %d", remain_repurchase_day)
+
+    remain_business_day   = int(soup.find_all(class_='counter-container')[2].get('countdown'))
+    remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
+
+    print("remain_business_day : %d" % remain_business_day)
+    print("remain_repurchase_day : %d" % remain_repurchase_day)
+
 
 
 
@@ -425,9 +426,9 @@ if __name__ == "__main__":
 
     get_id_password('이성원')
     #get_total_bonus_money()
-    #process_browser_to_get_left_day("lsw120300", "lsw8954!")
+    process_browser_to_get_left_day("lsw120301", "lsw8954!")
 
-    transfer_all_money_to_main_account()
+    #transfer_all_money_to_main_account()
 
     """
     scheduler = Schedule_Manager()
