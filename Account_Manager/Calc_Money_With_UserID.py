@@ -89,6 +89,7 @@ def process_browser_to_get_left_day(str_login_id, str_login_password):
 
     str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+    str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
     AirWebDriver = WebDriver(str_Chrome_Path)
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
@@ -99,15 +100,19 @@ def process_browser_to_get_left_day(str_login_id, str_login_password):
     # 75일 시점에서 재구매 창이 최상단으로 POPUP 될 경우 하단의 엘리먼트로 접근이 안되기 때문에
     # 강제로 마우스 클릭을 하여 POPUP 창을 닫는다.
     pyautogui.click(100, 100)
-
-    time.sleep(100)
+    AirWebDriver.move_to_url(str_Wallet_URL)
+    #time.sleep(100)
 
     soup = AirWebDriver.get_soup_object()
 
-    potential_revenue_day = int(soup.find_all(class_='counter-container')[0].get_text())
-    left_time_to_rewards  = int(soup.find_all(class_='counter-container')[1].get_text())
-    remain_business_day   = int(soup.find_all(class_='counter-container')[2].get_text())
-    remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get_text())
+    potential_revenue_day = int(soup.find_all(class_='counter-container')[0].countdown)
+    left_time_to_rewards  = int(soup.find_all(class_='counter-container')[1].countdown)
+    remain_business_day   = int(soup.find_all(class_='counter-container')[2].countdown)
+    remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].countdown)
+
+    print("remain_business_day : %d", remain_business_day)
+    print("remain_repurchase_day : %d", remain_repurchase_day)
+
 
 
 
@@ -381,12 +386,12 @@ def transfer_all_money_to_main_account():
     clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
-    for index in range(1, get_account_count()):
+    for index in range(12, get_account_count()):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
-    for index in range(1, get_account_count()):
+    for index in range(12, get_account_count()):
         if comissions_list_dic[index] > 0:
             transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
 
@@ -419,9 +424,10 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 if __name__ == "__main__":
 
     get_id_password('이성원')
-    get_total_bonus_money()
+    #get_total_bonus_money()
+    #process_browser_to_get_left_day("lsw120300", "lsw8954!")
 
-    #transfer_all_money_to_main_account()
+    transfer_all_money_to_main_account()
 
     """
     scheduler = Schedule_Manager()
