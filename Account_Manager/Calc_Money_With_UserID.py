@@ -106,17 +106,13 @@ def process_browser_to_get_left_day(str_login_id, str_login_password):
     soup = AirWebDriver.get_soup_object()
 
 
-
     remain_business_day   = int(soup.find_all(class_='counter-container')[2].get('countdown'))
     remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
 
     print("remain_business_day : %d" % remain_business_day)
     print("remain_repurchase_day : %d" % remain_repurchase_day)
 
-
-
-
-
+    # //*[@id="rew-daily-home"]
 
 
 
