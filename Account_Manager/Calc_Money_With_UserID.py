@@ -11,6 +11,7 @@ from Schedule_Manager_Class import Schedule_Manager
 from WebDriver_Class import WebDriver
 
 id_list = []
+repurchase_id_list = []
 password_list = []
 email_list = []
 gmail_secret_json = []
@@ -69,9 +70,8 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
 
-    pyautogui.click(100, 100)
+    #pyautogui.click(100, 100)
 
-    time.sleep(100)
     AirWebDriver.move_to_url(str_Wallet_URL)
 
     soup = AirWebDriver.get_soup_object()
@@ -104,7 +104,6 @@ def process_browser_to_get_left_day(str_login_id, str_login_password):
     #time.sleep(100)
 
     soup = AirWebDriver.get_soup_object()
-
 
     remain_business_day   = int(soup.find_all(class_='counter-container')[2].get('countdown'))
     remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
@@ -170,6 +169,16 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+
+    #재구매일이 0일 경우 이체 작업을 안한다.
+    soup = AirWebDriver.get_soup_object()
+    remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
+    if remain_repurchase_day == 0:
+        print("%s 아이디 재구매일 도래 이체 중지" % str_login_id)
+        repurchase_id_list.append(str_login_id)
+        AirWebDriver.quit_browser()
+        return
+
     AirWebDriver.move_to_url(str_Transfer_URL)
 
     # 현재 해당 계정의 월릿 금액을 구한다.
@@ -194,7 +203,6 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
-
 
     if _commissions > 0 and wallet == "commissions":
 
@@ -362,8 +370,6 @@ def get_total_bonus_money():
     strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
     Telegram_Mng.send_message(strmsg)
 
-    transfer_all_money_to_main_account()
-
 def transfer_all_money_to_main_account():
 
     global id_list
@@ -383,20 +389,22 @@ def transfer_all_money_to_main_account():
     clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
-    for index in range(12, get_account_count()):
+    for index in range(28, get_account_count()):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
-    for index in range(12, get_account_count()):
+    for index in range(28, get_account_count()):
         if comissions_list_dic[index] > 0:
             transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
 
     end_time = time.time()
     strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
-    Telegram_Mng.send_message(strmsg)
+    #Telegram_Mng.send_message(strmsg)
 
-    get_screent_shot_with_login_id(id_list[0], "lsw8954!")
+    #get_screent_shot_with_login_id(id_list[0], "lsw8954!")
+    process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
+    report_all_money()
 
 
 def get_screent_shot_with_login_id(str_login_id, str_login_password):
@@ -421,10 +429,7 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 if __name__ == "__main__":
 
     get_id_password('이성원')
-    #get_total_bonus_money()
-    process_browser_to_get_left_day("lsw120301", "lsw8954!")
-
-    #transfer_all_money_to_main_account()
+    transfer_all_money_to_main_account()
 
     """
     scheduler = Schedule_Manager()
