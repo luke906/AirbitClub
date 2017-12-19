@@ -192,9 +192,12 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     if remain_repurchase_day == 0:
         print("%s 아이디 재구매일 도래 이체 중지" % str_login_id)
-        repurchase_id_list.append(str_login_id)
-        AirWebDriver.quit_browser()
-        return
+        if str_login_id in repurchase_id_list:
+            pass
+        else:
+            repurchase_id_list.append(str_login_id)
+            AirWebDriver.quit_browser()
+            return
 
     # 만일 이체할 금액이 없다면 종료한다.
     if (_rewards + _commissions) <= 0:
