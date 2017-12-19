@@ -314,8 +314,12 @@ def get_account_count():
     return len(id_list)
 
 
-def report_all_money():
+def report_account():
     global id_list
+    global repurchase_id_list
+
+    str_repurchase = "75일 재구매 도래일 계좌 목록"
+    str_repurchase += repurchase_id_list
 
     str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value
     str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value
@@ -329,6 +333,9 @@ def report_all_money():
     cash.value = 0
     rewards.value = 0
     savings.value = 0
+    del repurchase_id_list[:]
+
+    print(str_repurchase)
 
     print(str_commisions)
     print(str_cash)
@@ -365,7 +372,7 @@ def get_total_bonus_money():
 
     # for proc in procs:
     #   proc.join()
-    report_all_money()
+    report_account()
     end_time = time.time()
     strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
     Telegram_Mng.send_message(strmsg)
@@ -389,12 +396,14 @@ def transfer_all_money_to_main_account():
     clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
-    for index in range(28, get_account_count()):
+    #for index in range(28, get_account_count()):
+    for index in range(12, 14):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
-    for index in range(28, get_account_count()):
+    #for index in range(28, get_account_count()):
+    for index in range(12, 14):
         if comissions_list_dic[index] > 0:
             transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
 
@@ -404,7 +413,7 @@ def transfer_all_money_to_main_account():
 
     #get_screent_shot_with_login_id(id_list[0], "lsw8954!")
     process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
-    report_all_money()
+    report_account()
 
 
 def get_screent_shot_with_login_id(str_login_id, str_login_password):
