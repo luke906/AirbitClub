@@ -173,11 +173,6 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     #재구매일이 0일 경우 이체 작업을 안한다.
     soup = AirWebDriver.get_soup_object()
     remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
-    if remain_repurchase_day == 0:
-        print("%s 아이디 재구매일 도래 이체 중지" % str_login_id)
-        repurchase_id_list.append(str_login_id)
-        AirWebDriver.quit_browser()
-        return
 
     AirWebDriver.move_to_url(str_Transfer_URL)
 
@@ -194,6 +189,12 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     print("commissions: %f" % _commissions)
     print("cash: %f" % _cash)
     print("rewards: %f" % _rewards)
+
+    if remain_repurchase_day == 0:
+        print("%s 아이디 재구매일 도래 이체 중지" % str_login_id)
+        repurchase_id_list.append(str_login_id)
+        AirWebDriver.quit_browser()
+        return
 
     # 만일 이체할 금액이 없다면 종료한다.
     if (_rewards + _commissions) <= 0:
@@ -318,8 +319,11 @@ def report_account():
     global id_list
     global repurchase_id_list
 
-    str_repurchase = "75일 재구매 도래일 계좌 목록"
-    str_repurchase += repurchase_id_list
+    str_repurchase = "75일 재구매 도래일 계좌 목록\n"
+
+    for index in range(0, len(repurchase_id_list)):
+        str_repurchase += (repurchase_id_list[index] + "\n")
+
 
     str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value
     str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value
@@ -336,7 +340,6 @@ def report_account():
     del repurchase_id_list[:]
 
     print(str_repurchase)
-
     print(str_commisions)
     print(str_cash)
     print(str_rewards)
@@ -345,6 +348,7 @@ def report_account():
     print(str_total)
 
     Telegram_Mng = Telegram_Manager()
+    Telegram_Mng.send_message(str_repurchase)
     Telegram_Mng.send_message(str_commisions)
     Telegram_Mng.send_message(str_cash)
     Telegram_Mng.send_message(str_rewards)
@@ -397,13 +401,13 @@ def transfer_all_money_to_main_account():
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     #for index in range(28, get_account_count()):
-    for index in range(12, 14):
+    for index in range(1, 4):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
     #for index in range(28, get_account_count()):
-    for index in range(12, 14):
+    for index in range(1, 4):
         if comissions_list_dic[index] > 0:
             transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
 
