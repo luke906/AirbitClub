@@ -1,89 +1,48 @@
 
-from fpdf import FPDF
+import datetime
+from PDF_Manager_Class import PDF_Manager
+from Telegram_Class import Telegram_Manager
 
-class PDF_Manager(FPDF):
-    def header(self):
-        # Logo
-        self.image('logo_pb.png', 5, 5, 30)
-        self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 35)
-        # Move to the right
-        self.cell(30)
-        # Title
-        self.set_draw_color(0, 80, 180)
-        self.set_fill_color(230, 230, 0)
-        self.set_text_color(0, 0, 0)
-        self.set_line_width(1)
-        self.cell(160, 20, 'AirBitClub  자금이체  보고서', 1, 1, 'C', 1)
-        # Line break
-        self.ln(20)
+def test():
+    pdf = PDF_Manager()
+    pdf.add_page()
 
-        self.set_title("Airbitclub_account_report")
-        self.set_author('Luke LEE')
+    # 75일 전산비 납부 리스트 보고서 작성
+    str_repurchase_list = "75일 도래 전산비 납부 대상 계좌 리스트\n"
+    str_repurchase_list += ("lsw120301" + "\n\n\n")
 
-    # Page footer
-    def footer(self):
-        # Position at 1.5 cm from bottom
-        self.set_y(-15)
-        self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 14)
-        self.set_text_color(128)
-        # Page number
-        self.cell(0, 10, 'Page ' + str(self.page_no()), 0, 0, 'C')
+    #  트랜스퍼 후 메인계좌 잔고 보고서 작성
+    str_main_transfer = "트랜스퍼 완료 후 메인계좌 현황\n"
+    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % 16.3 + "\n"
+    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % 34.9 + "\n"
+    str_cash = "전체계좌 CASH 합계 : %.2f" % 0  + "\n"
+    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % 20.9 + "\n"
+    str_total_account = "생성된 계좌의 총 갯수 : %d" % 30 + "\n"
+    str_total = "총 인출 가능 달러(커미션 + 리워드) : %.2f" % 52.2 + "\n"
 
-    def chapter_title(self, num, label):
-        # Arial 12
-        self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 12)
-        # Background color
-        self.set_fill_color(200, 220, 255)
-        # Title
-        self.cell(0, 6, 'Chapter %d : %s' % (num, label), 0, 1, 'L', 1)
-        # Line break
-        self.ln(4)
+    str_main_transfer += str_total_account
+    str_main_transfer += str_rewards
+    str_main_transfer += str_commisions
+    str_main_transfer += str_cash
+    str_main_transfer += str_savings
+    str_main_transfer += str_total
 
-    def user_chapter_title(self, chapter_contents):
-        # Arial 12
-        self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 12)
-        # Background color
-        self.set_fill_color(200, 220, 255)
-        # Title
-        self.cell(0, 6, chapter_contents, 0, 1, 'L', 1)
-        # Line break
-        self.ln(4)
+    print(str_repurchase_list)
+    print(str_main_transfer)
 
-    def chapter_body(self, txt):
-        # Read text file
-        #with open(name, 'rb') as fh:
-        #    txt = fh.read().decode('latin-1')
-        # Times 12
-        self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 12)
-        # Output justified text
-        self.multi_cell(0, 5, txt)
-        # Line break
-        self.ln()
-        # Mention in italics
-        self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 12)
-        #self.cell(0, 5, '(end of excerpt)')
+    # 보고서 PDF  생성
+    #pdf.add_page()
+    pdf.print_chapter_user('※ 75일 전산비 납부 대상 계좌 리스트 ※', str_repurchase_list)
+    pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_main_transfer)
 
-    def print_chapter(self, num, title, name):
-        self.add_page()
-        self.chapter_title(num, title)
-        self.chapter_body(name)
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y-%m-%d')
+    rerport_filename = nowDate + ' 계좌현황 보고서.pdf'
+    pdf.output(rerport_filename, 'F')
 
-    def print_chapter_user(self, title, contents):
-        self.user_chapter_title(title)
-        self.chapter_body(contents)
+    Telegram_Mng = Telegram_Manager()
+    Telegram_Mng.send_file(rerport_filename)
 
-# Instantiation of inherited class
 
-pdf = PDF_Manager()
-
-#pdf.print_chapter(1, 'A RUNAWAY REEF', '보고서1\n보고서2\n보고서3\n보고서4\n')
-#pdf.print_chapter(2, 'THE PROS AND CONS', '보고서2')
-pdf.add_page()
-pdf.print_chapter_user('※ 전 계좌 이체 현황 ※', '보고서1\n보고서2\n보고서3\n보고서4\n')
-pdf.output('계좌현황 보고서.pdf', 'F')
+if __name__ == "__main__":
+    test()

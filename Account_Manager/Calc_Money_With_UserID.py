@@ -1,5 +1,6 @@
 
 import time
+import datetime
 from multiprocessing import Value
 
 from DB_Manager_Class import DB_Manager
@@ -318,17 +319,31 @@ def report_account():
     pdf = PDF_Manager()
     pdf.add_page()
 
-    str_repurchase = "75일 도래 전산비 납부 대상 계좌 리스트\n"
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y-%m-%d')
 
+    # 75일 전산비 납부 리스트 보고서 작성
+    str_repurchase_list = "75일 도래 전산비 납부 대상 계좌 리스트\n"
     for index in range(0, len(repurchase_id_list)):
-        str_repurchase += (repurchase_id_list[index] + "\n")
+        str_repurchase_list += (repurchase_id_list[index] + "\n")
 
-    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards.value
-    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value
-    str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value
-    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % savings.value
-    str_total_account = "생성된 계좌의 총 갯수 : %d" % (len(id_list))
-    str_total = "전체 모든 계좌 총 합계(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value)
+    #  트랜스퍼 후 메인계좌 잔고 보고서 작성
+    str_main_transfer = "트랜스퍼 완료 후 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
+    str_transfer_date = "트랜스퍼 날짜 : " + nowDate + "\n"
+    str_total_account = "생성된 계좌의 총 갯수 : %d" % (len(id_list)) + "\n"
+    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards.value + "\n"
+    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value + "\n"
+    str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value  + "\n"
+    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % savings.value + "\n"
+    str_total = "총 인출 가능 달러(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value) + "\n"
+
+    str_main_transfer += str_transfer_date
+    str_main_transfer += str_total_account
+    str_main_transfer += str_rewards
+    str_main_transfer += str_commisions
+    str_main_transfer += str_cash
+    str_main_transfer += str_savings
+    str_main_transfer += str_total
 
     # 집계를 마치고 변수를 초기화 한다.
     commissions.value = 0
@@ -337,30 +352,19 @@ def report_account():
     savings.value = 0
     del repurchase_id_list[:]
 
-    print(str_repurchase)
-    print(str_commisions)
-    print(str_cash)
-    print(str_rewards)
-    print(str_savings)
-    print(str_total_account)
-    print(str_total)
+    print(str_repurchase_list)
+    print(str_main_transfer)
+
+    # 보고서 PDF  생성
+    pdf.print_chapter_user('※ 75일 전산비 납부 대상 계좌 리스트 ※', str_repurchase_list)
+    pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_main_transfer)
 
 
-
-
-
-    pdf.print_chapter_user('※ 전 계좌 이체 현황 ※', '보고서1\n보고서2\n보고서3\n보고서4\n')
-    pdf.output('계좌현황 보고서.pdf', 'F')
-
+    rerport_filename = nowDate +  ' 계좌현황 보고서.pdf'
+    pdf.output(rerport_filename, 'F')
 
     Telegram_Mng = Telegram_Manager()
-    Telegram_Mng.send_message(str_repurchase)
-    Telegram_Mng.send_message(str_commisions)
-    Telegram_Mng.send_message(str_cash)
-    Telegram_Mng.send_message(str_rewards)
-    Telegram_Mng.send_message(str_savings)
-    Telegram_Mng.send_message(str_total_account)
-    Telegram_Mng.send_message(str_total)
+    Telegram_Mng.send_file(rerport_filename)
 
 def get_total_bonus_money():
     # procs = []
@@ -407,13 +411,13 @@ def transfer_all_money_to_main_account():
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     #for index in range(28, get_account_count()):
-    for index in range(1, 4):
+    for index in range(1, 3):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
     #for index in range(28, get_account_count()):
-    for index in range(1, 4):
+    for index in range(1, 3):
         #75일 재구매 대상인 아이디는 이체를 건너뛴다.
         if id_list[index] in repurchase_id_list:
             continue

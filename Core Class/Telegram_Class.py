@@ -14,4 +14,8 @@ class Telegram_Manager:
     def send_image(self, file):
         self.bot.send_photo(chat_id='468017156', photo=open(file, 'rb'))
 
+    def send_file(self, file):
+        self.bot.send_document(chat_id='468017156', document=open(file, 'rb'))
+
+
 

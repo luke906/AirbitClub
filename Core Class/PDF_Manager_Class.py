@@ -4,7 +4,7 @@ from fpdf import FPDF
 class PDF_Manager(FPDF):
     def header(self):
         # Logo
-        self.image('logo_pb.png', 5, 5, 30)
+        self.image('../Core Class/logo_pb.png', 5, 5, 30)
         self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
         self.set_font('nanum_bold', '', 35)
         # Move to the right
@@ -26,7 +26,7 @@ class PDF_Manager(FPDF):
         # Position at 1.5 cm from bottom
         self.set_y(-15)
         self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 14)
+        self.set_font('nanum_bold', '', 12)
         self.set_text_color(128)
         # Page number
         self.cell(0, 10, 'Page ' + str(self.page_no()), 0, 0, 'C')
@@ -34,7 +34,7 @@ class PDF_Manager(FPDF):
     def chapter_title(self, num, label):
         # Arial 12
         self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 12)
+        self.set_font('nanum_bold', '', 14)
         # Background color
         self.set_fill_color(200, 220, 255)
         # Title
@@ -45,11 +45,11 @@ class PDF_Manager(FPDF):
     def user_chapter_title(self, chapter_contents):
         # Arial 12
         self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 12)
+        self.set_font('nanum_bold', '', 25)
         # Background color
         self.set_fill_color(200, 220, 255)
         # Title
-        self.cell(0, 6, chapter_contents, 0, 1, 'L', 1)
+        self.cell(0, 10, chapter_contents, 0, 1, 'L', 1)
         # Line break
         self.ln(4)
 
@@ -59,14 +59,14 @@ class PDF_Manager(FPDF):
         #    txt = fh.read().decode('latin-1')
         # Times 12
         self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 12)
+        self.set_font('nanum_bold', '', 20)
         # Output justified text
-        self.multi_cell(0, 5, txt)
+        self.multi_cell(0, 9, txt)
         # Line break
         self.ln()
         # Mention in italics
-        self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
-        self.set_font('nanum_bold', '', 12)
+        #self.add_font('nanum_bold', '', '../Core Class/nanum_bold.ttf', uni=True)
+        #self.set_font('nanum_bold', '', 14)
         #self.cell(0, 5, '(end of excerpt)')
 
     def print_chapter(self, num, title, name):
