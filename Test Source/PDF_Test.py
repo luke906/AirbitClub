@@ -13,12 +13,12 @@ def test():
 
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_main_transfer = "트랜스퍼 완료 후 메인계좌 현황\n"
-    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % 16.3 + "\n"
-    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % 34.9 + "\n"
-    str_cash = "전체계좌 CASH 합계 : %.2f" % 0  + "\n"
-    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % 20.9 + "\n"
-    str_total_account = "생성된 계좌의 총 갯수 : %d" % 30 + "\n"
-    str_total = "총 인출 가능 달러(커미션 + 리워드) : %.2f" % 52.2 + "\n"
+    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % 16.3 + "$\n"
+    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % 34.9 + "$\n"
+    str_cash = "전체계좌 CASH 합계 : %.2f" % 0  + "$\n"
+    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % 20.9 + "$\n"
+    str_total_account = "생성된 계좌의 총 갯수 : %d" % 30 + "$\n"
+    str_total = "총 인출 가능 달러(커미션 + 리워드) : %.2f" % 52.2 + "$\n"
 
     str_main_transfer += str_total_account
     str_main_transfer += str_rewards

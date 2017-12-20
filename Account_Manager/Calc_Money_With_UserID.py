@@ -331,11 +331,11 @@ def report_account():
     str_main_transfer = "트랜스퍼 완료 후 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
     str_transfer_date = "트랜스퍼 날짜 : " + nowDate + "\n"
     str_total_account = "생성된 계좌의 총 갯수 : %d" % (len(id_list)) + "\n"
-    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards.value + "\n"
-    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value + "\n"
-    str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value  + "\n"
-    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % savings.value + "\n"
-    str_total = "총 인출 가능 달러(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value) + "\n"
+    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards.value + "$\n"
+    str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value + "$\n"
+    str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value  + "$\n"
+    str_savings = "전체계좌 SAVINGS 합계 : %.2f" % savings.value + "$\n"
+    str_total = "총 인출 가능 달러(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value) + "$\n"
 
     str_main_transfer += str_transfer_date
     str_main_transfer += str_total_account
