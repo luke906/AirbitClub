@@ -189,10 +189,13 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     print("rewards: %f" % _rewards)
 
     # 만일 이체할 금액이 없다면 종료한다.
-    if (_rewards + _commissions) <= 0:
-        print("there is no money to transfer")
+    if (wallet == "commissions") and (_commissions <= 0):
         AirWebDriver.quit_browser()
         return
+    elif (wallet == "rewards") and (_rewards <= 0):
+        AirWebDriver.quit_browser()
+        return
+
 
     # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
