@@ -1,6 +1,5 @@
 
 import time
-import pyautogui
 from multiprocessing import Value
 
 from DB_Manager_Class import DB_Manager
@@ -55,15 +54,13 @@ def get_id_password(person_name):
 
     print(results[0])
 
-
 # 각 아이디 별로 로그인을 하여 금액을 합산한다.
 def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
 
-    str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
-    AirWebDriver = WebDriver(str_Chrome_Path)
+    AirWebDriver = WebDriver()
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
@@ -87,11 +84,10 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
 # 각 아이디 별로 남은 리워드 지급일수, 재구매일 여부 판별
 def process_browser_to_get_left_day(str_login_id, str_login_password):
 
-    str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
-    AirWebDriver = WebDriver(str_Chrome_Path)
+    AirWebDriver = WebDriver()
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
@@ -114,13 +110,11 @@ def process_browser_to_get_left_day(str_login_id, str_login_password):
     # //*[@id="rew-daily-home"]
 
 
-
 def clear_mail_box_before_transfer(secret_json_file):
 
     Gmail = Gmail_Manager()
     Gmail.get_credentials(secret_json_file)
     Gmail.get_unread_message()
-
 
 
 def get_airbit_token_value(secret_json_file):
@@ -159,11 +153,10 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     global comissions_list_dic
 
     print("start transfer %s" % str_login_id)
-    str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
 
-    AirWebDriver = WebDriver(str_Chrome_Path)
+    AirWebDriver = WebDriver()
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
@@ -407,6 +400,7 @@ def transfer_all_money_to_main_account():
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
     #for index in range(28, get_account_count()):
     for index in range(1, 4):
+        #75일 재구매 대상인 아이디는 이체를 건너뛴다.
         if id_list[index] in repurchase_id_list:
             continue
         if comissions_list_dic[id_list[index]] > 0:
@@ -422,11 +416,11 @@ def transfer_all_money_to_main_account():
 
 
 def get_screent_shot_with_login_id(str_login_id, str_login_password):
-    str_Chrome_Path = "../Selenium_Driver/chromedriver"
+
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
-    AirWebDriver = WebDriver(str_Chrome_Path)
+    AirWebDriver = WebDriver()
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)

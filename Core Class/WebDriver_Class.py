@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 
 class WebDriver:
 
-    def __init__(self, driver_path):
+
+    def __init__(self):
         """
         server = Server("../browsermob-proxy/bin/browsermob-proxy")
         server.start()
@@ -22,7 +23,7 @@ class WebDriver:
         #capabilities = webdriver.DesiredCapabilities.CHROME
         #capabilities["chrome.switches"] = ["--user-agent=" + ua.chrome]
 
-        self.DriverPath = driver_path
+        self.DriverPath = "../Web Driver/chromedriver"
         self.chrome_options = Options()
         #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
         self.chrome_options.add_argument("--start-maximized")
