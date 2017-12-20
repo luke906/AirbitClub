@@ -315,6 +315,9 @@ def report_account():
     global id_list
     global repurchase_id_list
 
+    pdf = PDF_Manager()
+    pdf.add_page()
+
     str_repurchase = "75일 도래 전산비 납부 대상 계좌 리스트\n"
 
     for index in range(0, len(repurchase_id_list)):
@@ -342,11 +345,10 @@ def report_account():
     print(str_total_account)
     print(str_total)
 
-    pdf = PDF_Manager()
 
-    # pdf.print_chapter(1, 'A RUNAWAY REEF', '보고서1\n보고서2\n보고서3\n보고서4\n')
-    # pdf.print_chapter(2, 'THE PROS AND CONS', '보고서2')
-    pdf.add_page()
+
+
+
     pdf.print_chapter_user('※ 전 계좌 이체 현황 ※', '보고서1\n보고서2\n보고서3\n보고서4\n')
     pdf.output('계좌현황 보고서.pdf', 'F')
 
