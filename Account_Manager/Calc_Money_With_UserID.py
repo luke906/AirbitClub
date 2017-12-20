@@ -8,6 +8,7 @@ from Telegram_Class import Telegram_Manager
 from Gmail_Manager_Class import Gmail_Manager
 from Schedule_Manager_Class import Schedule_Manager
 from WebDriver_Class import WebDriver
+from PDF_Manager_Class import PDF_Manager
 
 id_list = []
 repurchase_id_list = []
@@ -319,10 +320,9 @@ def report_account():
     for index in range(0, len(repurchase_id_list)):
         str_repurchase += (repurchase_id_list[index] + "\n")
 
-
+    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards.value
     str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value
     str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value
-    str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards.value
     str_savings = "전체계좌 SAVINGS 합계 : %.2f" % savings.value
     str_total_account = "생성된 계좌의 총 갯수 : %d" % (len(id_list))
     str_total = "전체 모든 계좌 총 합계(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value)
@@ -341,6 +341,15 @@ def report_account():
     print(str_savings)
     print(str_total_account)
     print(str_total)
+
+    pdf = PDF_Manager()
+
+    # pdf.print_chapter(1, 'A RUNAWAY REEF', '보고서1\n보고서2\n보고서3\n보고서4\n')
+    # pdf.print_chapter(2, 'THE PROS AND CONS', '보고서2')
+    pdf.add_page()
+    pdf.print_chapter_user('※ 전 계좌 이체 현황 ※', '보고서1\n보고서2\n보고서3\n보고서4\n')
+    pdf.output('계좌현황 보고서.pdf', 'F')
+
 
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_message(str_repurchase)
