@@ -27,8 +27,9 @@ class WebDriver_Manager:
         self.DriverPath = "../Web Driver/chromedriver"
         self.chrome_options = Options()
         #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
-        self.chrome_options.add_argument("--start-maximized")
+        #self.chrome_options.add_argument("--start-maximized")
         self.chrome_options.add_argument("--disable-infobars")
+        #self.chrome_options.add_argument("--disable-extensions")
         self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
 
 

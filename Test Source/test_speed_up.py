@@ -1,13 +1,16 @@
-from __future__ import print_function
-from incapsula import IncapSession
-from bs4 import BeautifulSoup
+"""
+from WebDriver_Class import WebDriver_Manager
 
-str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+if __name__ == "__main__":
 
-session = IncapSession()
+    str_AirBitClub_Login_URL = "http://www.bitbackoffice.com"
+    AirWebDriver = WebDriver_Manager()
+    AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+"""
 
-session.cookies.set('cookie-key', 'cookie-value')
+from twill import get_browser
+b = get_browser()
 
-response = session.get('http://example.com', headers={'Referer': str_AirBitClub_Login_URL})
-soup = BeautifulSoup(response, "html.parser")
-print(session.cookies)
+from twill.commands import *
+go("http://www.python.org/")
+b.showforms()
