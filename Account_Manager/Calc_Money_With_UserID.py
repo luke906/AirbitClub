@@ -413,14 +413,14 @@ def transfer_all_money_to_main_account():
     clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
-    #for index in range(1, get_account_count()):
-    for index in range(12, 17):
+    for index in range(1, get_account_count()):
+    #for index in range(12, 17):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
-    #for index in range(1, get_account_count()):
-    for index in range(12, 17):
+    for index in range(1, get_account_count()):
+    #for index in range(12, 17):
         #75일 재구매 대상인 아이디는 이체를 건너뛴다.
         if id_list[index] in repurchase_id_list:
             continue
