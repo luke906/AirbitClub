@@ -4,10 +4,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.keys import Keys
 #from browsermobproxy import Server
 #from fake_useragent import UserAgent
 
-class WebDriver:
+class WebDriver_Manager:
 
 
     def __init__(self):
@@ -85,6 +86,12 @@ class WebDriver:
         driver = self.browser
         driver.switch_to.window(driver.window_handles[-1])
         driver.close()
+
+    def switch_to_main_window(self):
+        main_window_handle = None
+        while not main_window_handle:
+            main_window_handle = driver.current_window_handle
+
 
     def quit_browser(self):
         try:
