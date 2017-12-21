@@ -161,6 +161,9 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     AirWebDriver = WebDriver_Manager()
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+
+    #AirWebDriver.send_click_event_with_xpath('//*[@id="nav-bar-signin"]')
+
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
