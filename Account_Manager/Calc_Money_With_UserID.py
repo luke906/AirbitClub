@@ -8,7 +8,7 @@ from Telegram_Class import Telegram_Manager
 
 from Gmail_Manager_Class import Gmail_Manager
 from Schedule_Manager_Class import Schedule_Manager
-from WebDriver_Class import WebDriver
+from WebDriver_Class import WebDriver_Manager
 from PDF_Manager_Class import PDF_Manager
 
 id_list = []
@@ -62,7 +62,7 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
-    AirWebDriver = WebDriver()
+    AirWebDriver = WebDriver_Manager()
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
@@ -89,7 +89,7 @@ def process_browser_to_get_left_day(str_login_id, str_login_password):
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
-    AirWebDriver = WebDriver()
+    AirWebDriver = WebDriver_Manager()
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
@@ -158,7 +158,7 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
 
-    AirWebDriver = WebDriver()
+    AirWebDriver = WebDriver_Manager()
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
@@ -438,7 +438,7 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
-    AirWebDriver = WebDriver()
+    AirWebDriver = WebDriver_Manager()
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
