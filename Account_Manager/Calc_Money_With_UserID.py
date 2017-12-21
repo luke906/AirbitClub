@@ -330,7 +330,7 @@ def report_account():
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_main_transfer = "트랜스퍼 완료 후 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
     str_transfer_date = "트랜스퍼 날짜 : " + nowDate + "\n"
-    str_total_account = "생성된 계좌의 총 갯수 : %d" % (len(id_list)) + "$\n"
+    str_total_account = "생성된 계좌의 총 갯수 : %d" % (len(id_list)) + "\n"
     str_rewards = "전체계좌 REWARDS 합계 : %.2f" % rewards.value + "$\n"
     str_commisions = "전체계좌 COMMISIONS 합계 : %.2f" % commissions.value + "$\n"
     str_cash = "전체계좌 CASH 합계 : %.2f" % cash.value  + "$\n"
@@ -410,14 +410,14 @@ def transfer_all_money_to_main_account():
     clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
-    #for index in range(28, get_account_count()):
-    for index in range(1, 3):
+    #for index in range(1, get_account_count()):
+    for index in range(12, 17):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
-    #for index in range(28, get_account_count()):
-    for index in range(1, 3):
+    #for index in range(1, get_account_count()):
+    for index in range(12, 17):
         #75일 재구매 대상인 아이디는 이체를 건너뛴다.
         if id_list[index] in repurchase_id_list:
             continue
