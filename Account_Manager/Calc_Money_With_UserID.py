@@ -168,6 +168,11 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
 
+    #로그인 버튼을 누르고 다음 페이지의 검사 엘리먼트가 나타날때 까지 대기한다.
+    if (AirWebDriver.wait_until_show_id(60, 'market_price_chart')) is not True:
+        print('로딩실패')
+        AirWebDriver.quit_browser()
+
     #재구매일이 0일 경우 이체 작업을 안한다.
     soup = AirWebDriver.get_soup_object()
     remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
@@ -413,13 +418,13 @@ def transfer_all_money_to_main_account():
     clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
-    for index in range(1, get_account_count()):
+    for index in range(12, get_account_count()):
     #for index in range(12, 17):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
-    for index in range(1, get_account_count()):
+    for index in range(12, get_account_count()):
     #for index in range(12, 17):
         #75일 재구매 대상인 아이디는 이체를 건너뛴다.
         if id_list[index] in repurchase_id_list:
