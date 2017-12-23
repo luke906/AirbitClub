@@ -2,6 +2,10 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
@@ -28,18 +32,18 @@ class WebDriver_Manager:
         self.chrome_options = Options()
         #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
         #self.chrome_options.add_argument("--start-maximized")
+        # self.chrome_options.add_argument('--incognito') #시크릿모드
         self.chrome_options.add_argument("--disable-infobars")
-        #self.chrome_options.add_argument('--incognito') #시크릿모드
-        self.chrome_options.add_argument("user-data-dir=C:/Users/charg/AppData/Local/Google/Chrome/User Data")
-        #self.chrome_options.add_argument("user-data-dir=C:/Users/charg/AppData/Local/Google/Chrome/User Data/Default/Cache")
-        #self.chrome_options.add_argument("--disable-extensions")
+        self.chrome_options.add_argument("--disable-session-crashed-bubble")
+        self.chrome_options.add_argument("user-data-dir=C:/Users/USER/AppData/Local/Google/Chrome/User Data")
+        self.chrome_options.add_argument("--disable-extensions")
         self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
 
 
     def move_to_url(self, destination_url):
 
         try:
-            self.browser.implicitly_wait(3)
+            self.browser.implicitly_wait(5)
             self.browser.get(destination_url)
         except Exception:
             self.browser.quit()
@@ -91,15 +95,29 @@ class WebDriver_Manager:
         driver.switch_to.window(driver.window_handles[-1])
         driver.close()
 
+
     def switch_to_main_window(self):
         main_window_handle = None
         while not main_window_handle:
             main_window_handle = driver.current_window_handle
 
+    def wait_until_show_id(self, timeout, id_name):
+        try:
+            element_present = EC.presence_of_element_located((By.ID, id_name))
+            WebDriverWait(self.browser, timeout).until(element_present)
+            print("%s 아이디 로딩 성공"%id_name)
+            return True
+        except TimeoutException:
+            print("Timed out waiting for page to load")
+            return False
+
+
 
     def quit_browser(self):
         try:
-            self.browser.quit()
+            self.browser.stop_client()
+            self.browser.close()
+            #self.browser.quit()
         except Exception:
             pass
 
