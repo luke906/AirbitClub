@@ -101,7 +101,7 @@ class WebDriver_Manager:
         while not main_window_handle:
             main_window_handle = driver.current_window_handle
 
-    def wait_until_show_id(self, timeout, id_name):
+    def wait_until_show_element_id(self, timeout, id_name):
         try:
             element_present = EC.presence_of_element_located((By.ID, id_name))
             WebDriverWait(self.browser, timeout).until(element_present)
