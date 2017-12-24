@@ -69,6 +69,11 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
 
+    # 로그인 버튼을 누르고 다음 페이지의 검사 엘리먼트가 나타날때 까지 대기한다.
+    if (AirWebDriver.wait_until_show_element_id(60, 'market_price_chart')) is not True:
+        print('로딩실패')
+        AirWebDriver.quit_browser()
+
     #pyautogui.click(100, 100)
 
     AirWebDriver.move_to_url(str_Wallet_URL)
@@ -399,7 +404,7 @@ def get_total_bonus_money():
     strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
     Telegram_Mng.send_message(strmsg)
 
-def transfer_all_money_to_main_account():
+def transfer_all_money_to_main_account(start_index, end_index):
 
     global id_list
     global password_list
@@ -418,14 +423,12 @@ def transfer_all_money_to_main_account():
     clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
-    for index in range(12, get_account_count()):
-    #for index in range(12, 17):
+    for index in range(start_index, end_index):
         transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
-    for index in range(12, get_account_count()):
-    #for index in range(12, 17):
+    for index in range(start_index, end_index):
         #75일 재구매 대상인 아이디는 이체를 건너뛴다.
         if id_list[index] in repurchase_id_list:
             continue
@@ -463,16 +466,19 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 if __name__ == "__main__":
 
     get_id_password('이성원')
-    transfer_all_money_to_main_account()
+    end_index = get_account_count()
+    transfer_all_money_to_main_account(26, end_index)
+    #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
     """
     scheduler = Schedule_Manager()
-    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
     print("start scheduler transfer")
-
-    scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 0)
-    print("start scheduler get_total_bonus_money")
     """
+
+    #scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 0)
+    #print("start scheduler get_total_bonus_money")
+    
 
 
 
