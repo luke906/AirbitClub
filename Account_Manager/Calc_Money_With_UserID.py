@@ -175,6 +175,7 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
         print('로그인 화면 로딩실패')
         AirWebDriver.quit_browser()
 
+
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
