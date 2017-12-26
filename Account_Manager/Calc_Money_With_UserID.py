@@ -196,7 +196,7 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     AirWebDriver.move_to_url(str_Transfer_URL)
 
-    if (AirWebDriver.wait_until_show_element_id(120, 'search - user')) is not True:
+    if (AirWebDriver.wait_until_show_element_id(120, 'search-user')) is not True:
         print('이체 화면 로딩실패')
         AirWebDriver.quit_browser()
 
@@ -478,14 +478,14 @@ if __name__ == "__main__":
 
     get_id_password('이성원')
     end_index = get_account_count()
-    #transfer_all_money_to_main_account(1, end_index)
+    transfer_all_money_to_main_account(1, end_index)
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
-
+    """
     scheduler = Schedule_Manager()
     scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
     print("start scheduler transfer")
-
+    """
 
     #scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 0)
     #print("start scheduler get_total_bonus_money")
