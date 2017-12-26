@@ -32,7 +32,7 @@ class WebDriver_Manager:
         self.chrome_options = Options()
         #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
         #self.chrome_options.add_argument("--start-maximized")
-        # self.chrome_options.add_argument('--incognito') #시크릿모드
+        #self.chrome_options.add_argument('--incognito') #시크릿모드
         self.chrome_options.add_argument("--disable-infobars")
         self.chrome_options.add_argument("--disable-session-crashed-bubble")
         self.chrome_options.add_argument("user-data-dir=C:/Users/charg/AppData/Local/Google/Chrome/User Data")
