@@ -95,7 +95,6 @@ class WebDriver_Manager:
         driver.switch_to.window(driver.window_handles[-1])
         driver.close()
 
-
     def switch_to_main_window(self):
         main_window_handle = None
         while not main_window_handle:
