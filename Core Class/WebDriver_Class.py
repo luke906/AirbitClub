@@ -8,6 +8,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
+import os
+
+
 from selenium.webdriver.common.keys import Keys
 #from browsermobproxy import Server
 #from fake_useragent import UserAgent
@@ -24,6 +27,9 @@ class WebDriver_Manager:
         capabilities = DesiredCapabilities.CHROME
         proxy.add_to_capabilities(capabilities)
         """
+        user_name = os.getlogin()
+        user_path_name = "user-data-dir=C:/Users" + user_name + "/AppData/Local/Google/Chrome/User Data"
+
         #ua = UserAgent()
         #capabilities = webdriver.DesiredCapabilities.CHROME
         #capabilities["chrome.switches"] = ["--user-agent=" + ua.chrome]
@@ -35,7 +41,7 @@ class WebDriver_Manager:
         #self.chrome_options.add_argument('--incognito') #시크릿모드
         self.chrome_options.add_argument("--disable-infobars")
         self.chrome_options.add_argument("--disable-session-crashed-bubble")
-        self.chrome_options.add_argument("user-data-dir=C:/Users/charg/AppData/Local/Google/Chrome/User Data")
+        self.chrome_options.add_argument(user_path_name)
         self.chrome_options.add_argument("--disable-extensions")
         self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
 
