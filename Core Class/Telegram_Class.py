@@ -4,9 +4,10 @@ import telegram
 class Telegram_Manager:
 
     def __init__(self):
-        self.bot = telegram.Bot(token='453642591:AAFwBdO7CaZ4XpfYi1ud3b6nURjYisHgs-s')
+        #self.bot = telegram.Bot(token='453642591:AAFwBdO7CaZ4XpfYi1ud3b6nURjYisHgs-s')
+        self.bot = telegram.Bot(token='538038697:AAHELqBNpIBU7RYQRCsC1JRonblnrN0vfLs')
         #self.updates = self.bot.getUpdates()  # 업데이트 내역을 받아옵니다.
-        # self.chat_id = self.bot.getUpdates()[-1].message.chat.id
+        #self.chat_id = self.bot.getUpdates()[-1].message.chat.id
 
     def send_message(self, message):
         self.bot.sendMessage(chat_id='468017156', text=message)
@@ -16,6 +17,9 @@ class Telegram_Manager:
 
     def send_file(self, file):
         self.bot.send_document(chat_id='468017156', document=open(file, 'rb'))
+
+    def get_update_object(self):
+        return self.bot.get_updates()
 
 
 
