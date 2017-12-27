@@ -181,9 +181,9 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
 
     #로그인 버튼을 누르고 다음 페이지의 검사 엘리먼트가 나타날때 까지 대기한다.
-    if (AirWebDriver.wait_until_show_element_id(120, 'all-market-prices-button')) is not True:
-        print('초기화면 로딩실패')
-        AirWebDriver.quit_browser()
+    #if (AirWebDriver.wait_until_show_element_id(120, 'all-markets-button')) is not True:
+     #   print('초기화면 로딩실패')
+      #  AirWebDriver.quit_browser()
 
     #재구매일이 0일 경우 이체 작업을 안한다.
     soup = AirWebDriver.get_soup_object()
@@ -272,10 +272,10 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(3)
-        AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
-
-        # 종료
-        AirWebDriver.quit_browser()
+        if (AirWebDriver.wait_until_show_element_id(120, 'search-user')) is True:
+            #AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+            # 종료
+            AirWebDriver.quit_browser()
 
     # 리워드에 금액이 있다면 리워드 이체를 한다.(1)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[3]
@@ -324,10 +324,10 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(5)
-        AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
-
-        # 종료
-        AirWebDriver.quit_browser()
+        if (AirWebDriver.wait_until_show_element_id(120, 'search-user')) is True:
+            #AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+            # 종료
+            AirWebDriver.quit_browser()
 
     # 종료
     AirWebDriver.quit_browser()

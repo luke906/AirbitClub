@@ -36,6 +36,8 @@ class WebDriver_Manager:
 
         self.DriverPath = "../Web Driver/chromedriver"
         self.chrome_options = Options()
+        #canary_path = "C:/Users/lattepanda/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        #self.chrome_options.binary_location = canary_path
         #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
         #self.chrome_options.add_argument("--start-maximized")
         #self.chrome_options.add_argument('--incognito') #시크릿모드
