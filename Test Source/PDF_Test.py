@@ -44,5 +44,12 @@ def test():
     Telegram_Mng.send_file(rerport_filename)
 
 
+
 if __name__ == "__main__":
-    test()
+    #test()
+
+    Telegram_Mng = Telegram_Manager()
+    updates = Telegram_Mng.get_update_object()
+    for u in updates:
+        print(u.message)
+
