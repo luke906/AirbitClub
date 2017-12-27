@@ -169,7 +169,6 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     #AirWebDriver.send_click_event_with_xpath('//*[@id="nav-bar-signin"]')
 
-
     # 로그인 버튼이 나타날때 까지 대기한다.
     if (AirWebDriver.wait_until_show_element_id(120, 'user_password')) is not True:
         print('로그인 화면 로딩실패')
