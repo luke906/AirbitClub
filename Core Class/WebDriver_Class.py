@@ -29,7 +29,7 @@ class WebDriver_Manager:
         """
         user_name = os.getlogin()
         #user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
-        user_path_name = "../User_Profile"
+        #user_path_name = "../User_Profile"
 
         #ua = UserAgent()
         #capabilities = webdriver.DesiredCapabilities.CHROME
@@ -44,7 +44,7 @@ class WebDriver_Manager:
         #self.chrome_options.add_argument('--incognito') #시크릿모드
         self.chrome_options.add_argument("--disable-infobars")
         self.chrome_options.add_argument("--disable-session-crashed-bubble")
-        self.chrome_options.add_argument(user_path_name)
+        #self.chrome_options.add_argument(user_path_name)
         self.chrome_options.add_argument("--disable-extensions")
         self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
 
