@@ -1,14 +1,14 @@
 from multiprocessing import Process
 
-from WebDriver_Class import WebDriver
+from WebDriver_Class import WebDriver_Manager
 
-
+import time
 def process_browser_login():
 
     str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
 
-    AirWebDriver = WebDriver(str_Chrome_Path)
+    AirWebDriver = WebDriver_Manager()
     AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
     AirWebDriver.send_key_by_name("user[username]", "lsw120324")
     AirWebDriver.send_key_by_name("user[password]", "1111")
@@ -31,7 +31,9 @@ def get_total_bonus_money():
 
 if __name__ == "__main__":
 
-    get_total_bonus_money()
+    #get_total_bonus_money()
+    process_browser_login()
+    time.sleep(500)
 
 
 
