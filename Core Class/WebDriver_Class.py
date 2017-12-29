@@ -28,7 +28,8 @@ class WebDriver_Manager:
         proxy.add_to_capabilities(capabilities)
         """
         user_name = os.getlogin()
-        user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
+        #user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
+        user_path_name = "../User_Profile"
 
         #ua = UserAgent()
         #capabilities = webdriver.DesiredCapabilities.CHROME
