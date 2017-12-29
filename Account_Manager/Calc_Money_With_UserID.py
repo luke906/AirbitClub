@@ -165,39 +165,47 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     AirWebDriver = WebDriver_Manager()
 
+    print("로그인 사이트 접속 시도")
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+    print("로그인 사이트 접속중")
 
     #AirWebDriver.send_click_event_with_xpath('//*[@id="nav-bar-signin"]')
 
     # 로그인 버튼이 나타날때 까지 대기한다.
-    if (AirWebDriver.wait_until_show_element_id(120, 'user_password')) is not True:
-        print('로그인 화면 로딩실패')
-        AirWebDriver.quit_browser()
+    #if (AirWebDriver.wait_until_show_element_id(120, 'user_password')) is not True:
+     #   print('로그인 화면 로딩실패')
+      #  AirWebDriver.quit_browser()
 
-
+    print("로그인 사이트 아이디 패스워드 입력")
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+    print("로그인 사이트 로그인 버튼 클릭")
 
     #로그인 버튼을 누르고 다음 페이지의 검사 엘리먼트가 나타날때 까지 대기한다.
-    #if (AirWebDriver.wait_until_show_element_id(120, 'all-markets-button')) is not True:
-     #   print('초기화면 로딩실패')
-      #  AirWebDriver.quit_browser()
+    if (AirWebDriver.wait_until_show_element_id(120, 'all-markets-button')) is not True:
+        print('초기화면 로딩실패')
+        AirWebDriver.quit_browser()
 
     #재구매일이 0일 경우 이체 작업을 안한다.
+
+    print("재 구매일 잔여 일수 얻어오기 시도...")
     soup = AirWebDriver.get_soup_object()
     remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
+    print("재 구매일 잔여일수 : %d"%remain_repurchase_day)
     if remain_repurchase_day == 0:
         print("%s 아이디 재구매일 도래 이체 중지" % str_login_id)
         repurchase_id_list.append(str_login_id)
         AirWebDriver.quit_browser()
         return
 
+    print("트랜스퍼 사이트 접속 시도")
     AirWebDriver.move_to_url(str_Transfer_URL)
 
     if (AirWebDriver.wait_until_show_element_id(120, 'search-user')) is not True:
-        print('이체 화면 로딩실패')
+        print('트랜스퍼 화면 로딩실패')
         AirWebDriver.quit_browser()
+    print("트랜스퍼 사이트 접속 성공")
 
     # 현재 해당 계정의 월릿 금액을 구한다.
     soup = AirWebDriver.get_soup_object()
@@ -214,12 +222,12 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     print("rewards: %f" % _rewards)
 
     # 만일 이체할 금액이 없다면 종료한다.
-    if (wallet == "commissions") and (_commissions <= 0):
-        AirWebDriver.quit_browser()
-        return
-    elif (wallet == "rewards") and (_rewards <= 0):
-        AirWebDriver.quit_browser()
-        return
+    if ((wallet == "commissions") and (_commissions <= 0)) or ((wallet == "rewards") and (_rewards <= 0)):
+        # submit-transfer 버튼이 나타날때 까지 대기 후 종료 한다.
+        if (AirWebDriver.wait_until_show_element_id(120, 'submit-transfer')):
+            print("트랜스퍼 잔고 없음 사이트 종료")
+            AirWebDriver.quit_browser()
+            return
 
 
     # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
