@@ -28,7 +28,7 @@ class WebDriver_Manager:
         proxy.add_to_capabilities(capabilities)
         """
         user_name = os.getlogin()
-        #user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
+        user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
         #user_path_name = "../User_Profile"
 
         #ua = UserAgent()
@@ -42,9 +42,10 @@ class WebDriver_Manager:
         #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
         #self.chrome_options.add_argument("--start-maximized")
         #self.chrome_options.add_argument('--incognito') #시크릿모드
+        self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False, })
         self.chrome_options.add_argument("--disable-infobars")
         self.chrome_options.add_argument("--disable-session-crashed-bubble")
-        #self.chrome_options.add_argument(user_path_name)
+        self.chrome_options.add_argument(user_path_name)
         self.chrome_options.add_argument("--disable-extensions")
         self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
 
