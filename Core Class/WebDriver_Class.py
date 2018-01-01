@@ -120,13 +120,18 @@ class WebDriver_Manager:
             print("Timed out waiting for page to load")
             return False
 
+    def refresh_page(self):
+        self.browser.refresh()
 
 
-    def quit_browser(self):
+
+    def quit_browser(self, flag=0):
         try:
             self.browser.stop_client()
-            self.browser.close()
-            #self.browser.quit()
+            if flag ==0:
+                self.browser.close()
+            elif flag == -1:
+                self.browser.quit()
         except Exception:
             pass
 
