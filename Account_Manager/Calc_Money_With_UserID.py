@@ -530,8 +530,9 @@ if __name__ == "__main__":
     a = 1
     for index in range(0, 10):
         transfer_all_money_to_main_account(1, end_index)
-        time.sleep(20)
+        time.sleep(10)
         a += index
+    print("test completed")
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
     """
