@@ -532,7 +532,8 @@ if __name__ == "__main__":
         transfer_all_money_to_main_account(1, end_index)
         time.sleep(10)
         a += index
-    print("test completed")
+    Telegram_Mng = Telegram_Manager()
+    Telegram_Mng.send_image("test completed")
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
     """
