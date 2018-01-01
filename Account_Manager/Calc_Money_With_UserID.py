@@ -483,7 +483,7 @@ def transfer_all_money_to_main_account(start_index=1, end_index=29):
         if result is False:
             continue
 
-    """
+
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
     for index in range(start_index, end_index):
@@ -492,7 +492,7 @@ def transfer_all_money_to_main_account(start_index=1, end_index=29):
             continue
         if comissions_list_dic[id_list[index]] > 0:
             transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
-    """
+
 
     end_time = time.time()
     strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
