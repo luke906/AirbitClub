@@ -70,9 +70,12 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
 
     # 로그인 버튼을 누르고 다음 페이지의 검사 엘리먼트가 나타날때 까지 대기한다.
-    if (AirWebDriver.wait_until_show_element_id(60, 'market_price_chart')) is not True:
-        print('로딩실패')
-        AirWebDriver.quit_browser()
+    if (AirWebDriver.wait_until_show_element_id(60, 'all-markets-button')) is not True:
+        print('초기화면 로딩실패-1')
+        AirWebDriver.refresh_page()
+        if (AirWebDriver.wait_until_show_element_id(60, 'all-markets-button')) is not True:
+            print('초기화면 로딩실패-2')
+            AirWebDriver.quit_browser(-1)
 
     #pyautogui.click(100, 100)
 
@@ -85,7 +88,7 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     rewards.value += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
     savings.value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
-    AirWebDriver.quit_browser()
+    AirWebDriver.quit_browser(-1)
 
 
 # 각 아이디 별로 남은 리워드 지급일수, 재구매일 여부 판별
@@ -159,11 +162,20 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     global _REQUEST_TOKEN_VALUE
     global comissions_list_dic
 
+    b_wallet = wallet
+    b_str_destination_id = str_destination_id
+    b_str_login_id = str_login_id
+    b_str_login_password = str_login_password
+    b_str_credential_filename = str_credential_filename
+    b_index = index
+
     print("start transfer %s" % str_login_id)
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
 
+    print("웹 드라이버 로딩 시작")
     AirWebDriver = WebDriver_Manager()
+    print("웹 드라이버 로딩 종료")
 
     print("로그인 사이트 접속 시도")
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
@@ -172,9 +184,16 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     #AirWebDriver.send_click_event_with_xpath('//*[@id="nav-bar-signin"]')
 
     # 로그인 버튼이 나타날때 까지 대기한다.
-    #if (AirWebDriver.wait_until_show_element_id(120, 'user_password')) is not True:
-     #   print('로그인 화면 로딩실패')
-      #  AirWebDriver.quit_browser()
+    if (AirWebDriver.wait_until_show_element_id(120, 'user_password')) is not True:
+        print('로그인 화면 로딩실패')
+        AirWebDriver.quit_browser(-1)
+        print('로그인 재 시도')
+        transfer_money_to(b_wallet,
+                          b_str_destination_id,
+                          b_str_login_id,
+                          b_str_login_password,
+                          b_str_credential_filename,
+                          b_index)
 
     print("로그인 사이트 아이디 패스워드 입력")
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
@@ -184,19 +203,28 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     #로그인 버튼을 누르고 다음 페이지의 검사 엘리먼트가 나타날때 까지 대기한다.
     if (AirWebDriver.wait_until_show_element_id(120, 'all-markets-button')) is not True:
-        print('초기화면 로딩실패')
-        AirWebDriver.quit_browser()
+        print('로그인 후 초기화면 로딩실패')
+        AirWebDriver.quit_browser(-1)
+        print('로그인 재 시도')
+        transfer_money_to(b_wallet,
+                          b_str_destination_id,
+                          b_str_login_id,
+                          b_str_login_password,
+                          b_str_credential_filename,
+                          b_index)
 
+    print('로그인 후 초기화면 로딩 성공')
     #재구매일이 0일 경우 이체 작업을 안한다.
 
     print("재 구매일 잔여 일수 얻어오기 시도...")
+    time.sleep(3)
     soup = AirWebDriver.get_soup_object()
     remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
     print("재 구매일 잔여일수 : %d"%remain_repurchase_day)
     if remain_repurchase_day == 0:
         print("%s 아이디 재구매일 도래 이체 중지" % str_login_id)
         repurchase_id_list.append(str_login_id)
-        AirWebDriver.quit_browser()
+        AirWebDriver.quit_browser(-1)
         return
 
     print("트랜스퍼 사이트 접속 시도")
@@ -204,7 +232,15 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     if (AirWebDriver.wait_until_show_element_id(120, 'search-user')) is not True:
         print('트랜스퍼 화면 로딩실패')
-        AirWebDriver.quit_browser()
+        AirWebDriver.quit_browser(-1)
+        print('로그인 재 시도')
+        transfer_money_to(b_wallet,
+                          b_str_destination_id,
+                          b_str_login_id,
+                          b_str_login_password,
+                          b_str_credential_filename,
+                          b_index)
+
     print("트랜스퍼 사이트 접속 성공")
 
     # 현재 해당 계정의 월릿 금액을 구한다.
@@ -224,10 +260,11 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     # 만일 이체할 금액이 없다면 종료한다.
     if ((wallet == "commissions") and (_commissions <= 0)) or ((wallet == "rewards") and (_rewards <= 0)):
         # submit-transfer 버튼이 나타날때 까지 대기 후 종료 한다.
-        if (AirWebDriver.wait_until_show_element_id(120, 'submit-transfer')):
+        if (AirWebDriver.wait_until_show_element_id(60, 'submit-transfer')):
             print("트랜스퍼 잔고 없음 사이트 종료")
-            AirWebDriver.quit_browser()
-            return
+            AirWebDriver.quit_browser(-1)
+            return False
+
 
 
     # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
@@ -282,7 +319,7 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
         if (AirWebDriver.wait_until_show_element_id(120, 'search-user')) is True:
             #AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
             # 종료
-            AirWebDriver.quit_browser()
+            AirWebDriver.quit_browser(-1)
 
     # 리워드에 금액이 있다면 리워드 이체를 한다.(1)
     # //*[@id="partition_transfer_partition_user_wallet_id"]/option[3]
@@ -334,10 +371,10 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
         if (AirWebDriver.wait_until_show_element_id(120, 'search-user')) is True:
             #AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
             # 종료
-            AirWebDriver.quit_browser()
+            AirWebDriver.quit_browser(-1)
 
     # 종료
-    AirWebDriver.quit_browser()
+    AirWebDriver.quit_browser(-1)
 
 def get_account_count():
     return len(id_list)
@@ -442,8 +479,11 @@ def transfer_all_money_to_main_account(start_index=1, end_index=29):
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(start_index, end_index):
-        transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
+        result = transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
+        if result is False:
+            continue
 
+    """
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
     for index in range(start_index, end_index):
@@ -452,6 +492,7 @@ def transfer_all_money_to_main_account(start_index=1, end_index=29):
             continue
         if comissions_list_dic[id_list[index]] > 0:
             transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
+    """
 
     end_time = time.time()
     strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
@@ -485,7 +526,12 @@ if __name__ == "__main__":
 
     get_id_password('이성원')
     end_index = get_account_count()
-    transfer_all_money_to_main_account(1, end_index)
+
+    a = 1
+    for index in range(0, 10):
+        transfer_all_money_to_main_account(1, end_index)
+        time.sleep(20)
+        a += index
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
     """
