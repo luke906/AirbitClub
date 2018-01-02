@@ -5,14 +5,15 @@ from WebDriver_Class import WebDriver_Manager
 import time
 def process_browser_login():
 
-    str_Chrome_Path = "../Selenium_Driver/chromedriver"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
 
     AirWebDriver = WebDriver_Manager()
     AirWebDriver.move_to_url((str_AirBitClub_Login_URL))
-    AirWebDriver.send_key_by_name("user[username]", "lsw120324")
-    AirWebDriver.send_key_by_name("user[password]", "1111")
-    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+    AirWebDriver.send_key_by_name("user[username]", "lsw120300")
+    AirWebDriver.send_key_by_name("user[password]", "lsw8954!")
+    AirWebDriver.mouse_click(258, 525, 3)
+
+    AirWebDriver.mouse_click(927, 163, 5)
 
 def get_total_bonus_money():
 
