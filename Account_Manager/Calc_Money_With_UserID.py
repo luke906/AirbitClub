@@ -21,6 +21,9 @@ email_kind = []
 #트랜스퍼 속도 개선을 위해서 커미션리스트를 만든다.
 comissions_list_dic = {}
 
+remaining_business_day_dic = {}
+repurchase_left_list_dic = {}
+
 # 프로세스를 이용하여 다중 로그인을 할 경우 사용할 메모리 변수
 # shared memory 사용 (멀티 프로세스간 변수값 공유)
 commissions = Value('d', 0.0)
@@ -161,6 +164,8 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     global _REQUEST_TOKEN_VALUE
     global comissions_list_dic
+    global remaining_business_day_dic
+    global repurchase_left_list_dic
 
     b_wallet = wallet
     b_str_destination_id = str_destination_id
@@ -170,8 +175,10 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     b_index = index
 
     print("start transfer %s" % str_login_id)
+    str_AirBitClub_Home_URL = "https://www.bitbackoffice.com/#"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
+    str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
     print("웹 드라이버 로딩 시작")
     AirWebDriver = WebDriver_Manager()
@@ -181,7 +188,8 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     print("로그인 사이트 접속중")
 
-    #AirWebDriver.send_click_event_with_xpath('//*[@id="nav-bar-signin"]')
+    #AirWebDriver.mouse_click(981, 102, 3)
+    """
 
     # 로그인 버튼이 나타날때 까지 대기한다.
     if (AirWebDriver.wait_until_show_element_id(120, 'user_password')) is not True:
@@ -194,42 +202,63 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
                           b_str_login_password,
                           b_str_credential_filename,
                           b_index)
+    """
 
     print("로그인 사이트 아이디 패스워드 입력")
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
+    #AirWebDriver.mouse_click(258, 525, 5)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
-    print("로그인 사이트 로그인 버튼 클릭")
+    #print("로그인 사이트 로그인 버튼 클릭")
 
+    """
     #로그인 버튼을 누르고 다음 페이지의 검사 엘리먼트가 나타날때 까지 대기한다.
     if (AirWebDriver.wait_until_show_element_id(120, 'all-markets-button')) is not True:
         print('로그인 후 초기화면 로딩실패')
         AirWebDriver.quit_browser(-1)
-        print('로그인 재 시도')
+        #print('로그인 재 시도')
+        
         transfer_money_to(b_wallet,
                           b_str_destination_id,
                           b_str_login_id,
                           b_str_login_password,
                           b_str_credential_filename,
                           b_index)
+        
+    """
+
+
+    AirWebDriver.move_to_url(str_Wallet_URL)
+    AirWebDriver.move_to_url(str_AirBitClub_Home_URL)
+
 
     print('로그인 후 초기화면 로딩 성공')
     #재구매일이 0일 경우 이체 작업을 안한다.
 
+
     print("재 구매일 잔여 일수 얻어오기 시도...")
-    time.sleep(3)
     soup = AirWebDriver.get_soup_object()
+
+    remain_business_day = int(soup.find_all(class_='counter-container')[2].get('countdown'))
     remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
+
+    remaining_business_day_dic[str_login_id] = remain_business_day
+    repurchase_left_list_dic[str_login_id] = remain_repurchase_day
+
+    print(str_login_id, " 남은 비지니스 데이 :", remain_business_day )
+    print(str_login_id, " 남은 재 구매일 :", remain_repurchase_day)
+
     print("재 구매일 잔여일수 : %d"%remain_repurchase_day)
     if remain_repurchase_day == 0:
         print("%s 아이디 재구매일 도래 이체 중지" % str_login_id)
-        repurchase_id_list.append(str_login_id)
+        #AirWebDriver.mouse_click(927, 163, 10)
         AirWebDriver.quit_browser(-1)
-        return
+        return False
 
     print("트랜스퍼 사이트 접속 시도")
     AirWebDriver.move_to_url(str_Transfer_URL)
 
+    """
     if (AirWebDriver.wait_until_show_element_id(120, 'search-user')) is not True:
         print('트랜스퍼 화면 로딩실패')
         AirWebDriver.quit_browser(-1)
@@ -240,9 +269,11 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
                           b_str_login_password,
                           b_str_credential_filename,
                           b_index)
+    """
 
     print("트랜스퍼 사이트 접속 성공")
 
+    print("현재 해당 계정의 월릿 금액을 구한다.")
     # 현재 해당 계정의 월릿 금액을 구한다.
     soup = AirWebDriver.get_soup_object()
     _commissions = float(soup.find_all("small")[1].get_text())
@@ -259,12 +290,17 @@ def transfer_money_to(wallet, str_destination_id, str_login_id, str_login_passwo
 
     # 만일 이체할 금액이 없다면 종료한다.
     if ((wallet == "commissions") and (_commissions <= 0)) or ((wallet == "rewards") and (_rewards <= 0)):
+        print("트랜스퍼 잔고 없음 사이트 종료")
+        #AirWebDriver.mouse_click(927, 163, 10)
+        AirWebDriver.quit_browser(-1)
+        return False
+    """ 
         # submit-transfer 버튼이 나타날때 까지 대기 후 종료 한다.
         if (AirWebDriver.wait_until_show_element_id(60, 'submit-transfer')):
             print("트랜스퍼 잔고 없음 사이트 종료")
             AirWebDriver.quit_browser(-1)
             return False
-
+    """
 
 
     # 커미션에 금액이 있다면 커미션 이체를 한다.(0)
@@ -383,6 +419,8 @@ def get_account_count():
 def report_account():
     global id_list
     global repurchase_id_list
+    global remaining_business_day_dic
+    global repurchase_left_list_dic
 
     pdf = PDF_Manager()
     pdf.add_page()
@@ -390,10 +428,23 @@ def report_account():
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
 
+    # 300일 비지니스 데이 보고서 작성
+    # 고객이 원하는 일수를 지정해 준다 (ex: 한달이면 30일 남겨놓고 표시)
+    # remaining_business_day_dic[str_login_id] = remain_business_day
+    str_remaining_business_day_list = "30일 이하 비지니스 데이 계좌 리스트\n"
+    for userid, left_day in remaining_business_day_dic.items():
+        if left_day <= 200:
+            strtmp = userid + ": " + str(left_day) + "회 남음\n"
+            str_remaining_business_day_list += strtmp
+
     # 75일 전산비 납부 리스트 보고서 작성
-    str_repurchase_list = "75일 도래 전산비 납부 대상 계좌 리스트\n"
-    for index in range(0, len(repurchase_id_list)):
-        str_repurchase_list += (repurchase_id_list[index] + "\n")
+    # 고객이 원하는 일수를 지정해 준다 (ex: 7일이면 7 남겨놓고 표시)
+    # repurchase_left_list_dic[str_login_id] = remain_repurchase_day
+    str_repurchase_left_list = "7일 이하 전산비 납부 계좌 리스트\n"
+    for userid, left_day in repurchase_left_list_dic.items():
+        if left_day <= 50:
+            strtmp = userid + ": " + str(left_day) + "일 남음\n"
+            str_repurchase_left_list += strtmp
 
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_main_transfer = "트랜스퍼 완료 후 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
@@ -420,11 +471,14 @@ def report_account():
     savings.value = 0
     del repurchase_id_list[:]
 
-    print(str_repurchase_list)
+    print(str_remaining_business_day_list)
+    print(str_repurchase_left_list)
     print(str_main_transfer)
 
+    """
     # 보고서 PDF  생성
-    pdf.print_chapter_user('※ 75일 전산비 납부 대상 계좌 리스트 ※', str_repurchase_list)
+    pdf.print_chapter_user('※ 300일 비지니스 데이 30일 잔여 대상 계좌 리스트 ※', str_remaining_business_day_list)
+    pdf.print_chapter_user('※ 75일 전산비 납부 7일 잔여 대상 계좌 리스트 ※', str_repurchase_left_list)
     pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_main_transfer)
 
 
@@ -433,6 +487,7 @@ def report_account():
 
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_file(rerport_filename)
+    """
 
 def get_total_bonus_money():
     # procs = []
@@ -459,15 +514,15 @@ def get_total_bonus_money():
     strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
     Telegram_Mng.send_message(strmsg)
 
-def transfer_all_money_to_main_account(start_index=1, end_index=29):
+def transfer_all_money_to_main_account(start_index, end_index):
 
     global id_list
     global password_list
     global gmail_secret_json
     global comissions_list_dic
 
-    Telegram_Mng = Telegram_Manager()
-    start_time = time.time()
+    #Telegram_Mng = Telegram_Manager()
+    #start_time = time.time()
 
     #transfer_money_to(main_account, "lsw120302", "lsw8954!", "gmail-python-chargerunit01.json")
 
@@ -479,6 +534,7 @@ def transfer_all_money_to_main_account(start_index=1, end_index=29):
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(start_index, end_index):
+        print("리워드 트랜스퍼 인덱스 : %d"%index)
         result = transfer_money_to("rewards", id_list[0], id_list[index], password_list[index], gmail_secret_json[index], index)
         if result is False:
             continue
@@ -487,6 +543,7 @@ def transfer_all_money_to_main_account(start_index=1, end_index=29):
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
     for index in range(start_index, end_index):
+        print("커미션 트랜스퍼 인덱스 : %d" % index)
         #75일 재구매 대상인 아이디는 이체를 건너뛴다.
         if id_list[index] in repurchase_id_list:
             continue
@@ -494,8 +551,8 @@ def transfer_all_money_to_main_account(start_index=1, end_index=29):
             transfer_money_to("commissions", id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
 
 
-    end_time = time.time()
-    strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
+    #end_time = time.time()
+    #strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
     #Telegram_Mng.send_message(strmsg)
 
     #get_screent_shot_with_login_id(id_list[0], "lsw8954!")
