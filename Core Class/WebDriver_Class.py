@@ -9,11 +9,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import os
+import pyautogui
 
 
 from selenium.webdriver.common.keys import Keys
 #from browsermobproxy import Server
-#from fake_useragent import UserAgent
+from fake_useragent import UserAgent
 
 class WebDriver_Manager:
 
@@ -29,11 +30,13 @@ class WebDriver_Manager:
         """
         user_name = os.getlogin()
         user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
+        #user_path_name = "user-data-dir=C:/Users/" + user_name + "/PycharmProjects/AirbitClub/User_Profile/GPUCache"
+
         #user_path_name = "../User_Profile"
 
-        #ua = UserAgent()
-        #capabilities = webdriver.DesiredCapabilities.CHROME
-        #capabilities["chrome.switches"] = ["--user-agent=" + ua.chrome]
+        ua = UserAgent()
+        capabilities = webdriver.DesiredCapabilities.CHROME
+        capabilities["chrome.switches"] = ["--user-agent=" + ua.chrome]
 
         self.DriverPath = "../Web Driver/chromedriver"
         self.chrome_options = Options()
@@ -42,11 +45,9 @@ class WebDriver_Manager:
         #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
         #self.chrome_options.add_argument("--start-maximized")
         #self.chrome_options.add_argument('--incognito') #시크릿모드
-        self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False, })
+        #self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False, })
         self.chrome_options.add_argument("--disable-infobars")
-        self.chrome_options.add_argument("--disable-session-crashed-bubble")
         self.chrome_options.add_argument(user_path_name)
-        self.chrome_options.add_argument("--disable-extensions")
         self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
 
 
@@ -123,6 +124,20 @@ class WebDriver_Manager:
     def refresh_page(self):
         self.browser.refresh()
 
+    def mouse_click(self, xpos, ypos, delay=0):
+        screenWidth, screenHeight = pyautogui.size()
+        currentMouseX, currentMouseY = pyautogui.position()
+        pyautogui.PAUSE = delay
+        pyautogui.moveTo(xpos, ypos)
+        pyautogui.click()
+
+    def click_keyboard_esc(self):
+        pyautogui.press('esc')
+
+    def image_button_click(self, image_name):
+        button7location = pyautogui.locateOnScreen(image_name)# returns (left, top, width, height) of matching region
+        buttonx, buttony = pyautogui.center(button7location)
+        pyautogui.click(buttonx, buttony)  # clicks the center of where the button was found
 
 
     def quit_browser(self, flag=0):
