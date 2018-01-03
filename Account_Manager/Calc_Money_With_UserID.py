@@ -600,8 +600,8 @@ if __name__ == "__main__":
     end_index = get_account_count()
 
     a = 1
-    for index in range(0, 3):
-        transfer_all_money_to_main_account(13, 16)
+    for index in range(0, 4):
+        transfer_all_money_to_main_account(1, end_index)
         time.sleep(10)
         a += index
     Telegram_Mng = Telegram_Manager()
