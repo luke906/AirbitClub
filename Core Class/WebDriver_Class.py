@@ -10,51 +10,64 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import os
 import pyautogui
+import time
 
 
 from selenium.webdriver.common.keys import Keys
-#from browsermobproxy import Server
 from fake_useragent import UserAgent
 
 class WebDriver_Manager:
 
-
-    def __init__(self):
-        """
-        server = Server("../browsermob-proxy/bin/browsermob-proxy")
-        server.start()
-        proxy = server.create_proxy()
-        proxy.selenium_proxy()
-        capabilities = DesiredCapabilities.CHROME
-        proxy.add_to_capabilities(capabilities)
-        """
+    #browser_flag = chrome, firefox
+    def __init__(self, browser_flag):
         user_name = os.getlogin()
-        user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
-        #user_path_name = "user-data-dir=C:/Users/" + user_name + "/PycharmProjects/AirbitClub/User_Profile/GPUCache"
 
-        #user_path_name = "../User_Profile"
+        if browser_flag == 'chrome':
+            user_name = os.getlogin()
+            chrome_user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
+            #user_path_name = "user-data-dir=C:/Users/" + user_name + "/PycharmProjects/AirbitClub/User_Profile/GPUCache"
 
-        ua = UserAgent()
-        capabilities = webdriver.DesiredCapabilities.CHROME
-        capabilities["chrome.switches"] = ["--user-agent=" + ua.chrome]
+            #user_path_name = "../User_Profile"
 
-        self.DriverPath = "../Web Driver/chromedriver"
-        self.chrome_options = Options()
-        #canary_path = "C:/Users/lattepanda/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
-        #self.chrome_options.binary_location = canary_path
-        #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
-        #self.chrome_options.add_argument("--start-maximized")
-        #self.chrome_options.add_argument('--incognito') #시크릿모드
-        #self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False, })
-        self.chrome_options.add_argument("--disable-infobars")
-        self.chrome_options.add_argument(user_path_name)
-        self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
+            #ua = UserAgent()
+            #capabilities = webdriver.DesiredCapabilities.CHROME
+            #capabilities["chrome.switches"] = ["--user-agent=" + ua.chrome]
+
+            self.DriverPath = "../Web Driver/chromedriver"
+            self.chrome_options = Options()
+            #canary_path = "C:/Users/lattepanda/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+            #self.chrome_options.binary_location = canary_path
+            #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
+            #self.chrome_options.add_argument("--start-maximized")
+            #self.chrome_options.add_argument('--incognito') #시크릿모드
+            prefs = {"profile.managed_default_content_settings.images": 2}
+            self.chrome_options.add_experimental_option("prefs", prefs)
+            self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False})
+            self.chrome_options.add_argument("--disable-infobars")
+            self.chrome_options.add_argument(chrome_user_path_name)
+            self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
+
+        elif browser_flag == 'firefox':
+
+            #firefox_capabilities = DesiredCapabilities.FIREFOX
+            #firefox_capabilities['marionette'] = True
+
+            firefox_user_path_name = "C:/Users/USER/AppData/Local/Mozilla/Firefox/Profiles/z213e3t9.default-1514972796227"
+            profile = webdriver.FirefoxProfile(firefox_user_path_name)
+            profile.set_preference("permissions.default.image", 2)
+            profile.set_preference("http.response.timeout", 10)
+            profile.set_preference("dom.max_script_run_time", 10)
+            geckoPath = '../Web Driver/geckodriver.exe'
+
+            self.browser = webdriver.Firefox(firefox_profile = profile, executable_path = geckoPath)
+            #self.browser = webdriver.Firefox(executable_path=geckoPath)
+
 
 
     def move_to_url(self, destination_url):
 
         try:
-            self.browser.implicitly_wait(5)
+            self.browser.implicitly_wait(2)
             self.browser.get(destination_url)
         except Exception:
             self.browser.quit()
