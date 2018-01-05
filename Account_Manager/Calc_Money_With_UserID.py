@@ -115,7 +115,8 @@ def process_browser_to_get_left_day(str_login_id, str_login_password):
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
-    AirWebDriver = WebDriver_Manager(browser_flag)
+    initialize = -1
+    AirWebDriver = WebDriver_Manager(browser_flag, initialize)
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
@@ -227,7 +228,7 @@ def transfer_all_money_to_main_account(start_index, end_index):
 
 def transfer_reward_money(index, str_destination_id, str_login_id, str_login_password, str_credential_filename):
 
-    global _REQUEST_TOKEN_VALUE
+    global _REQUEST_TOKEN_VALUE, _rewards
     global comissions_list_dic
     global remaining_business_day_dic
     global repurchase_left_list_dic
@@ -648,7 +649,8 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
-    AirWebDriver = WebDriver_Manager(browser_flag)
+    initialize = -1
+    AirWebDriver = WebDriver_Manager(browser_flag, initialize)
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
