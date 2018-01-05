@@ -261,19 +261,26 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
     print("로그인 사이트 접속 시도")
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
 
-    print('로그인 페이지 로그인 버튼 xpath 대기중..')
-    time.sleep(3)
-    if (AirWebDriver.wait_until_show_element_xpath('//*[@id="new_user"]/button')) is not True:
-        print('로그인 페이지 로그인 버튼 로딩 실패')
+    try:
+        print('로그인 페이지 패스워드 입력란 xpath 대기중..')
+        time.sleep(2)
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="user_password"]')
+        print("로그인 사이트 아이디 입력 ...")
+        AirWebDriver.send_key_by_name("user[username]", str_login_id)
+        print("로그인 사이트 패스워드 입력 ...")
+        AirWebDriver.send_key_by_name("user[password]", str_login_password)
+        # AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+        print("로그인 사이트 엔터키 입력 ...")
+        AirWebDriver.click_keyboard('enter')
+        print('로그인 후 초기화면 로딩 성공')
+
+    except (Exception) as detail:
+        print('로그인 페이지 로딩 실패')
         login_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
+        print(detail)
         return False
-    else:
-        print("로그인 사이트 접속중...")
-        AirWebDriver.send_key_by_name("user[username]", str_login_id)
-        AirWebDriver.send_key_by_name("user[password]", str_login_password)
-        AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
-        print('로그인 후 초기화면 로딩 성공')
+
 
     print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
     # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
@@ -455,19 +462,25 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
     print("로그인 사이트 접속 시도")
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
 
-    print('로그인 페이지 로그인 버튼 xpath 대기중..')
-    time.sleep(3)
-    if (AirWebDriver.wait_until_show_element_xpath('//*[@id="new_user"]/button')) is not True:
-        print('로그인 페이지 로그인 버튼 로딩 실패')
+    try:
+        print('로그인 페이지 패스워드 입력란 xpath 대기중..')
+        time.sleep(2)
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="user_password"]')
+        print("로그인 사이트 아이디 입력 ...")
+        AirWebDriver.send_key_by_name("user[username]", str_login_id)
+        print("로그인 사이트 패스워드 입력 ...")
+        AirWebDriver.send_key_by_name("user[password]", str_login_password)
+        # AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+        print("로그인 사이트 엔터키 입력 ...")
+        AirWebDriver.click_keyboard('enter')
+        print('로그인 후 초기화면 로딩 성공')
+
+    except (Exception) as detail:
+        print('로그인 페이지 로딩 실패')
         login_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
+        print(detail)
         return False
-    else:
-        print("로그인 사이트 접속중...")
-        AirWebDriver.send_key_by_name("user[username]", str_login_id)
-        AirWebDriver.send_key_by_name("user[password]", str_login_password)
-        AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
-        print('로그인 후 초기화면 로딩 성공')
 
     print("트랜스퍼 사이트 접속 시도")
     AirWebDriver.move_to_url(str_Transfer_URL)
