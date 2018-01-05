@@ -1,5 +1,5 @@
 
-import telegram
+import telegram # https://pypi.python.org/pypi/python-telegram-bot#installing
 
 class Telegram_Manager:
 
