@@ -10,6 +10,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import os
 import pyautogui
+import shutil
 import time
 
 
@@ -19,7 +20,7 @@ from fake_useragent import UserAgent
 class WebDriver_Manager:
 
     #browser_flag = chrome, firefox
-    def __init__(self, browser_flag):
+    def __init__(self, browser_flag, initialize):
         user_name = os.getlogin()
 
         if browser_flag == 'chrome':
@@ -52,16 +53,23 @@ class WebDriver_Manager:
             #firefox_capabilities = DesiredCapabilities.FIREFOX
             #firefox_capabilities['marionette'] = True
 
-            firefox_user_path_name = "C:/Users/USER/AppData/Local/Mozilla/Firefox/Profiles/z213e3t9.default-1514972796227"
-            profile = webdriver.FirefoxProfile(firefox_user_path_name)
-            profile.set_preference("permissions.default.image", 2)
-            profile.set_preference("http.response.timeout", 10)
-            profile.set_preference("dom.max_script_run_time", 10)
-            geckoPath = '../Web Driver/geckodriver.exe'
+            try:
+                firefox_user_path_name = "C:/Users/USER/AppData/Local/Mozilla/Firefox/Profiles/z213e3t9.default-1514972796227"
+                profile = webdriver.FirefoxProfile(firefox_user_path_name)
+                profile.set_preference("permissions.default.image", 2)
+                profile.set_preference("http.response.timeout", 10)
+                profile.set_preference("dom.max_script_run_time", 10)
+                geckoPath = '../Web Driver/geckodriver.exe'
+                caps = DesiredCapabilities.FIREFOX
+                caps["wires"] = True
 
-            self.browser = webdriver.Firefox(firefox_profile = profile, executable_path = geckoPath)
-            #self.browser = webdriver.Firefox(executable_path=geckoPath)
-
+                self.browser = webdriver.Firefox(firefox_profile = profile, executable_path = geckoPath, capabilities=caps)
+                #self.browser = webdriver.Firefox(executable_path=geckoPath)
+                initialize = 1
+            except (Exception) as detail:
+                print(detail)
+                print("웹 드라이버 생성 실패")
+                initialize = 0
 
 
     def move_to_url(self, destination_url):
@@ -120,18 +128,49 @@ class WebDriver_Manager:
         driver.close()
 
     def switch_to_main_window(self):
+        driver = self.browser
         main_window_handle = None
         while not main_window_handle:
             main_window_handle = driver.current_window_handle
 
-    def wait_until_show_element_id(self, timeout, id_name):
+    def wait_until_show_element_id(self, id_name):
         try:
             element_present = EC.presence_of_element_located((By.ID, id_name))
-            WebDriverWait(self.browser, timeout).until(element_present)
-            print("%s 아이디 로딩 성공"%id_name)
+            WebDriverWait(self.browser, 60).until(element_present)
+            print("%s id 로딩 성공"%id_name)
             return True
         except TimeoutException:
-            print("Timed out waiting for page to load")
+            print("id 로딩 시간초과")
+            return False
+
+    def wait_until_show_element_xpath(self, xpath):
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, xpath))
+            WebDriverWait(self.browser, 60).until(element_present)
+            print("%s xpath 로딩 성공"%xpath)
+            return True
+        except TimeoutException:
+            print("xpath 로딩 시간초과")
+            return False
+
+    def wait_until_show_element_class(self, class_id):
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, class_id))
+            WebDriverWait(self.browser, 60).until(element_present)
+            print("%s class 로딩 성공"%class_id)
+            return True
+        except TimeoutException:
+            print("class 로딩 시간초과")
+            return False
+
+    def wait_until_show_element_css(self, css):
+        try:
+            element_present = EC.presence_of_element_located((By.CSS_SELECTOR, css))
+            WebDriverWait(self.browser, 60).until(element_present)
+            print("%s css 로딩 성공"%css)
+            return True
+        except TimeoutException:
+            print("css 로딩 시간초과")
             return False
 
     def refresh_page(self):
@@ -152,14 +191,29 @@ class WebDriver_Manager:
         buttonx, buttony = pyautogui.center(button7location)
         pyautogui.click(buttonx, buttony)  # clicks the center of where the button was found
 
+    def delete_firefox_temp_addon_file(self):
+        import glob
+        import os
+        user_name = os.getlogin()
+        filepath = "C:/Users/" + user_name + "/AppData/Local/Temp/tmpaddon*"
+        filelist = glob.glob(filepath)
+        for file in filelist:
+            #print(file)
+            os.remove(file)
+        #for folder in os.listdir("C:/Users/" + user_name + "/AppData/Local/Temp"):
+         #   if folder.find(0,3) == 'tmp':
+          #      shutil.rmtree(folder)
 
-    def quit_browser(self, flag=0):
+
+
+    def quit_browser(self, flag=-1):
         try:
             self.browser.stop_client()
             if flag ==0:
                 self.browser.close()
             elif flag == -1:
                 self.browser.quit()
+            self.delete_firefox_temp_addon_file()
         except Exception:
             pass
 
