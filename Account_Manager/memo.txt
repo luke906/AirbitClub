@@ -1,0 +1,27 @@
+
+    # 로그인 버튼이 나타날때 까지 대기한다.
+    if (AirWebDriver.wait_until_show_element_id(120, 'user_password')) is not True:
+        print('로그인 화면 로딩실패')
+        login_fail_id_list.append(str_login_id)
+        AirWebDriver.quit_browser()
+        return False
+
+
+    #로그인 버튼을 누르고 다음 페이지의 검사 엘리먼트가 나타날때 까지 대기한다.
+    if (AirWebDriver.wait_until_show_element_id(120, 'all-markets-button')) is not True:
+        print('로그인 후 초기화면 로딩실패')
+        AirWebDriver.quit_browser()
+        #print('로그인 재 시도')
+
+XPATH
+/html/body/div[2]/div/div[3]/div[3]/div[1]/div[2]/div/div[2]/div/div[3]/div[2]/div/div/div/div/input
+
+CSS
+
+
+html.js body div.content div.large-9.columns.cero div.content-dashboard div.row div.col-xs-12.col-sm-12.col-md-9.col-lg-9 div.col-xs-12.col-sm-6.col-md-6.col-lg-3 div.wallet-card div p.dll-quantity.dll-container
+
+
+div.col-md-6:nth-child(2)>div:nth-child(1)>div:nth-child(2)>p:nth-child(2)
+
+send_document telegram.error.TimedOut: Timed out
