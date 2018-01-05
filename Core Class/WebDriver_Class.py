@@ -183,8 +183,8 @@ class WebDriver_Manager:
         pyautogui.moveTo(xpos, ypos)
         pyautogui.click()
 
-    def click_keyboard_esc(self):
-        pyautogui.press('esc')
+    def click_keyboard(self, keyvalue):
+        pyautogui.press(keyvalue)
 
     def image_button_click(self, image_name):
         button7location = pyautogui.locateOnScreen(image_name)# returns (left, top, width, height) of matching region
