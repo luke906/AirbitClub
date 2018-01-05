@@ -21,9 +21,11 @@ email_kind = []
 #트랜스퍼 속도 개선을 위해서 커미션리스트를 만든다.
 comissions_list_dic = {}
 
+#보고서 제출용
 remaining_business_day_dic = {}
 repurchase_left_list_dic = {}
 
+#진행중 실패한 아이디 목록
 login_fail_id_index_list = []
 
 # 프로세스를 이용하여 다중 로그인을 할 경우 사용할 메모리 변수
@@ -260,7 +262,7 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
 
     print('로그인 페이지 로그인 버튼 xpath 대기중..')
-    time.sleep(5)
+    time.sleep(3)
     if (AirWebDriver.wait_until_show_element_xpath('//*[@id="new_user"]/button')) is not True:
         print('로그인 페이지 로그인 버튼 로딩 실패')
         login_fail_id_index_list.append(index)
@@ -419,9 +421,11 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
 
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(5)
-        if (AirWebDriver.wait_until_show_element_id('search-user')) is True:
+        if (AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')) is True:
             #AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
             # 종료
+            AirWebDriver.quit_browser()
+        else:
             AirWebDriver.quit_browser()
 
 
@@ -452,7 +456,7 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
 
     print('로그인 페이지 로그인 버튼 xpath 대기중..')
-    time.sleep(5)
+    time.sleep(3)
     if (AirWebDriver.wait_until_show_element_xpath('//*[@id="new_user"]/button')) is not True:
         print('로그인 페이지 로그인 버튼 로딩 실패')
         login_fail_id_index_list.append(index)
@@ -523,9 +527,11 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
 
     # 트랜스퍼 실행 후 잠시 대기
     time.sleep(5)
-    if (AirWebDriver.wait_until_show_element_id('search-user')) is True:
+    if (AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')) is True:
         # AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
         # 종료
+        AirWebDriver.quit_browser()
+    else:
         AirWebDriver.quit_browser()
 
 
