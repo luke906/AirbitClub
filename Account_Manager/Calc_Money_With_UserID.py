@@ -600,7 +600,7 @@ def report_account():
     remaining_business_day_dic = {}
     repurchase_left_list_dic = {}
 
-    """
+
     # 보고서 PDF  생성
     pdf.print_chapter_user('※ 300일 비지니스 데이 30일 잔여 대상 계좌 리스트 ※', str_remaining_business_day_list)
     pdf.print_chapter_user('※ 75일 전산비 납부 7일 잔여 대상 계좌 리스트 ※', str_repurchase_left_list)
@@ -612,7 +612,8 @@ def report_account():
 
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_file(rerport_filename)
-    """
+
+
 
 def get_total_bonus_money():
     # procs = []
@@ -637,7 +638,7 @@ def get_total_bonus_money():
     report_account()
     end_time = time.time()
     strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
-    Telegram_Mng.send_message(strmsg)
+
 
 
 
@@ -660,7 +661,6 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
     Telegram_Mng = Telegram_Manager()
     Telegram_Mng.send_image("main_account.png")
 
-
 if __name__ == "__main__":
 
     get_id_password('이성원')
@@ -670,8 +670,12 @@ if __name__ == "__main__":
         transfer_all_money_to_main_account(1, end_index)
         time.sleep(3)
 
-    #Telegram_Mng = Telegram_Manager()
-    #Telegram_Mng.send_image("test completed")
+    """
+    Telegram_Mng = Telegram_Manager()
+    Telegram_Mng.send_file("2018-01-05 계좌현황 보고서.pdf")
+    """
+
+
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
     """
