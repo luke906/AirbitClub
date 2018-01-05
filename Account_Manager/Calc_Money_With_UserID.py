@@ -258,10 +258,10 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
 
     print("웹 드라이버 로딩 성공")
 
-    print("로그인 사이트 접속 시도")
-    AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
 
     try:
+        print("로그인 사이트 접속 시도")
+        AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
         print('로그인 페이지 패스워드 입력란 xpath 대기중..')
         time.sleep(2)
         AirWebDriver.wait_until_show_element_xpath('//*[@id="user_password"]')
@@ -459,10 +459,10 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
         login_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         return False
-    print("로그인 사이트 접속 시도")
-    AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
 
     try:
+        print("로그인 사이트 접속 시도")
+        AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
         print('로그인 페이지 패스워드 입력란 xpath 대기중..')
         time.sleep(2)
         AirWebDriver.wait_until_show_element_xpath('//*[@id="user_password"]')
@@ -474,7 +474,6 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
         print("로그인 사이트 엔터키 입력 ...")
         AirWebDriver.click_keyboard('enter')
         print('로그인 후 초기화면 로딩 성공')
-
     except (Exception) as detail:
         print('로그인 페이지 로딩 실패')
         login_fail_id_index_list.append(index)
