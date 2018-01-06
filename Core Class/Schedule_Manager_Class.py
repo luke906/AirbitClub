@@ -60,9 +60,9 @@ class Schedule_Manager(object):
 
         self.sched.start()
 
-    def start_scheduler_cron(self, function, day_of_week, hour, minute, args_value=None):
+    def start_scheduler_cron(self, function, day_of_week, hour, minute, start_idex, end_index):
 
         # Runs from Monday to Friday at 5:30 (am) until 2014-05-30 00:00:00
         #sched.add_job(job_function, 'cron', day_of_week='mon-fri', hour=5, minute=30, end_date='2014-05-30')
-        self.block_sched.add_job(function, 'cron', day_of_week=day_of_week, hour=hour, minute=minute)
+        self.block_sched.add_job(function, 'cron', day_of_week=day_of_week, hour=hour, minute=minute, args=(start_idex, end_index))
         self.block_sched.start()

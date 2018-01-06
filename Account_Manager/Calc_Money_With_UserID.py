@@ -286,7 +286,11 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
         # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
         time.sleep(5)
         css_path = '.times>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>input:nth-child(2)'
-        AirWebDriver.wait_until_show_element_css(css_path)
+        if (AirWebDriver.wait_until_show_element_css(css_path)) is False:
+            repurchase_id_list.append(str_login_id)
+            AirWebDriver.quit_browser()
+            return False
+
 
         print("초기화면에서 비지니스데이 CSS 얻어오기 성공")
         print("재 구매일, 비지니스데이 잔여 일수 얻어오기 시도...")
@@ -682,9 +686,11 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    for index in range(0, 10):
+
+    for index in range(0, 5):
         transfer_all_money_to_main_account(1, end_index)
         time.sleep(3)
+
 
     """
     Telegram_Mng = Telegram_Manager()
@@ -694,11 +700,11 @@ if __name__ == "__main__":
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
-    """
-    scheduler = Schedule_Manager()
-    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 2, 00)
-    print("start scheduler transfer")
-    """
+
+    #scheduler = Schedule_Manager()
+    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 16, 35, 1, end_index)
+    #print("start scheduler transfer")
+
 
     #scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 0)
     #print("start scheduler get_total_bonus_money")
