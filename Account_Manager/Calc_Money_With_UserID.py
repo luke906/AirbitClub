@@ -236,8 +236,7 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
     global repurchase_left_list_dic
     global login_fail_id_list
 
-    # 프로세스 실패 흐름 판별
-    process_success_flag = 1
+    _tmp_rewards = -1
 
     print("start rewards transfer %s" % str_login_id)
     str_AirBitClub_Main = "https://www.bitbackoffice.com"
@@ -262,9 +261,9 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
     try:
         print("로그인 사이트 접속 시도")
         AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
-        print('로그인 페이지 패스워드 입력란 xpath 대기중..')
+        print('로그인 페이지 패스워드 입력란 css 대기중..')
         time.sleep(2)
-        AirWebDriver.wait_until_show_element_xpath('//*[@id="user_password"]')
+        AirWebDriver.wait_until_show_element_css('#user_username')
         print("로그인 사이트 아이디 입력 ...")
         AirWebDriver.send_key_by_name("user[username]", str_login_id)
         print("로그인 사이트 패스워드 입력 ...")
@@ -282,17 +281,13 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
         return False
 
 
-    print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
-    # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
-    time.sleep(5)
-    css_path = '.times>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>input:nth-child(2)'
-    if (AirWebDriver.wait_until_show_element_css(css_path)) is not True:
-        print('초기화면에서 비지니스데이 CSS 얻어오기 실패')
-        login_fail_id_index_list.append(index)
-        AirWebDriver.quit_browser()
-        return False
-
     try:
+        print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
+        # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
+        time.sleep(5)
+        css_path = '.times>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>input:nth-child(2)'
+        AirWebDriver.wait_until_show_element_css(css_path)
+
         print("초기화면에서 비지니스데이 CSS 얻어오기 성공")
         print("재 구매일, 비지니스데이 잔여 일수 얻어오기 시도...")
         time.sleep(3)
@@ -325,25 +320,19 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
         print(detail)
         return False
 
-
-
-    print("트랜스퍼 사이트 접속 시도")
-    AirWebDriver.move_to_url(str_Transfer_URL)
-    print("트랜스퍼 사이트 접속 성공")
-
-    #
-    print('이체 버튼 xpath 대기중..')
-    # 트랜스퍼 화면에서 이체 버튼 xapth가 활성화 될때까지 대기한다.
-    time.sleep(5)
-    if (AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')) is not True:
-        print('이체 버튼 로딩 실패')
-        login_fail_id_index_list.append(index)
-        AirWebDriver.quit_browser()
-        return False
-
-    _tmp_rewards = -1
     try:
-        print('이체 버튼 로딩 성공')
+        print("트랜스퍼 사이트 접속 시도")
+        AirWebDriver.move_to_url(str_Transfer_URL)
+        print("트랜스퍼 사이트 접속 성공")
+        time.sleep(5)
+
+        print('커미션 밸류 값   xpath 대기중..')
+        if (AirWebDriver.wait_until_show_element_css('div.row:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>small:nth-child(4)')) is False:
+            login_fail_id_index_list.append(index)
+            AirWebDriver.quit_browser()
+            return False
+        print('커미션 밸류 값  성공')
+
         print("현재 해당 계정의 월릿 금액을 구한다.")
         # 현재 해당 계정의 커미션 금액을 구한다. (추후 커미션이 있는 계좌만 커미션 이체를 하기 위해서)
         time.sleep(3)
@@ -370,12 +359,6 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
         print(detail)
         # 실패 경우 아이디에 -1을 기록해 놓고 추후 -1인 아이디만 재시도 한다.
         comissions_list_dic[str_login_id] = -1
-        process_success_flag = -1
-
-
-    #초기 로그인후 재구매일 조회 또는 트랜스퍼창 금액 조회 실패할 경우
-    #실패한 아이디의 인덱스를 저장한 후 종료
-    if process_success_flag == -1:
         login_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         return False
@@ -428,13 +411,15 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
 
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(5)
-        if (AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')) is True:
+        AirWebDriver.quit_browser()
+        """
+        if (AirWebDriver.wait_until_show_element_xpath('//*[@id="search-user"]')) is True:
             #AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
             # 종료
             AirWebDriver.quit_browser()
         else:
             AirWebDriver.quit_browser()
-
+        """
 
 def transfer_commission_money(indedx, str_destination_id, str_login_id, str_login_password, str_credential_filename):
     global _REQUEST_TOKEN_VALUE
@@ -463,9 +448,9 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
     try:
         print("로그인 사이트 접속 시도")
         AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
-        print('로그인 페이지 패스워드 입력란 xpath 대기중..')
+        print('로그인 페이지 패스워드 입력란 css 대기중..')
         time.sleep(2)
-        AirWebDriver.wait_until_show_element_xpath('//*[@id="user_password"]')
+        AirWebDriver.wait_until_show_element_css('#user_username')
         print("로그인 사이트 아이디 입력 ...")
         AirWebDriver.send_key_by_name("user[username]", str_login_id)
         print("로그인 사이트 패스워드 입력 ...")
@@ -481,18 +466,27 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
         print(detail)
         return False
 
-    print("트랜스퍼 사이트 접속 시도")
-    AirWebDriver.move_to_url(str_Transfer_URL)
-    print("트랜스퍼 사이트 접속 성공")
 
-    #time.sleep(3)
-    print('이체 버튼 xpath 대기중..')
-    # 트랜스퍼 화면에서 이체 버튼 xapth가 활성화 될때까지 대기한다.
-    time.sleep(5)
-    if (AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')) is not True:
-        print('이체 버튼 로딩 실패')
+    try:
+        print("트랜스퍼 사이트 접속 시도")
+        AirWebDriver.move_to_url(str_Transfer_URL)
+        print("트랜스퍼 사이트 접속 성공")
+        time.sleep(5)
+
+        print('커미션 밸류 값   xpath 대기중..')
+        if (AirWebDriver.wait_until_show_element_css(
+                'div.row:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>small:nth-child(4)')) is False:
+            login_fail_id_index_list.append(index)
+            AirWebDriver.quit_browser()
+            return False
+        print('커미션 밸류 값  성공')
+
+    except (Exception) as detail:
+        print(detail)
+        # 실패 경우 아이디에 -1을 기록해 놓고 추후 -1인 아이디만 재시도 한다.
         login_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
+        return False
 
     mail_scheduler = Schedule_Manager()
 
@@ -539,13 +533,15 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
 
     # 트랜스퍼 실행 후 잠시 대기
     time.sleep(5)
-    if (AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')) is True:
+    AirWebDriver.quit_browser()
+    """
+    if (AirWebDriver.wait_until_show_element_xpath('//*[@id="search-user"]')) is True:
         # AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
         # 종료
         AirWebDriver.quit_browser()
     else:
         AirWebDriver.quit_browser()
-
+    """
 
 
 def get_account_count():
