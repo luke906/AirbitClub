@@ -690,23 +690,10 @@ if __name__ == "__main__":
     end_index = get_account_count()
     transfer_all_money_to_main_account(1, end_index)
 
-    """
-    Telegram_Mng = Telegram_Manager()
-    Telegram_Mng.send_file("2018-01-05 계좌현황 보고서.pdf")
-    """
+    # scheduler = Schedule_Manager()
+    # scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 16, 35, 1, end_index)
+    # print("start scheduler transfer")
 
-
-    #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
-
-
-    #scheduler = Schedule_Manager()
-    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 16, 35, 1, end_index)
-    #print("start scheduler transfer")
-
-
-    #scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 0)
-    #print("start scheduler get_total_bonus_money")
-    
 
 
 
