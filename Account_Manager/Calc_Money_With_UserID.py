@@ -17,6 +17,7 @@ password_list = []
 email_list = []
 gmail_secret_json = []
 email_kind = []
+user_telegram_id_list=[]
 
 #트랜스퍼 속도 개선을 위해서 커미션리스트를 만든다.
 comissions_list_dic = {}
@@ -51,6 +52,7 @@ def get_id_password(person_name):
     global email_list
     global gmail_secret_json
     global email_kind
+    global user_telegram_id_list
 
     # 가비아 DB 접속
     DB = DB_Manager()
@@ -66,6 +68,7 @@ def get_id_password(person_name):
         email_list.append(results[index]['user_email'])
         gmail_secret_json.append(results[index]['user_gmail_secret_json'])
         email_kind.append(results[index]['user_email_kind'])
+        user_telegram_id_list.append(results[index]['user_telegram_id'])
 
     DB.close_db()
 
@@ -559,6 +562,7 @@ def report_account():
     global repurchase_id_list
     global remaining_business_day_dic
     global repurchase_left_list_dic
+    global user_telegram_id_list
 
     pdf = PDF_Manager()
     pdf.add_page()
@@ -632,9 +636,8 @@ def report_account():
     rerport_filename = nowDate +  ' 계좌현황 보고서.pdf'
     pdf.output(rerport_filename, 'F')
 
-    Telegram_Mng = Telegram_Manager()
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
     Telegram_Mng.send_file(rerport_filename)
-
 
 
 def get_total_bonus_money():
@@ -689,18 +692,14 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-
-
     for index in range(0, 10):
         transfer_all_money_to_main_account(1, end_index)
         time.sleep(3)
 
-
     """
-    Telegram_Mng = Telegram_Manager()
-    Telegram_Mng.send_file("2018-01-05 계좌현황 보고서.pdf")
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    Telegram_Mng.send_file("2018-01-07 계좌현황 보고서.pdf")
     """
-
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
