@@ -25,8 +25,11 @@ comissions_list_dic = {}
 remaining_business_day_dic = {}
 repurchase_left_list_dic = {}
 
-#진행중 실패한 아이디 목록
-login_fail_id_index_list = []
+# 리워드 진행중 실패한 아이디 목록
+reward_fail_id_index_list = []
+
+# 커미션 진행중 실패한 아이디 목록
+commission_fail_id_index_list = []
 
 # 프로세스를 이용하여 다중 로그인을 할 경우 사용할 메모리 변수
 # shared memory 사용 (멀티 프로세스간 변수값 공유)
@@ -53,7 +56,7 @@ def get_id_password(person_name):
     DB = DB_Manager()
 
     # 사용자 로그인 정보를 가지고 온다.
-    sql = "select * from USER_LOGIN_INFO where user_name = " + "'" + person_name + "'"
+    sql = "select * from USER_LOGIN_INFO where user_name = " + "'" + person_name + "'" + "order by user_id_index ASC"
     results = DB.get_object_execute_sql(sql)
 
     # SELECT한 로그인 정보를 리스트에 저장한다.
@@ -202,6 +205,9 @@ def transfer_all_money_to_main_account(start_index, end_index):
         if result is False:
             continue
 
+    # 리워드 트랜스퍼가 실패한 계좌에 대해서 다시 재시도 한다.
+    for id_index in reward_fail_id_index_list:
+        print("리워드 트랜스퍼 프로세스 실패한 아이디 : %s" % id_list[id_index])
 
     # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
     # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
@@ -209,6 +215,7 @@ def transfer_all_money_to_main_account(start_index, end_index):
         print("커미션 트랜스퍼 시작 인덱스 : %d" % index)
         #75일 재구매 대상인 아이디는 이체를 건너뛴다.
         if id_list[index] in repurchase_id_list:
+
             print("%s 아이디 재구매 대상 커미션 이체 패스" % id_list[index])
             continue
 
@@ -216,9 +223,11 @@ def transfer_all_money_to_main_account(start_index, end_index):
             print("커미션 트랜스퍼 시작  : %s" % id_list[index])
             transfer_commission_money(index, id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
 
-    # 프로세스 실패한 아이디 리스트
-    for id in login_fail_id_index_list:
-        print("프로세스 실패한 아이디 : %s" % id_list[id])
+    # 커미션 트랜스퍼가 실패한 계좌에 대해서 다시 재시도 한다.
+    for id_index in commission_fail_id_index_list:
+        print("커미션 트랜스퍼 프로세스 실패한 아이디 : %s" % id_list[id_index])
+
+
     #end_time = time.time()
     #strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
     #Telegram_Mng.send_message(strmsg)
@@ -234,16 +243,13 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
     global comissions_list_dic
     global remaining_business_day_dic
     global repurchase_left_list_dic
-    global login_fail_id_list
+    global reward_fail_id_index_list
 
-    _tmp_rewards = -1
+
 
     print("start rewards transfer %s" % str_login_id)
-    str_AirBitClub_Main = "https://www.bitbackoffice.com"
-    str_AirBitClub_Home_URL = "https://www.bitbackoffice.com/#"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
-    str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
 
     print("웹 드라이버 로딩 시작")
@@ -251,7 +257,7 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
     AirWebDriver = WebDriver_Manager(browser_flag, initialize)
     if initialize == 0:
         print('리워드 이체 웹 드라이버 초기 로딩 실패')
-        login_fail_id_index_list.append(index)
+        reward_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         return False
 
@@ -275,7 +281,7 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
 
     except (Exception) as detail:
         print('로그인 페이지 로딩 실패')
-        login_fail_id_index_list.append(index)
+        reward_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         print(detail)
         return False
@@ -284,10 +290,10 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
     try:
         print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
         # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
-        time.sleep(5)
+        #time.sleep(5)
         css_path = '.times>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>input:nth-child(2)'
         if (AirWebDriver.wait_until_show_element_css(css_path)) is False:
-            repurchase_id_list.append(str_login_id)
+            reward_fail_id_index_list.append(index)
             AirWebDriver.quit_browser()
             return False
 
@@ -316,19 +322,18 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
 
     except (Exception) as detail:
         #실패 경우 아이디에 -1을 기록해 놓고 추후 -1인 아이디만 재시도 한다.
-        #remaining_business_day_dic[str_login_id] = -1
-        #repurchase_left_list_dic[str_login_id] = -1
-        #process_success_flag = -1
-        login_fail_id_index_list.append(index)
+        reward_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         print(detail)
         return False
+
+    _tmp_rewards = -1
 
     try:
         print("트랜스퍼 사이트 접속 시도")
         AirWebDriver.move_to_url(str_Transfer_URL)
         print("트랜스퍼 사이트 접속 성공")
-        time.sleep(5)
+        #time.sleep(5)
 
         print('커미션 밸류 값   xpath 대기중..')
         if (AirWebDriver.wait_until_show_element_css('div.row:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>small:nth-child(4)')) is False:
@@ -363,7 +368,7 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
         print(detail)
         # 실패 경우 아이디에 -1을 기록해 놓고 추후 -1인 아이디만 재시도 한다.
         comissions_list_dic[str_login_id] = -1
-        login_fail_id_index_list.append(index)
+        reward_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         return False
 
@@ -401,6 +406,7 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
                 mail_scheduler.kill_scheduler("token_job_rewards")
                 print("Request Token for rewards is : %s" % _REQUEST_TOKEN_VALUE)
                 print("get_airbit_token_value JOB STOP!")
+
                 break
 
         # 토큰 입력
@@ -428,24 +434,20 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
 def transfer_commission_money(indedx, str_destination_id, str_login_id, str_login_password, str_credential_filename):
     global _REQUEST_TOKEN_VALUE
     global comissions_list_dic
-    global remaining_business_day_dic
-    global repurchase_left_list_dic
-    global login_fail_id_list
+    global commission_fail_id_index_list
 
 
     print("start commission transfer %s" % str_login_id)
-    str_AirBitClub_Main = "https://www.bitbackoffice.com"
-    str_AirBitClub_Home_URL = "https://www.bitbackoffice.com/#"
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
-    str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
+
 
     print("웹 드라이버 로딩 시작")
     initialize = -1
     AirWebDriver = WebDriver_Manager(browser_flag, initialize)
     if initialize == 0:
         print('리워드 이체 웹 드라이버 초기 로딩 실패')
-        login_fail_id_index_list.append(index)
+        commission_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         return False
 
@@ -465,7 +467,7 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
         print('로그인 후 초기화면 로딩 성공')
     except (Exception) as detail:
         print('로그인 페이지 로딩 실패')
-        login_fail_id_index_list.append(index)
+        commission_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         print(detail)
         return False
@@ -475,20 +477,19 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
         print("트랜스퍼 사이트 접속 시도")
         AirWebDriver.move_to_url(str_Transfer_URL)
         print("트랜스퍼 사이트 접속 성공")
-        time.sleep(5)
+        #time.sleep(5)
 
         print('커미션 밸류 값   xpath 대기중..')
         if (AirWebDriver.wait_until_show_element_css(
                 'div.row:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>small:nth-child(4)')) is False:
-            login_fail_id_index_list.append(index)
+            commission_fail_id_index_list.append(index)
             AirWebDriver.quit_browser()
             return False
         print('커미션 밸류 값  성공')
 
     except (Exception) as detail:
         print(detail)
-        # 실패 경우 아이디에 -1을 기록해 놓고 추후 -1인 아이디만 재시도 한다.
-        login_fail_id_index_list.append(index)
+        commission_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         return False
 
@@ -607,7 +608,8 @@ def report_account():
     print(str_repurchase_left_list)
     print(str_main_transfer)
 
-    print(login_fail_id_index_list)
+    print(reward_fail_id_index_list)
+    print(commission_fail_id_index_list)
 
     # 집계를 마치고 변수를 초기화 한다.
     commissions.value = 0
@@ -615,7 +617,8 @@ def report_account():
     rewards.value = 0
     savings.value = 0
     del repurchase_id_list[:]
-    del login_fail_id_index_list[:]
+    del reward_fail_id_index_list[:]
+    del commission_fail_id_index_list[:]
     remaining_business_day_dic = {}
     repurchase_left_list_dic = {}
 
@@ -687,7 +690,8 @@ if __name__ == "__main__":
     end_index = get_account_count()
 
 
-    for index in range(0, 5):
+
+    for index in range(0, 10):
         transfer_all_money_to_main_account(1, end_index)
         time.sleep(3)
 

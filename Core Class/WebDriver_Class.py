@@ -136,7 +136,7 @@ class WebDriver_Manager:
     def wait_until_show_element_id(self, id_name):
         try:
             element_present = EC.presence_of_element_located((By.ID, id_name))
-            WebDriverWait(self.browser, 60).until(element_present)
+            WebDriverWait(self.browser, 120).until(element_present)
             print("%s id 로딩 성공"%id_name)
             return True
         except TimeoutException:
@@ -146,7 +146,7 @@ class WebDriver_Manager:
     def wait_until_show_element_xpath(self, xpath):
         try:
             element_present = EC.presence_of_element_located((By.XPATH, xpath))
-            WebDriverWait(self.browser, 60).until(element_present)
+            WebDriverWait(self.browser, 120).until(element_present)
             print("%s xpath 로딩 성공"%xpath)
             return True
         except TimeoutException:
@@ -156,7 +156,7 @@ class WebDriver_Manager:
     def wait_until_show_element_class(self, class_id):
         try:
             element_present = EC.presence_of_element_located((By.XPATH, class_id))
-            WebDriverWait(self.browser, 60).until(element_present)
+            WebDriverWait(self.browser, 120).until(element_present)
             print("%s class 로딩 성공"%class_id)
             return True
         except TimeoutException:
@@ -166,7 +166,8 @@ class WebDriver_Manager:
     def wait_until_show_element_css(self, css):
         try:
             element_present = EC.presence_of_element_located((By.CSS_SELECTOR, css))
-            WebDriverWait(self.browser, 60).until(element_present)
+            WebDriverWait(self.browser, 120
+                          ).until(element_present)
             print("%s css 로딩 성공"%css)
             return True
         except TimeoutException:
