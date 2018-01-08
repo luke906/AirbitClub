@@ -244,7 +244,7 @@ def transfer_all_money_to_main_account(start_index, end_index):
     #Telegram_Mng.send_message(strmsg)
 
     #get_screent_shot_with_login_id(id_list[0], "lsw8954!")
-    process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
+    process_browser_to_get_money_with_userid(id_list[0], password_list[0])
     report_account()
 
 
@@ -704,13 +704,14 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('이성원')
+    get_id_password('박현욱')
     end_index = get_account_count()
 
+    """
     Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
     Telegram_Mng.send_message(
         "지금부터 트랜스퍼를 시작하겠습니다.\n 이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n 완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n")
-
+    """
     transfer_all_money_to_main_account(1, end_index)
 
 
