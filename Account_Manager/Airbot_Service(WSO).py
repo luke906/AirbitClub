@@ -671,9 +671,7 @@ if __name__ == "__main__":
     get_id_password('우순옥')
     end_index = get_account_count()
 
-    for index in range(0, 10):
-        transfer_all_money_to_main_account(1, end_index)
-        time.sleep(3)
+    transfer_all_money_to_main_account(1, end_index)
 
     """
     Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])

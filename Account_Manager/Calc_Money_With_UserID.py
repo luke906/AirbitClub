@@ -636,8 +636,8 @@ def report_account():
     rerport_filename = nowDate +  ' 계좌현황 보고서.pdf'
     pdf.output(rerport_filename, 'F')
 
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    Telegram_Mng.send_file(rerport_filename)
+    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    #Telegram_Mng.send_file(rerport_filename)
 
 
 def get_total_bonus_money():
