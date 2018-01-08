@@ -193,57 +193,19 @@ def get_airbit_token_value(secret_json_file):
                 # scheduler.shutdown_schedule()
                 break
 
-def transfer_all_money_to_main_account(start_index, end_index):
-
-    global id_list
-    global password_list
-    global gmail_secret_json
-    global comissions_list_dic
-
-    #Telegram_Mng = Telegram_Manager()
-    #start_time = time.time()
-
-    #transfer_money_to(main_account, "lsw120302", "lsw8954!", "gmail-python-chargerunit01.json")
-
+def transfer_all_money_to_main_account_test(start_index, end_index):
     # 트랜스퍼 하기전에 메일을 청소 한다.
     for json_list in gmail_secret_json_to_clear:
         clear_mail_box_before_transfer(json_list)
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(start_index, end_index):
-        print("리워드 트랜스퍼 인덱스 : %d"%index)
-        result = transfer_reward_money(index, id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
+        print("리워드 트랜스퍼 인덱스 : %d" % index)
+        result = transfer_reward_commission_money(index, id_list[0], id_list[index], password_list[index],
+                                       gmail_secret_json[index])
         if result is False:
             continue
 
-    # 리워드 트랜스퍼가 실패한 계좌에 대해서 다시 재시도 한다.
-    for id_index in reward_fail_id_index_list:
-        print("리워드 트랜스퍼 프로세스 실패한 아이디 : %s" % id_list[id_index])
-
-    # 메인 계좌 다음 계좌부터 커미션만 트랜스퍼 샐행.
-    # 커미션이 있는 계좌만 트랜스퍼 실행 (속도 단축을 위해서)
-    for index in range(start_index, end_index):
-        print("커미션 트랜스퍼 시작 인덱스 : %d" % index)
-        #75일 재구매 대상인 아이디는 이체를 건너뛴다.
-        if id_list[index] in repurchase_id_list:
-
-            print("%s 아이디 재구매 대상 커미션 이체 패스" % id_list[index])
-            continue
-
-        if comissions_list_dic[id_list[index]] > 0:
-            print("커미션 트랜스퍼 시작  : %s" % id_list[index])
-            transfer_commission_money(index, id_list[0], id_list[index], password_list[index], gmail_secret_json[index])
-
-    # 커미션 트랜스퍼가 실패한 계좌에 대해서 다시 재시도 한다.
-    for id_index in commission_fail_id_index_list:
-        print("커미션 트랜스퍼 프로세스 실패한 아이디 : %s" % id_list[id_index])
-
-
-    #end_time = time.time()
-    #strmsg = "트랜스퍼 프로세스 소요시간 : " + str(end_time - start_time)
-    #Telegram_Mng.send_message(strmsg)
-
-    #get_screent_shot_with_login_id(id_list[0], "lsw8954!")
     process_browser_to_get_money_with_userid(id_list[0], password_list[0])
     report_account()
 
@@ -256,12 +218,9 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
     global repurchase_left_list_dic
     global reward_fail_id_index_list
 
-
-
     print("start rewards transfer %s" % str_login_id)
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
-
 
     print("웹 드라이버 로딩 시작")
     initialize = -1
@@ -273,7 +232,6 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
         return False
 
     print("웹 드라이버 로딩 성공")
-
 
     try:
         print("로그인 사이트 접속 시도")
@@ -442,6 +400,239 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
             AirWebDriver.quit_browser()
         """
 
+
+def transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password, str_credential_filename):
+
+    global _REQUEST_TOKEN_VALUE, _rewards
+    global comissions_list_dic
+    global remaining_business_day_dic
+    global repurchase_left_list_dic
+    global reward_fail_id_index_list
+
+    _rewards = -1
+    _commissions = -1
+
+    print("start transfer %s" % str_login_id)
+    str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+    str_Transfer_URL = "https://www.bitbackoffice.com/transfers"
+
+    print("웹 드라이버 로딩 시작")
+    initialize = -1
+    AirWebDriver = WebDriver_Manager(browser_flag, initialize)
+    if initialize == 0:
+        print('웹 드라이버 초기 로딩 실패')
+        AirWebDriver.quit_browser()
+        print('처음부터 재 시도')
+        transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
+                                         str_credential_filename)
+
+    print("웹 드라이버 로딩 성공")
+
+    try:
+        print("로그인 사이트 접속 시도")
+        AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+        print('로그인 페이지 패스워드 입력란 css 대기중..')
+        time.sleep(2)
+        AirWebDriver.wait_until_show_element_css('#user_username')
+        print("로그인 사이트 아이디 입력 ...")
+        AirWebDriver.send_key_by_name("user[username]", str_login_id)
+        print("로그인 사이트 패스워드 입력 ...")
+        AirWebDriver.send_key_by_name("user[password]", str_login_password)
+        # AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+        print("로그인 사이트 엔터키 입력 ...")
+        AirWebDriver.click_keyboard('enter')
+        print('로그인 후 초기화면 로딩 성공')
+
+    except (Exception) as detail:
+        print('로그인 페이지 로딩 실패')
+        reward_fail_id_index_list.append(index)
+        AirWebDriver.quit_browser()
+        print(detail)
+        return False
+
+    print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
+    # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
+    # time.sleep(5)
+    css_path = '.times>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>input:nth-child(2)'
+    if (AirWebDriver.wait_until_show_element_css(css_path)) is False:
+        reward_fail_id_index_list.append(index)
+        AirWebDriver.quit_browser()
+        print('처음부터 재 시도')
+        transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
+                                         str_credential_filename)
+        return False
+
+    try:
+        print("초기화면에서 비지니스데이 CSS 얻어오기 성공")
+        print("재 구매일, 비지니스데이 잔여 일수 얻어오기 시도...")
+        time.sleep(4)
+        soup = AirWebDriver.get_soup_object()
+
+        remain_business_day = int(soup.find_all(class_='counter-container')[2].get('countdown'))
+        remain_repurchase_day = int(soup.find_all(class_='counter-container')[3].get('countdown'))
+
+        remaining_business_day_dic[str_login_id] = remain_business_day
+        repurchase_left_list_dic[str_login_id] = remain_repurchase_day
+
+        print(str_login_id, " 남은 비지니스 데이 :", remain_business_day)
+        print(str_login_id, " 남은 재 구매일 :", remain_repurchase_day)
+
+        # 재구매일이 0일 경우 이체 작업을 안한다.
+        if remain_repurchase_day == 0:
+            print("%s 아이디 재구매일 도래 이체 중지" % str_login_id)
+            # AirWebDriver.mouse_click(927, 163, 10)
+            repurchase_id_list.append(str_login_id)
+            AirWebDriver.quit_browser()
+            return False
+
+    except (Exception) as detail:
+        #실패 경우 아이디에 -1을 기록해 놓고 추후 -1인 아이디만 재시도 한다.
+        AirWebDriver.quit_browser()
+        print(detail)
+        print('처음부터 재 시도')
+        transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
+                                         str_credential_filename)
+
+    try:
+        print("트랜스퍼 사이트 접속 시도")
+        AirWebDriver.move_to_url(str_Transfer_URL)
+        print("트랜스퍼 사이트 접속 성공")
+        #time.sleep(5)
+
+        print('트랜스퍼 사이트 리딩을 위한 css 대기중..')
+        if (AirWebDriver.wait_until_show_element_css('div.row:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>small:nth-child(4)')) is False:
+            login_fail_id_index_list.append(index)
+            AirWebDriver.quit_browser()
+            print('처음부터 재 시도')
+            transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
+                                             str_credential_filename)
+        print('트랜스퍼 사이트 리딩을 위한 css 대기 성공')
+
+        print("현재 해당 계정의 월릿 금액을 구한다.")
+        # 현재 해당 계정의 커미션 금액을 구한다. (추후 커미션이 있는 계좌만 커미션 이체를 하기 위해서)
+        time.sleep(3)
+        soup = AirWebDriver.get_soup_object()
+        _rewards = float(soup.find_all("small")[3].get_text())
+        _commissions = float(soup.find_all("small")[1].get_text())
+
+        print("rewards: %f" % _rewards)
+        print("commissions: %f" % _commissions)
+
+        # 만일 이체할 금액이 없다면 종료한다.
+        if _rewards <= 0 and _commissions <=0:
+            print("이체할 잔고 없음 트랜스퍼 종료")
+            # AirWebDriver.mouse_click(927, 163, 10)
+            AirWebDriver.quit_browser()
+            return False
+
+    except (Exception) as detail:
+        AirWebDriver.quit_browser()
+        print(detail)
+        print('처음부터 재 시도')
+        transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
+                                         str_credential_filename)
+
+
+    # 리워드에 금액이 있다면 리워드 이체를 한다.
+    if _rewards > 0 :
+
+        mail_scheduler = Schedule_Manager()
+
+        # 트랜스퍼할 아이디를 입력한다.
+        AirWebDriver.send_key_by_id("search-user", str_destination_id)
+
+        # 검색버튼을 누른다.
+        AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
+
+        # 리워드 지갑 선택
+        # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
+        #AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[2]')
+        AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "rewards")
+
+        # 전송할 리워드 금액 입력
+        AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(_rewards))
+
+        # 토큰 요청 버튼을 누른다.
+        # //*[@id="submit-token"]
+        AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
+
+        # 토큰을 요청하고 메일에서 토큰을 받아온다.
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 3, str_credential_filename)
+
+        # 이메일 확인 후 토큰을 얻어 올때 까지 대기
+        while 1:
+            if _REQUEST_TOKEN_VALUE is not None and len(_REQUEST_TOKEN_VALUE) is 32:
+                mail_scheduler.kill_scheduler("token_job_rewards")
+                print("Request Token for rewards is : %s" % _REQUEST_TOKEN_VALUE)
+                print("get_airbit_token_value JOB STOP!")
+
+                break
+
+        # 토큰 입력
+        # id = partition_transfer_partition_token
+        AirWebDriver.send_key_by_id('partition_transfer_partition_token', str(_REQUEST_TOKEN_VALUE))
+        _REQUEST_TOKEN_VALUE = None #다음번 조회를 위해서 토큰 초기화
+
+        # 트랜스퍼 실행
+        # //*[@id="submit-transfer"]
+        print("send rewards money : %f" % _rewards )
+        AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
+
+        # 트랜스퍼 실행 후 잠시 대기
+        time.sleep(10)
+
+
+    # 커미션에 금액이 있다면 리워드 이체를 한다.
+    if _commissions > 0:
+        mail_scheduler = Schedule_Manager()
+
+        # 트랜스퍼할 아이디를 입력한다.
+        AirWebDriver.send_key_by_id("search-user", str_destination_id)
+
+        # 검색버튼을 누른다.
+        AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
+
+        # 커미션 지갑 선택
+        # //*[@id="partition_transfer_partition_user_wallet_id"]/option[4]
+        AirWebDriver.send_click_event_with_xpath('//*[@id="partition_transfer_partition_user_wallet_id"]/option[4]')
+        AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "commissions")
+
+        # 전송할 커미션 금액 입력
+        AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(_commissions))
+
+        # 토큰 요청 버튼을 누른다.
+        # //*[@id="submit-token"]
+        AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
+
+        # 토큰을 요청하고 메일에서 토큰을 받아온다.
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 3,
+                                                str_credential_filename)
+
+        # 이메일 확인 후 토큰을 얻어 올때 까지 대기
+        while 1:
+            if _REQUEST_TOKEN_VALUE is not None and len(_REQUEST_TOKEN_VALUE) is 32:
+                mail_scheduler.kill_scheduler("token_job_commissions")
+                print("Request Token for commissions is : %s" % _REQUEST_TOKEN_VALUE)
+                print("get_airbit_token_value JOB STOP!")
+                break
+
+        # 토큰 입력
+        # id = partition_transfer_partition_token
+        AirWebDriver.send_key_by_id('partition_transfer_partition_token', str(_REQUEST_TOKEN_VALUE))
+        _REQUEST_TOKEN_VALUE = None  # 다음번 조회를 위해서 토큰 초기화
+
+        # 트랜스퍼 실행
+        # //*[@id="submit-transfer"]
+        print("send commissions money : %f" % _commissions)
+        AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
+
+        # 트랜스퍼 실행 후 잠시 대기
+        time.sleep(6)
+        AirWebDriver.quit_browser()
+
+
+
+
 def transfer_commission_money(index, str_destination_id, str_login_id, str_login_password, str_credential_filename):
     global _REQUEST_TOKEN_VALUE
     global comissions_list_dic
@@ -552,7 +743,7 @@ def transfer_commission_money(index, str_destination_id, str_login_id, str_login
 
     # 트랜스퍼 실행
     # //*[@id="submit-transfer"]
-    print("send rewards money : %f" % commissions_money)
+    print("send commissions money : %f" % commissions_money)
     AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
     # 트랜스퍼 실행 후 잠시 대기
@@ -704,7 +895,7 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('박현욱')
+    get_id_password('이성원')
     end_index = get_account_count()
 
     """
@@ -712,17 +903,8 @@ if __name__ == "__main__":
     Telegram_Mng.send_message(
         "지금부터 트랜스퍼를 시작하겠습니다.\n 이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n 완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n")
     """
-    transfer_all_money_to_main_account(1, end_index)
 
-
-    #for index in range(0, 10):
-     #   transfer_all_money_to_main_account(1, end_index)
-      #  time.sleep(3)
-
-    """
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    Telegram_Mng.send_file("2018-01-07 계좌현황 보고서.pdf")
-    """
+    transfer_all_money_to_main_account_test(1, 3)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
@@ -732,9 +914,6 @@ if __name__ == "__main__":
     #print("start scheduler transfer")
 
 
-    #scheduler.start_scheduler_cron(get_total_bonus_money, 'mon-sat', 2, 0)
-    #print("start scheduler get_total_bonus_money")
-    
 
 
 
