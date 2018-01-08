@@ -16,8 +16,10 @@ repurchase_id_list = []
 password_list = []
 email_list = []
 gmail_secret_json = []
+gmail_secret_json_to_clear = []
 email_kind = []
 user_telegram_id_list=[]
+user_name_list=[]
 
 #트랜스퍼 속도 개선을 위해서 커미션리스트를 만든다.
 comissions_list_dic = {}
@@ -53,6 +55,8 @@ def get_id_password(person_name):
     global gmail_secret_json
     global email_kind
     global user_telegram_id_list
+    global user_name_list
+    global gmail_secret_json_to_clear
 
     # 가비아 DB 접속
     DB = DB_Manager()
@@ -69,6 +73,12 @@ def get_id_password(person_name):
         gmail_secret_json.append(results[index]['user_gmail_secret_json'])
         email_kind.append(results[index]['user_email_kind'])
         user_telegram_id_list.append(results[index]['user_telegram_id'])
+        user_name_list.append(results[index]['user_name'])
+
+    sql = "select distinct user_gmail_secret_json from USER_LOGIN_INFO where user_name = " + "'" + person_name + "'"
+    results = DB.get_object_execute_sql(sql)
+    for index in range(0, len(results)):
+        gmail_secret_json_to_clear.append(results[index]['user_gmail_secret_json'])
 
     DB.close_db()
 
@@ -196,10 +206,8 @@ def transfer_all_money_to_main_account(start_index, end_index):
     #transfer_money_to(main_account, "lsw120302", "lsw8954!", "gmail-python-chargerunit01.json")
 
     # 트랜스퍼 하기전에 메일을 청소 한다.
-    clear_mail_box_before_transfer("gmail-python-chargerunit01.json")
-    clear_mail_box_before_transfer("gmail-python-chargerunit03.json")
-    clear_mail_box_before_transfer("gmail-python-chargerunit05.json")
-    clear_mail_box_before_transfer("gmail-python-chargerunit07.json")
+    for json_list in gmail_secret_json_to_clear:
+        clear_mail_box_before_transfer(json_list)
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(start_index, end_index):
@@ -434,7 +442,7 @@ def transfer_reward_money(index, str_destination_id, str_login_id, str_login_pas
             AirWebDriver.quit_browser()
         """
 
-def transfer_commission_money(indedx, str_destination_id, str_login_id, str_login_password, str_credential_filename):
+def transfer_commission_money(index, str_destination_id, str_login_id, str_login_password, str_credential_filename):
     global _REQUEST_TOKEN_VALUE
     global comissions_list_dic
     global commission_fail_id_index_list
@@ -475,8 +483,16 @@ def transfer_commission_money(indedx, str_destination_id, str_login_id, str_logi
         print(detail)
         return False
 
-
     try:
+        print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
+        # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
+        # time.sleep(5)
+        css_path = '.times>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>input:nth-child(2)'
+        if (AirWebDriver.wait_until_show_element_css(css_path)) is False:
+            commission_fail_id_index_list.append(index)
+            AirWebDriver.quit_browser()
+            return False
+
         print("트랜스퍼 사이트 접속 시도")
         AirWebDriver.move_to_url(str_Transfer_URL)
         print("트랜스퍼 사이트 접속 성공")
@@ -626,18 +642,17 @@ def report_account():
     remaining_business_day_dic = {}
     repurchase_left_list_dic = {}
 
-
     # 보고서 PDF  생성
     pdf.print_chapter_user('※ 300일 비지니스 데이 30일 잔여 대상 계좌 리스트 ※', str_remaining_business_day_list)
     pdf.print_chapter_user('※ 75일 전산비 납부 7일 잔여 대상 계좌 리스트 ※', str_repurchase_left_list)
     pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_main_transfer)
 
 
-    rerport_filename = nowDate +  ' 계좌현황 보고서.pdf'
+    rerport_filename = nowDate +  " " + user_name_list[0] +' 계좌현황 보고서.pdf'
     pdf.output(rerport_filename, 'F')
 
-    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    #Telegram_Mng.send_file(rerport_filename)
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    Telegram_Mng.send_file(rerport_filename)
 
 
 def get_total_bonus_money():
@@ -646,8 +661,8 @@ def get_total_bonus_money():
     global id_list
     global password_list
 
-    Telegram_Mng = Telegram_Manager()
-    start_time = time.time()
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    Telegram_Mng.send_message("지금부터 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n")
 
     for index in range(0, get_account_count()):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
@@ -692,9 +707,16 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    for index in range(0, 10):
-        transfer_all_money_to_main_account(1, end_index)
-        time.sleep(3)
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    Telegram_Mng.send_message(
+        "지금부터 트랜스퍼를 시작하겠습니다.\n 이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n 완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n")
+
+    transfer_all_money_to_main_account(1, end_index)
+
+
+    #for index in range(0, 10):
+     #   transfer_all_money_to_main_account(1, end_index)
+      #  time.sleep(3)
 
     """
     Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
