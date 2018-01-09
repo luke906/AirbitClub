@@ -570,7 +570,7 @@ def report_account():
     # repurchase_left_list_dic[str_login_id] = remain_repurchase_day
     str_repurchase_left_list = "7일 이하 전산비 납부 계좌 리스트\n"
     for userid, left_day in repurchase_left_list_dic.items():
-        if left_day <= 7:
+        if left_day <= 0:
             strtmp = userid + ": " + str(left_day) + "일 남음\n"
             str_repurchase_left_list += strtmp
 
