@@ -551,7 +551,10 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 검색버튼을 누른다.
         AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
-        time.sleep(5)
+        time.sleep(4)
+        print('수신자 조회창 대기중..')
+        AirWebDriver.wait_until_show_element_id('transfer-to')
+        print('수신자 조회창 성공..')
 
         # 리워드 지갑 선택
         # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
@@ -599,7 +602,10 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 검색버튼을 누른다.
         AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
-        time.sleep(5)
+        time.sleep(4)
+        print('수신자 조회창 대기중..')
+        AirWebDriver.wait_until_show_element_id('transfer-to')
+        print('수신자 조회창 성공..')
 
         # 커미션 지갑 선택
         # //*[@id="partition_transfer_partition_user_wallet_id"]/option[4]
