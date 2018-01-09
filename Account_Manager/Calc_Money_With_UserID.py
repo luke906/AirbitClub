@@ -203,8 +203,7 @@ def transfer_all_money_to_main_account_test(start_index, end_index):
         print("리워드 트랜스퍼 인덱스 : %d" % index)
         result = transfer_reward_commission_money(index, id_list[0], id_list[index], password_list[index],
                                        gmail_secret_json[index])
-        if result is False:
-            continue
+
 
     process_browser_to_get_money_with_userid(id_list[0], password_list[0])
     report_account()
@@ -432,23 +431,32 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         print("로그인 사이트 접속 시도")
         AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
         print('로그인 페이지 패스워드 입력란 css 대기중..')
+        if (AirWebDriver.wait_until_show_element_css('#user_username')) is False:
+            reward_fail_id_index_list.append(index)
+            AirWebDriver.quit_browser()
+            print('처음부터 재 시도')
+            transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
+                                             str_credential_filename)
+
         time.sleep(2)
         AirWebDriver.wait_until_show_element_css('#user_username')
         print("로그인 사이트 아이디 입력 ...")
         AirWebDriver.send_key_by_name("user[username]", str_login_id)
         print("로그인 사이트 패스워드 입력 ...")
         AirWebDriver.send_key_by_name("user[password]", str_login_password)
-        # AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+
+        AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
         print("로그인 사이트 엔터키 입력 ...")
-        AirWebDriver.click_keyboard('enter')
+        # AirWebDriver.click_keyboard('enter')
         print('로그인 후 초기화면 로딩 성공')
 
     except (Exception) as detail:
         print('로그인 페이지 로딩 실패')
-        reward_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
+        print('처음부터 재 시도')
+        transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
+                                         str_credential_filename)
         print(detail)
-        return False
 
     print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
     # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
@@ -578,9 +586,6 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         print("send rewards money : %f" % _rewards )
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
-        # 트랜스퍼 실행 후 잠시 대기
-        time.sleep(10)
-
 
     # 커미션에 금액이 있다면 리워드 이체를 한다.
     if _commissions > 0:
@@ -626,11 +631,11 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         print("send commissions money : %f" % _commissions)
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
-        # 트랜스퍼 실행 후 잠시 대기
-        time.sleep(6)
-        AirWebDriver.quit_browser()
-
-
+    # 트랜스퍼 실행 후 잠시 대기
+    time.sleep(10)
+    str_Wallet_URL = "https://www.bitbackoffice.com/#"
+    AirWebDriver.move_to_url(str_Wallet_URL)
+    AirWebDriver.quit_browser()
 
 
 def transfer_commission_money(index, str_destination_id, str_login_id, str_login_password, str_credential_filename):
@@ -813,8 +818,6 @@ def report_account():
     str_main_transfer += str_savings
     str_main_transfer += str_total
 
-
-
     print(str_remaining_business_day_list)
     print(str_repurchase_left_list)
     print(str_main_transfer)
@@ -834,10 +837,17 @@ def report_account():
     repurchase_left_list_dic = {}
 
     # 보고서 PDF  생성
-    pdf.print_chapter_user('※ 300일 비지니스 데이 30일 잔여 대상 계좌 리스트 ※', str_remaining_business_day_list)
-    pdf.print_chapter_user('※ 75일 전산비 납부 7일 잔여 대상 계좌 리스트 ※', str_repurchase_left_list)
-    pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_main_transfer)
+    if str_remaining_business_day_list.count() <= 0:
+        pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', "없음")
+    else:
+        pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', str_remaining_business_day_list)
 
+    if str_repurchase_left_list.count() <= 0:
+        pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', "없음")
+    else:
+        pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', str_repurchase_left_list)
+
+    pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_main_transfer)
 
     rerport_filename = nowDate +  " " + user_name_list[0] +' 계좌현황 보고서.pdf'
     pdf.output(rerport_filename, 'F')
@@ -903,8 +913,8 @@ if __name__ == "__main__":
     Telegram_Mng.send_message(
         "지금부터 트랜스퍼를 시작하겠습니다.\n 이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n 완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n")
     """
-
-    transfer_all_money_to_main_account_test(1, 3)
+    #for i in range(0,10):
+    transfer_all_money_to_main_account_test(1, end_index)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
