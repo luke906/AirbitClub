@@ -861,10 +861,10 @@ def report_account():
 
     rerport_filename = nowDate +  " " + user_name_list[0] +' 계좌현황 보고서.pdf'
 
-    #pdf.output(rerport_filename, 'F')
+    pdf.output(rerport_filename, 'F')
 
-    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    #Telegram_Mng.send_file(rerport_filename)
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    Telegram_Mng.send_file(rerport_filename)
 
 
 def get_total_bonus_money():
@@ -924,9 +924,9 @@ if __name__ == "__main__":
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
 
-    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    #announce_msg = nowDate + " 지금부터 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    #Telegram_Mng.send_message(announce_msg)
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    Telegram_Mng.send_message(announce_msg)
     #for i in range(0,10):
     transfer_all_money_to_main_account_test(1, end_index)
 
