@@ -551,7 +551,10 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 검색버튼을 누른다.
         AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
-        time.sleep(5)
+        time.sleep(4)
+        print('수신자 조회창 대기중..')
+        AirWebDriver.wait_until_show_element_id('transfer-to')
+        print('수신자 조회창 성공..')
 
         # 리워드 지갑 선택
         # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
@@ -599,7 +602,10 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 검색버튼을 누른다.
         AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
-        time.sleep(5)
+        time.sleep(4)
+        print('수신자 조회창 대기중..')
+        AirWebDriver.wait_until_show_element_id('transfer-to')
+        print('수신자 조회창 성공..')
 
         # 커미션 지갑 선택
         # //*[@id="partition_transfer_partition_user_wallet_id"]/option[4]
@@ -912,18 +918,17 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('우순옥')
+    get_id_password('이성원')
     end_index = get_account_count()
 
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
 
-
     #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
     #announce_msg = nowDate + " 지금부터 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
     #Telegram_Mng.send_message(announce_msg)
     #for i in range(0,10):
-    transfer_all_money_to_main_account_test(1, end_index)
+    transfer_all_money_to_main_account_test(1, 16)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 

@@ -193,7 +193,8 @@ def get_airbit_token_value(secret_json_file):
                 # scheduler.shutdown_schedule()
                 break
 
-def transfer_all_money_to_main_account_test(start_index, end_index):
+def transfer_all_money_to_main_account(start_index, end_index):
+
     # 트랜스퍼 하기전에 메일을 청소 한다.
     for json_list in gmail_secret_json_to_clear:
         clear_mail_box_before_transfer(json_list)
@@ -543,9 +544,6 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
     # 리워드에 금액이 있다면 리워드 이체를 한다.
     if _rewards > 0 :
-
-        mail_scheduler = Schedule_Manager()
-
         # 트랜스퍼할 아이디를 입력한다.
         AirWebDriver.send_key_by_id("search-user", str_destination_id)
 
@@ -569,12 +567,14 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
+        mail_scheduler = Schedule_Manager()
         mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 3, str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
             if _REQUEST_TOKEN_VALUE is not None and len(_REQUEST_TOKEN_VALUE) is 32:
-                mail_scheduler.kill_scheduler("token_job_rewards")
+                #mail_scheduler.kill_scheduler("token_job_rewards")
+                mail_scheduler.shutdown()
                 print("Request Token for rewards is : %s" % _REQUEST_TOKEN_VALUE)
                 print("get_airbit_token_value JOB STOP!")
 
@@ -591,12 +591,12 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(10)
+        if _commissions <= 0:
+            AirWebDriver.quit_browser()
 
 
     # 커미션에 금액이 있다면 리워드 이체를 한다.
     if _commissions > 0:
-        mail_scheduler = Schedule_Manager()
-
         # 트랜스퍼할 아이디를 입력한다.
         AirWebDriver.send_key_by_id("search-user", str_destination_id)
 
@@ -620,13 +620,15 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
+        mail_scheduler = Schedule_Manager()
         mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 3,
                                                 str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
             if _REQUEST_TOKEN_VALUE is not None and len(_REQUEST_TOKEN_VALUE) is 32:
-                mail_scheduler.kill_scheduler("token_job_commissions")
+                #mail_scheduler.kill_scheduler("token_job_commissions")
+                mail_scheduler.shutdown()
                 print("Request Token for commissions is : %s" % _REQUEST_TOKEN_VALUE)
                 print("get_airbit_token_value JOB STOP!")
                 break
@@ -832,9 +834,6 @@ def report_account():
     print(str_repurchase_left_list)
     print(str_main_transfer)
 
-    print(reward_fail_id_index_list)
-    print(commission_fail_id_index_list)
-
     # 집계를 마치고 변수를 초기화 한다.
     commissions.value = 0
     cash.value = 0
@@ -918,24 +917,25 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('이성원')
+    get_id_password('김양수')
     end_index = get_account_count()
 
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
 
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    Telegram_Mng.send_message(announce_msg)
-    #for i in range(0,10):
-    transfer_all_money_to_main_account_test(1, end_index)
+    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    #Telegram_Mng.send_message(announce_msg)
+
+    transfer_all_money_to_main_account(17, end_index)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
-
-    #scheduler = Schedule_Manager()
-    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 16, 35, 1, end_index)
+    """
+    scheduler = Schedule_Manager()
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 0, 1, end_index)
     #print("start scheduler transfer")
+    """
 
 
 
