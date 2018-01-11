@@ -31,8 +31,6 @@ class WebDriver_Manager:
             chrome_user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
             #user_path_name = "user-data-dir=C:/Users/" + user_name + "/PycharmProjects/AirbitClub/User_Profile/GPUCache"
 
-            #user_path_name = "../User_Profile"
-
             #ua = UserAgent()
             #capabilities = webdriver.DesiredCapabilities.CHROME
             #capabilities["chrome.switches"] = ["--user-agent=" + ua.chrome]
