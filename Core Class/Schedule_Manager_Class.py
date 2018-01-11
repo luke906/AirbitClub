@@ -7,7 +7,7 @@ import sys
 
 import time
 
-class Schedule_Manager(object):
+class Schedule_Manager():
 
     # 클래스 생성시 스케쥴러 데몬을 생성합니다.
     def __init__(self):
@@ -15,12 +15,12 @@ class Schedule_Manager(object):
         self.block_sched = BlockingScheduler()
 
         self.job_id=''
-        print("class")
+        print("Schedule_Manager start")
 
     # 클래스가 종료될때, 모든 job들을 종료시켜줍니다.
     def __del__(self):
         pass
-        # self.shutdown()
+        #self.shutdown()
 
     # 모든 job들을 종료시켜주는 함수입니다.
     def shutdown(self):

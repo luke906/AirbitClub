@@ -133,6 +133,16 @@ class WebDriver_Manager:
         while not main_window_handle:
             main_window_handle = driver.current_window_handle
 
+    def wait_until_show_element_id_text(self, id_name, text_value):
+        try:
+            element_present = EC.text_to_be_present_in_element((By.ID, id_name), text_value)
+            WebDriverWait(self.browser, 240).until(element_present)
+            print("%s text 로딩 성공"%text_value)
+            return True
+        except TimeoutException:
+            print("id text 로딩 시간초과")
+            return False
+
     def wait_until_show_element_id(self, id_name):
         try:
             element_present = EC.presence_of_element_located((By.ID, id_name))

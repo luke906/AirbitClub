@@ -75,7 +75,7 @@ class Gmail_Manager:
 
             while 'nextPageToken' in response:
                 page_token = response['nextPageToken']
-                response = _service.users().messages().list(userId=user_id, q=query,
+                response = self.service.users().messages().list(userId=user_id, q=query,
                                                             pageToken=page_token).execute()
                 messages.extend(response['messages'])
 

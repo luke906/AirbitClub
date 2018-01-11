@@ -41,6 +41,10 @@ cash = Value('d', 0.0)
 rewards = Value('d', 0.0)
 savings = Value('d', 0.0)
 
+# 트랜스퍼한 금액을 집계하기 위한 변수
+transfer_rewards_total = Value('d', 0.0)
+transfer_commissions_total = Value('d', 0.0)
+
 # 트랜스퍼 하기위한 토큰 값
 _REQUEST_TOKEN_VALUE = None
 
@@ -201,7 +205,7 @@ def transfer_all_money_to_main_account(start_index, end_index):
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(start_index, end_index):
-        print("리워드 트랜스퍼 인덱스 : %d" % index)
+        print("트랜스퍼 인덱스 : %d" % index)
         result = transfer_reward_commission_money(index, id_list[0], id_list[index], password_list[index],
                                        gmail_secret_json[index])
 
@@ -544,6 +548,10 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
     # 리워드에 금액이 있다면 리워드 이체를 한다.
     if _rewards > 0 :
+
+        transfer_rewards_total.value += _rewards
+
+
         # 트랜스퍼할 아이디를 입력한다.
         AirWebDriver.send_key_by_id("search-user", str_destination_id)
 
@@ -597,6 +605,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
     # 커미션에 금액이 있다면 리워드 이체를 한다.
     if _commissions > 0:
+
+        transfer_commissions_total.value += _commissions
+
         # 트랜스퍼할 아이디를 입력한다.
         AirWebDriver.send_key_by_id("search-user", str_destination_id)
 
@@ -839,6 +850,9 @@ def report_account():
     cash.value = 0
     rewards.value = 0
     savings.value = 0
+    transfer_rewards_total.value = 0
+    transfer_commissions_total.value = 0
+
     del repurchase_id_list[:]
     del reward_fail_id_index_list[:]
     del commission_fail_id_index_list[:]
@@ -917,7 +931,7 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('김양수')
+    get_id_password('우순옥')
     end_index = get_account_count()
 
     now = datetime.datetime.now()
@@ -927,7 +941,7 @@ if __name__ == "__main__":
     #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
     #Telegram_Mng.send_message(announce_msg)
 
-    transfer_all_money_to_main_account(17, end_index)
+    transfer_all_money_to_main_account(8, end_index)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
