@@ -9,10 +9,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import os
+from os.path import expanduser
 import pyautogui
+import glob
+import subprocess
+import sys
 import shutil
 import time
-
 
 from selenium.webdriver.common.keys import Keys
 from fake_useragent import UserAgent
@@ -54,7 +57,21 @@ class WebDriver_Manager:
             #firefox_capabilities['marionette'] = True
 
             try:
-                firefox_user_path_name = "C:/Users/USER/AppData/Local/Mozilla/Firefox/Profiles/z213e3t9.default-1514972796227"
+                FF_PRF_DIR_DEFAULT = ""
+
+                if sys.platform in ['linux', 'linux2']:
+                    cmd = "ls -d /home/$USER/.mozilla/firefox/*.default/"
+                    p = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE)
+                    FF_PRF_DIR = p.communicate()[0][0:-2]
+                    FF_PRF_DIR_DEFAULT = str(FF_PRF_DIR, 'utf-8')
+                elif sys.platform == 'win32':
+                    user_name = os.getlogin()
+                    APPDATA = os.getenv('APPDATA')
+                    FF_PRF_DIR = "C:/Users/" + user_name + "/AppData/Local/Mozilla/Firefox/Profiles/"
+                    PATTERN = FF_PRF_DIR + "*default*"
+                    FF_PRF_DIR_DEFAULT = glob.glob(PATTERN)[0]
+
+                firefox_user_path_name = FF_PRF_DIR_DEFAULT # "C:/Users/USER/AppData/Local/Mozilla/Firefox/Profiles/z213e3t9.default-1514972796227"
                 profile = webdriver.FirefoxProfile(firefox_user_path_name)
                 profile.set_preference("permissions.default.image", 2)
                 profile.set_preference("http.response.timeout", 10)
@@ -71,6 +88,11 @@ class WebDriver_Manager:
                 print("웹 드라이버 생성 실패")
                 initialize = 0
 
+    def get_firefox_profile_dir():
+
+
+
+        return FF_PRF_DIR_DEFAULT
 
     def move_to_url(self, destination_url):
 
@@ -213,7 +235,6 @@ class WebDriver_Manager:
         #for folder in os.listdir("C:/Users/" + user_name + "/AppData/Local/Temp"):
          #   if folder.find(0,3) == 'tmp':
           #      shutil.rmtree(folder)
-
 
 
     def quit_browser(self, flag=-1):
