@@ -88,11 +88,6 @@ class WebDriver_Manager:
                 print("웹 드라이버 생성 실패")
                 initialize = 0
 
-    def get_firefox_profile_dir():
-
-
-
-        return FF_PRF_DIR_DEFAULT
 
     def move_to_url(self, destination_url):
 
