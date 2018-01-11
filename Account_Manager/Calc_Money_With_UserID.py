@@ -830,8 +830,8 @@ def report_account():
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_report = ""
     str_transfer_date = "트랜스퍼 날짜 : " + nowDate + "\n"
-    str_today_rewards = "금일 트랜스퍼한 REWARDS 총 금액(메인계좌 제외) : %.2f" % transfer_rewards_total.value + "$\n"
-    str_today_commisions = "금일 트랜스퍼한 COMMISIONS 총 금액(메인계좌 제외) : %.2f" % transfer_commissions_total.value + "$\n\n"
+    str_today_rewards = "금일 트랜스퍼 REWARDS 총금액 : %.2f" % transfer_rewards_total.value + "$\n"
+    str_today_commisions = "금일 트랜스퍼 COMMISIONS 총금액 : %.2f" % transfer_commissions_total.value + "$\n\n"
 
     str_total_account = "현재 계좌의 총 갯수 : %d" % (len(id_list)) + "개" + "\n"
     str_main_transfer = "트랜스퍼 완료 후 현재 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
@@ -945,7 +945,7 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('이성원')
+    get_id_password('박현욱')
     end_index = get_account_count()
 
     now = datetime.datetime.now()
