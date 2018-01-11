@@ -45,6 +45,10 @@ savings = Value('d', 0.0)
 transfer_rewards_total = Value('d', 0.0)
 transfer_commissions_total = Value('d', 0.0)
 
+transfer_rewards_total.value = 0
+transfer_commissions_total.value = 0
+
+
 # 트랜스퍼 하기위한 토큰 값
 _REQUEST_TOKEN_VALUE = None
 
@@ -826,17 +830,17 @@ def report_account():
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_report = ""
     str_transfer_date = "트랜스퍼 날짜 : " + nowDate + "\n"
-    str_today_rewards = "금일 트랜스퍼한 REWARDS 합계 : %.2f" % transfer_rewards_total.value + "$\n"
-    str_today_commisions = "금일 트랜스퍼한 COMMISIONS 합계 : %.2f" % transfer_commissions_total.value + "$\n\n"
+    str_today_rewards = "금일 트랜스퍼한 REWARDS 총 금액 : %.2f" % transfer_rewards_total.value + "$\n"
+    str_today_commisions = "금일 트랜스퍼한 COMMISIONS 총 금액 : %.2f" % transfer_commissions_total.value + "$\n\n"
 
-    str_total_account = "현재 계좌의 총 갯수 : %d" % (len(id_list)) + "\n"
-    str_main_transfer = "트랜스퍼 완료 후 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
+    str_total_account = "현재 계좌의 총 갯수 : %d" % (len(id_list)) + "개" + "\n"
+    str_main_transfer = "트랜스퍼 완료 후 현재 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
 
     str_rewards = "메인계좌 REWARDS : %.2f" % rewards.value + "$\n"
     str_commisions = "메인계좌 COMMISIONS : %.2f" % commissions.value + "$\n"
     str_cash = "메인계좌 CASH : %.2f" % cash.value  + "$\n"
     str_savings = "메인계좌 SAVINGS : %.2f" % savings.value + "$\n"
-    str_total = "총 인출 가능 달러(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value) + "$\n"
+    str_total = "메인계좌 인출 가능 달러(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value) + "$\n"
 
     str_report += str_transfer_date
     str_report += str_today_rewards
@@ -899,9 +903,9 @@ def get_total_bonus_money():
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
 
-    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    #announce_msg = nowDate + " 지금부터 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    #Telegram_Mng.send_message(announce_msg)
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    announce_msg = nowDate + " 지금부터 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    Telegram_Mng.send_message(announce_msg)
 
     for index in range(0, get_account_count()):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
@@ -941,17 +945,18 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('우순옥')
+    get_id_password('이성원')
     end_index = get_account_count()
 
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
 
-    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    #Telegram_Mng.send_message(announce_msg)
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
 
-    transfer_all_money_to_main_account(8, end_index)
+    Telegram_Mng.send_message(announce_msg)
+
+    transfer_all_money_to_main_account(1, end_index)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
