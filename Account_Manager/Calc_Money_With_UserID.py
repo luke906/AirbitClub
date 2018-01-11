@@ -812,7 +812,7 @@ def report_account():
     # 300일 비지니스 데이 보고서 작성
     # 고객이 원하는 일수를 지정해 준다 (ex: 한달이면 30일 남겨놓고 표시)
     # remaining_business_day_dic[str_login_id] = remain_business_day
-    str_remaining_business_day_list = "30일 이하 비지니스 데이 계좌 리스트\n"
+    str_remaining_business_day_list = "300회 리워드 보너스중 30회 남은 계좌 리스트\n"
     for userid, left_day in remaining_business_day_dic.items():
         if left_day <= 30:
             strtmp = userid + ": " + str(left_day) + "회 남음\n"
@@ -821,7 +821,7 @@ def report_account():
     # 75일 전산비 납부 리스트 보고서 작성
     # 고객이 원하는 일수를 지정해 준다 (ex: 7일이면 7 남겨놓고 표시)
     # repurchase_left_list_dic[str_login_id] = remain_repurchase_day
-    str_repurchase_left_list = "7일 이하 전산비 납부 계좌 리스트\n"
+    str_repurchase_left_list = "75일 마다 전산비 납부하는 계좌중 7일 남은 계좌 리스트\n"
     for userid, left_day in repurchase_left_list_dic.items():
         if left_day <= 7:
             strtmp = userid + ": " + str(left_day) + "일 남음\n"
@@ -830,8 +830,8 @@ def report_account():
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_report = ""
     str_transfer_date = "트랜스퍼 날짜 : " + nowDate + "\n"
-    str_today_rewards = "금일 트랜스퍼한 REWARDS 총 금액 : %.2f" % transfer_rewards_total.value + "$\n"
-    str_today_commisions = "금일 트랜스퍼한 COMMISIONS 총 금액 : %.2f" % transfer_commissions_total.value + "$\n\n"
+    str_today_rewards = "금일 트랜스퍼한 REWARDS 총 금액(메인계좌 제외) : %.2f" % transfer_rewards_total.value + "$\n"
+    str_today_commisions = "금일 트랜스퍼한 COMMISIONS 총 금액(메인계좌 제외) : %.2f" % transfer_commissions_total.value + "$\n\n"
 
     str_total_account = "현재 계좌의 총 갯수 : %d" % (len(id_list)) + "개" + "\n"
     str_main_transfer = "트랜스퍼 완료 후 현재 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
