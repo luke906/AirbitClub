@@ -54,7 +54,7 @@ transfer_commissions_total.value = 0
 _REQUEST_TOKEN_VALUE = None
 
 #browser_flag
-browser_flag = 'chrome'
+browser_flag = 'firefox'
 
 def get_id_password(person_name):
 
@@ -212,6 +212,12 @@ def transfer_all_money_to_main_account(start_index, end_index):
         print(detail)
         print("메일인증 실패 다시 시도")
         transfer_all_money_to_main_account(start_index, end_index)
+
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y-%m-%d')
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    Telegram_Mng.send_message(announce_msg)
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(start_index, end_index):
@@ -473,6 +479,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
                                          str_credential_filename)
         print(detail)
 
+    AirWebDriver.mouse_click(1005, 101, 2)
+    AirWebDriver.mouse_click(1005, 101, 2)
+
     print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
     # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
     # time.sleep(5)
@@ -609,8 +618,8 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(10)
         if _commissions <= 0:
-            #AirWebDriver.mouse_click(949, 162, 3)
-            #time.sleep(10)
+            AirWebDriver.mouse_click(953, 163, 3)
+            time.sleep(5)
             #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
             AirWebDriver.quit_browser()
             return True
@@ -668,8 +677,8 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
     # 트랜스퍼 실행 후 잠시 대기
-    #AirWebDriver.mouse_click(949, 162, 3)
-    time.sleep(10)
+    #AirWebDriver.mouse_click(953, 163, 3)
+    time.sleep(5)
     #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
     AirWebDriver.quit_browser()
     return True
@@ -966,31 +975,18 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('이성원')
+    get_id_password('우순옥')
     end_index = get_account_count()
-    now = datetime.datetime.now()
-    nowDate = now.strftime('%Y-%m-%d')
-    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    #Telegram_Mng.send_message(announce_msg)
-    transfer_all_money_to_main_account(5, 16)
 
-    get_id_password('이성원')
-    end_index = get_account_count()
-    now = datetime.datetime.now()
-    nowDate = now.strftime('%Y-%m-%d')
-    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    #Telegram_Mng.send_message(announce_msg)
-    transfer_all_money_to_main_account(16, end_index)
+    #transfer_all_money_to_main_account(1, 6)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
-    """
+
     scheduler = Schedule_Manager()
     scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 0, 1, end_index)
-    #print("start scheduler transfer")
-    """
+    print("start scheduler transfer")
+
 
 
 
