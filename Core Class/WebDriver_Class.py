@@ -235,7 +235,7 @@ class WebDriver_Manager:
 
     def quit_browser(self, flag=-1):
         try:
-            self.browser.stop_client()
+            #self.browser.stop_client()
             if flag ==0:
                 self.browser.close()
             elif flag == -1:
