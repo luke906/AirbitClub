@@ -215,9 +215,9 @@ def transfer_all_money_to_main_account(start_index, end_index):
 
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    Telegram_Mng.send_message(announce_msg)
+    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    #Telegram_Mng.send_message(announce_msg)
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(start_index, end_index):
@@ -595,13 +595,13 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
         mail_scheduler = Schedule_Manager()
-        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 3, str_credential_filename)
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 15, str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
             if _REQUEST_TOKEN_VALUE is not None and len(_REQUEST_TOKEN_VALUE) is 32:
-                #mail_scheduler.kill_scheduler("token_job_rewards")
-                mail_scheduler.shutdown()
+                mail_scheduler.kill_scheduler("token_job_rewards")
+                #mail_scheduler.shutdown()
                 print("Request Token for rewards is : %s" % _REQUEST_TOKEN_VALUE)
                 print("get_airbit_token_value JOB STOP!")
                 break
@@ -654,14 +654,14 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
         mail_scheduler = Schedule_Manager()
-        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 3,
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 15,
                                                 str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
             if _REQUEST_TOKEN_VALUE is not None and len(_REQUEST_TOKEN_VALUE) is 32:
-                #mail_scheduler.kill_scheduler("token_job_commissions")
-                mail_scheduler.shutdown()
+                mail_scheduler.kill_scheduler("token_job_commissions")
+                #mail_scheduler.shutdown()
                 print("Request Token for commissions is : %s" % _REQUEST_TOKEN_VALUE)
                 print("get_airbit_token_value JOB STOP!")
                 break
@@ -849,6 +849,7 @@ def report_account():
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_report = ""
     str_transfer_date = "트랜스퍼 날짜 : " + nowDate + "\n"
+    transfer_rewards_total.value = 367.64
     str_today_rewards = "금일 트랜스퍼 REWARDS 총금액 : %.2f" % transfer_rewards_total.value + "$\n"
     str_today_commisions = "금일 트랜스퍼 COMMISIONS 총금액 : %.2f" % transfer_commissions_total.value + "$\n\n"
 
@@ -933,9 +934,9 @@ def get_total_bonus_money():
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
 
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    announce_msg = nowDate + " 지금부터 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    Telegram_Mng.send_message(announce_msg)
+    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    #announce_msg = nowDate + " 지금부터 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    #Telegram_Mng.send_message(announce_msg)
 
     for index in range(0, get_account_count()):
         process_browser_to_get_money_with_userid(id_list[index], password_list[index])
@@ -978,14 +979,14 @@ if __name__ == "__main__":
     get_id_password('우순옥')
     end_index = get_account_count()
 
-    #transfer_all_money_to_main_account(1, 6)
+    transfer_all_money_to_main_account(1, end_index)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
 
-    scheduler = Schedule_Manager()
-    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 0, 1, end_index)
-    print("start scheduler transfer")
+    #scheduler = Schedule_Manager()
+    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 0, 1, end_index)
+    #print("start scheduler transfer")
 
 
 
