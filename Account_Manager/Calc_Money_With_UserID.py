@@ -945,7 +945,7 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('박현욱')
+    get_id_password('김양수')
     end_index = get_account_count()
 
     now = datetime.datetime.now()
