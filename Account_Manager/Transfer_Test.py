@@ -465,7 +465,7 @@ if __name__ == "__main__":
 
     get_id_password('이성원')
     end_index = get_account_count()
-    transfer_all_money_to_main_account(1, 6)
+    transfer_all_money_to_main_account(1, 30)
 
 
 
