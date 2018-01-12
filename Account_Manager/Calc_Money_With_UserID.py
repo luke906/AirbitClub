@@ -860,6 +860,28 @@ def report_account():
     print(str_repurchase_left_list)
     print(str_report)
 
+
+
+    # 보고서 PDF  생성
+    if len(str_remaining_business_day_list) <= 0:
+        pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', "없음")
+    else:
+        pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', str_remaining_business_day_list)
+
+    if len(str_repurchase_left_list) <= 0:
+        pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', "없음")
+    else:
+        pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', str_repurchase_left_list)
+
+    pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_report)
+
+    rerport_filename = nowDate +  " " + user_name_list[0] +' 계좌현황 보고서.pdf'
+
+    pdf.output(rerport_filename, 'F')
+
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    Telegram_Mng.send_file(rerport_filename)
+
     # 집계를 마치고 변수를 초기화 한다.
     commissions.value = 0
     cash.value = 0
@@ -882,26 +904,6 @@ def report_account():
     del email_kind[:]
     del user_telegram_id_list[:]
     del user_name_list[:]
-
-    # 보고서 PDF  생성
-    if len(str_remaining_business_day_list) <= 0:
-        pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', "없음")
-    else:
-        pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', str_remaining_business_day_list)
-
-    if len(str_repurchase_left_list) <= 0:
-        pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', "없음")
-    else:
-        pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', str_repurchase_left_list)
-
-    pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_report)
-
-    rerport_filename = nowDate +  " " + user_name_list[0] +' 계좌현황 보고서.pdf'
-
-    pdf.output(rerport_filename, 'F')
-
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    Telegram_Mng.send_file(rerport_filename)
 
 
 def get_total_bonus_money():
