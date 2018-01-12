@@ -33,6 +33,7 @@ class Schedule_Manager():
         try:
             print("stop scheduler: %s" % job_id)
             self.sched.remove_job(job_id)
+            self.sched.shutdown()
         except JobLookupError as err:
             print("fail to stop scheduler: %s" % err)
             return
