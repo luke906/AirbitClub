@@ -54,7 +54,7 @@ transfer_commissions_total.value = 0
 _REQUEST_TOKEN_VALUE = None
 
 #browser_flag
-browser_flag = 'firefox'
+browser_flag = 'chrome'
 
 def get_id_password(person_name):
 
@@ -205,8 +205,13 @@ def get_airbit_token_value(secret_json_file):
 def transfer_all_money_to_main_account(start_index, end_index):
 
     # 트랜스퍼 하기전에 메일을 청소 한다.
-    for json_list in gmail_secret_json_to_clear:
-        clear_mail_box_before_transfer(json_list)
+    try:
+        for json_list in gmail_secret_json_to_clear:
+            clear_mail_box_before_transfer(json_list)
+    except (Exception) as detail:
+        print(detail)
+        print("메일인증 실패 다시 시도")
+        transfer_all_money_to_main_account(start_index, end_index)
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(start_index, end_index):
@@ -501,7 +506,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
             # AirWebDriver.mouse_click(927, 163, 10)
             repurchase_id_list.append(str_login_id)
             AirWebDriver.quit_browser()
-            return False
+            return True
 
     except (Exception) as detail:
         #실패 경우 아이디에 -1을 기록해 놓고 추후 -1인 아이디만 재시도 한다.
@@ -541,7 +546,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
             print("이체할 잔고 없음 트랜스퍼 종료")
             # AirWebDriver.mouse_click(927, 163, 10)
             AirWebDriver.quit_browser()
-            return False
+            return True
 
     except (Exception) as detail:
         AirWebDriver.quit_browser()
@@ -590,7 +595,6 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
                 mail_scheduler.shutdown()
                 print("Request Token for rewards is : %s" % _REQUEST_TOKEN_VALUE)
                 print("get_airbit_token_value JOB STOP!")
-
                 break
 
         # 토큰 입력
@@ -605,7 +609,11 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(10)
         if _commissions <= 0:
+            #AirWebDriver.mouse_click(949, 162, 3)
+            #time.sleep(10)
+            #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
             AirWebDriver.quit_browser()
+            return True
 
 
     # 커미션에 금액이 있다면 리워드 이체를 한다.
@@ -660,10 +668,11 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
     # 트랜스퍼 실행 후 잠시 대기
+    #AirWebDriver.mouse_click(949, 162, 3)
     time.sleep(10)
-    #str_Wallet_URL = "https://www.bitbackoffice.com/#"
-    #AirWebDriver.move_to_url(str_Wallet_URL)
+    #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
     AirWebDriver.quit_browser()
+    return True
 
 
 def transfer_commission_money(index, str_destination_id, str_login_id, str_login_password, str_credential_filename):
@@ -961,18 +970,18 @@ if __name__ == "__main__":
     end_index = get_account_count()
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    Telegram_Mng.send_message(announce_msg)
-    transfer_all_money_to_main_account(1, 16)
+    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    #Telegram_Mng.send_message(announce_msg)
+    transfer_all_money_to_main_account(5, 16)
 
     get_id_password('이성원')
     end_index = get_account_count()
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    Telegram_Mng.send_message(announce_msg)
+    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    #Telegram_Mng.send_message(announce_msg)
     transfer_all_money_to_main_account(16, end_index)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
