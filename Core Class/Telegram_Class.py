@@ -12,13 +12,22 @@ class Telegram_Manager:
         self.user_telegram_id = user_id
 
     def send_message(self, message):
-        self.bot.sendMessage(chat_id=self.user_telegram_id, text=message)
+        try:
+            self.bot.sendMessage(chat_id=self.user_telegram_id, text=message)
+        except (Exception) as detail:
+            print(detail)
 
     def send_image(self, file):
-        self.bot.send_photo(chat_id=self.user_telegram_id, photo=open(file, 'rb'))
+        try:
+            self.bot.send_photo(chat_id=self.user_telegram_id, photo=open(file, 'rb'))
+        except (Exception) as detail:
+            print(detail)
 
     def send_file(self, file):
-        self.bot.send_document(chat_id=self.user_telegram_id, document=open(file, 'rb'))
+        try:
+            self.bot.send_document(chat_id=self.user_telegram_id, document=open(file, 'rb'))
+        except (Exception) as detail:
+            print(detail)
 
     def get_update_object(self):
         return self.bot.get_updates()
