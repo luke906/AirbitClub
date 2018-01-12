@@ -12,7 +12,6 @@ from WebDriver_Class import WebDriver_Manager
 from PDF_Manager_Class import PDF_Manager
 
 id_list = []
-repurchase_id_list = []
 password_list = []
 email_list = []
 gmail_secret_json = []
@@ -20,6 +19,8 @@ gmail_secret_json_to_clear = []
 email_kind = []
 user_telegram_id_list=[]
 user_name_list=[]
+
+repurchase_id_list = []
 
 #트랜스퍼 속도 개선을 위해서 커미션리스트를 만든다.
 comissions_list_dic = {}
@@ -873,6 +874,15 @@ def report_account():
     remaining_business_day_dic = {}
     repurchase_left_list_dic = {}
 
+    del id_list[:]
+    del password_list[:]
+    del email_list[:]
+    del gmail_secret_json[:]
+    del gmail_secret_json_to_clear[:]
+    del email_kind[:]
+    del user_telegram_id_list[:]
+    del user_name_list[:]
+
     # 보고서 PDF  생성
     if len(str_remaining_business_day_list) <= 0:
         pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', "없음")
@@ -945,18 +955,23 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('김양수')
+    get_id_password('이성원')
     end_index = get_account_count()
-
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
-
     Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
     announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-
     Telegram_Mng.send_message(announce_msg)
+    transfer_all_money_to_main_account(1, 16)
 
-    transfer_all_money_to_main_account(1, end_index)
+    get_id_password('이성원')
+    end_index = get_account_count()
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y-%m-%d')
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    Telegram_Mng.send_message(announce_msg)
+    transfer_all_money_to_main_account(16, end_index)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
