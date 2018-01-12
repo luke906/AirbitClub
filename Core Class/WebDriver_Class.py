@@ -26,16 +26,18 @@ class WebDriver_Manager:
         user_name = os.getlogin()
 
         if browser_flag == 'chrome':
+            print("web driver - 1")
             user_name = os.getlogin()
             chrome_user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
             #user_path_name = "user-data-dir=C:/Users/" + user_name + "/PycharmProjects/AirbitClub/User_Profile/GPUCache"
-
+            print("web driver - 2")
             #ua = UserAgent()
             #capabilities = webdriver.DesiredCapabilities.CHROME
             #capabilities["chrome.switches"] = ["--user-agent=" + ua.chrome]
 
-            self.DriverPath = "../Web Driver/chromedriver"
+            self.DriverPath = "../Web Driver/chromedriver2.35"
             self.chrome_options = Options()
+            print("web driver - 3")
             #canary_path = "C:/Users/lattepanda/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
             #self.chrome_options.binary_location = canary_path
             #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
@@ -46,7 +48,9 @@ class WebDriver_Manager:
             self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False})
             self.chrome_options.add_argument("--disable-infobars")
             self.chrome_options.add_argument(chrome_user_path_name)
+            print("web driver - 4")
             self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
+            print("web driver - 5")
 
         elif browser_flag == 'firefox':
 
