@@ -53,11 +53,7 @@ class Schedule_Manager():
     def start_scheduler_interval(self, function, job_id, interval_time=5, args_value=None):
 
         #print("Scheduler Start")
-        self.sched.add_job(function,
-                         'interval',
-              seconds=interval_time,
-                          id=job_id,
-                   args=[args_value])
+        self.sched.add_job(function, 'interval', seconds=interval_time, id=job_id, args=[args_value], max_instances=10)
 
         self.sched.start()
 
