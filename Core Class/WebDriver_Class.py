@@ -48,7 +48,7 @@ class WebDriver_Manager:
             self.chrome_options.add_experimental_option("prefs", prefs)
             #self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False})
             self.chrome_options.add_argument("--disable-infobars")
-            self.chrome_options.add_argument(chrome_user_path_name)
+            #self.chrome_options.add_argument(chrome_user_path_name)
             print("web driver - 4")
             self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
             print("web driver - 5")
@@ -76,6 +76,8 @@ class WebDriver_Manager:
                 firefox_user_path_name = FF_PRF_DIR_DEFAULT # "C:/Users/USER/AppData/Local/Mozilla/Firefox/Profiles/z213e3t9.default-1514972796227"
                 profile = webdriver.FirefoxProfile(firefox_user_path_name)
                 profile.set_preference("permissions.default.image", 2)
+                #profile.set_preference("permissions.default.stylesheet", 2)
+                #profile.set_preference("javascript.enabled", False)
                 profile.set_preference("http.response.timeout", 10)
                 profile.set_preference("dom.max_script_run_time", 10)
                 profile.set_preference("intl.accept_languages", "en")
