@@ -977,7 +977,7 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    transfer_all_money_to_main_account(11, 16)
+    transfer_all_money_to_main_account(14, 19)
 
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
 
