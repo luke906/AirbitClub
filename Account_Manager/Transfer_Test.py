@@ -54,7 +54,7 @@ transfer_commissions_total.value = 0
 _REQUEST_TOKEN_VALUE = None
 
 #browser_flag
-browser_flag = 'firefox'
+browser_flag = 'chrome'
 
 def get_id_password(person_name):
 
@@ -173,8 +173,6 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
         transfer_reward_commission_money(str_destination_id, str_credential_filename)
 
     print("웹 드라이버 로딩 성공")
-    AirWebDriver.mouse_click(1005, 101, 2)
-    AirWebDriver.mouse_click(1005, 101, 2)
 
     try:
         print("로그인 사이트 접속 시도")
@@ -198,6 +196,7 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
         # AirWebDriver.click_keyboard('enter')
         print('로그인 후 초기화면 로딩 성공')
 
+
     except (Exception) as detail:
         print('로그인 페이지 로딩 실패')
         AirWebDriver.quit_browser()
@@ -206,20 +205,18 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
         print(detail)
 
     try:
+        #AirWebDriver.mouse_click(1906, 87, 2)
         print("트랜스퍼 사이트 접속 시도")
-        time.sleep(9000)
         AirWebDriver.move_to_url(str_Transfer_URL)
         print("트랜스퍼 사이트 접속 성공")
         #time.sleep(5)
 
         print('트랜스퍼 사이트 리딩을 위한 css 대기중..')
         if (AirWebDriver.wait_until_show_element_css('div.row:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>small:nth-child(4)')) is False:
-            login_fail_id_index_list.append(index)
             AirWebDriver.quit_browser()
             print('처음부터 재 시도')
             transfer_reward_commission_money(str_destination_id, str_credential_filename)
         print('트랜스퍼 사이트 리딩을 위한 css 대기 성공')
-
 
 
     except (Exception) as detail:
@@ -279,9 +276,9 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
         print("send rewards money : %f" % _rewards )
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
         # 트랜스퍼 실행 후 잠시 대기
-        time.sleep(10)
+        time.sleep(5)
         if _commissions <= 0:
-            #AirWebDriver.mouse_click(984, 162, 3)
+            #AirWebDriver.mouse_click(1865, 153, 5)
             #time.sleep(10)
             #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
             AirWebDriver.quit_browser()
@@ -340,8 +337,8 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
     # 트랜스퍼 실행 후 잠시 대기
-    #AirWebDriver.mouse_click(984, 162, 3)
-    time.sleep(10)
+    #AirWebDriver.mouse_click(1865, 153, 5)
+    time.sleep(5)
     #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
     AirWebDriver.quit_browser()
     return True
