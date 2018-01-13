@@ -228,7 +228,7 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
 
     # 리워드에 금액이 있다면 리워드 이체를 한다.
     _rewards = 2
-    _commissions = 0
+    _commissions = 2
     if _rewards > 0 :
 
         # 트랜스퍼할 아이디를 입력한다.
@@ -462,7 +462,7 @@ if __name__ == "__main__":
 
     get_id_password('이성원')
     end_index = get_account_count()
-    transfer_all_money_to_main_account(1, 30)
+    transfer_all_money_to_main_account(1, end_index)
 
 
 
