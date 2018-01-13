@@ -595,7 +595,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
         mail_scheduler = Schedule_Manager()
-        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 15, str_credential_filename)
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 10, str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
@@ -616,10 +616,10 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         print("send rewards money : %f" % _rewards )
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
         # 트랜스퍼 실행 후 잠시 대기
-        time.sleep(10)
+        time.sleep(7)
         if _commissions <= 0:
-            AirWebDriver.mouse_click(953, 163, 3)
-            time.sleep(5)
+            #AirWebDriver.mouse_click(953, 163, 3)
+            #time.sleep(5)
             #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
             AirWebDriver.quit_browser()
             return True
@@ -654,7 +654,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
         mail_scheduler = Schedule_Manager()
-        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 15,
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 10,
                                                 str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
@@ -678,7 +678,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
     # 트랜스퍼 실행 후 잠시 대기
     #AirWebDriver.mouse_click(953, 163, 3)
-    time.sleep(5)
+    time.sleep(7)
     #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
     AirWebDriver.quit_browser()
     return True
@@ -976,7 +976,7 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
 if __name__ == "__main__":
 
-    get_id_password('우순옥')
+    get_id_password('이성원')
     end_index = get_account_count()
 
     transfer_all_money_to_main_account(1, end_index)

@@ -54,7 +54,7 @@ transfer_commissions_total.value = 0
 _REQUEST_TOKEN_VALUE = None
 
 #browser_flag
-browser_flag = 'chrome'
+browser_flag = 'firefox'
 
 def get_id_password(person_name):
 
@@ -207,6 +207,7 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
 
     try:
         print("트랜스퍼 사이트 접속 시도")
+        time.sleep(9000)
         AirWebDriver.move_to_url(str_Transfer_URL)
         print("트랜스퍼 사이트 접속 성공")
         #time.sleep(5)
@@ -229,8 +230,8 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
 
 
     # 리워드에 금액이 있다면 리워드 이체를 한다.
-    _rewards = 10
-    _commissions = 10
+    _rewards = 2
+    _commissions = 2
     if _rewards > 0 :
 
         # 트랜스퍼할 아이디를 입력한다.
@@ -257,7 +258,7 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
         mail_scheduler = Schedule_Manager()
-        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 3, str_credential_filename)
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_rewards", 10, str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
         while 1:
@@ -280,7 +281,7 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(10)
         if _commissions <= 0:
-            AirWebDriver.mouse_click(953, 163, 3)
+            #AirWebDriver.mouse_click(984, 162, 3)
             #time.sleep(10)
             #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
             AirWebDriver.quit_browser()
@@ -288,7 +289,6 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
 
 
     # 커미션에 금액이 있다면 리워드 이체를 한다.
-    _commissions = 10
     if _commissions > 0:
 
         transfer_commissions_total.value += _commissions
@@ -317,7 +317,7 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
         mail_scheduler = Schedule_Manager()
-        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 3,
+        mail_scheduler.start_scheduler_interval(get_airbit_token_value, "token_job_commissions", 10,
                                                 str_credential_filename)
 
         # 이메일 확인 후 토큰을 얻어 올때 까지 대기
@@ -340,7 +340,7 @@ def transfer_reward_commission_money(str_destination_id, str_credential_filename
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
     # 트랜스퍼 실행 후 잠시 대기
-    AirWebDriver.mouse_click(953, 163, 3)
+    #AirWebDriver.mouse_click(984, 162, 3)
     time.sleep(10)
     #AirWebDriver.move_to_url("https://www.bitbackoffice.com/#")
     AirWebDriver.quit_browser()

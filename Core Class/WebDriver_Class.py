@@ -28,7 +28,8 @@ class WebDriver_Manager:
         if browser_flag == 'chrome':
             print("web driver - 1")
             user_name = os.getlogin()
-            chrome_user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
+            #chrome_user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
+            chrome_user_path_name = "user-data-dir=C:/Users/USER/PycharmProjects/AirbitClub/chrome_profile"
             #user_path_name = "user-data-dir=C:/Users/" + user_name + "/PycharmProjects/AirbitClub/User_Profile/GPUCache"
             print("web driver - 2")
             #ua = UserAgent()
@@ -45,7 +46,7 @@ class WebDriver_Manager:
             #self.chrome_options.add_argument('--incognito') #시크릿모드
             prefs = {"profile.managed_default_content_settings.images": 2}
             self.chrome_options.add_experimental_option("prefs", prefs)
-            self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False})
+            #self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False})
             self.chrome_options.add_argument("--disable-infobars")
             self.chrome_options.add_argument(chrome_user_path_name)
             print("web driver - 4")
@@ -68,7 +69,7 @@ class WebDriver_Manager:
                 elif sys.platform == 'win32':
                     user_name = os.getlogin()
                     APPDATA = os.getenv('APPDATA')
-                    FF_PRF_DIR = "C:/Users/" + user_name + "/AppData/Local/Mozilla/Firefox/Profiles/"
+                    FF_PRF_DIR = "C:/Users/" + user_name + "/AppData/Roaming/Mozilla/Firefox/Profiles/"
                     PATTERN = FF_PRF_DIR + "*default*"
                     FF_PRF_DIR_DEFAULT = glob.glob(PATTERN)[0]
 
@@ -77,6 +78,7 @@ class WebDriver_Manager:
                 profile.set_preference("permissions.default.image", 2)
                 profile.set_preference("http.response.timeout", 10)
                 profile.set_preference("dom.max_script_run_time", 10)
+                profile.set_preference("intl.accept_languages", "en")
                 geckoPath = '../Web Driver/geckodriver.exe'
                 caps = DesiredCapabilities.FIREFOX
                 caps["wires"] = True
