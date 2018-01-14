@@ -568,16 +568,21 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         transfer_rewards_total.value += _rewards
 
-
         # 트랜스퍼할 아이디를 입력한다.
+        print('수신자 조회창 대기중..')
+        AirWebDriver.wait_until_show_element_id('search-user')
+        print('수신자 조회창 성공..')
         AirWebDriver.send_key_by_id("search-user", str_destination_id)
 
         # 검색버튼을 누른다.
+        print('아이디 검색 버튼 대기중..')
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="search-btn"]')
+        print('아이디 검색 버튼 성공..')
         AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
         time.sleep(4)
-        print('수신자 조회창 대기중..')
+        print('수신자 검색버튼 대기중..')
         AirWebDriver.wait_until_show_element_id('transfer-to')
-        print('수신자 조회창 성공..')
+        print('수신자 검색버튼 성공..')
 
         # 리워드 지갑 선택
         # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
@@ -585,6 +590,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "rewards")
 
         # 전송할 리워드 금액 입력
+        print('전송할 리워드 금액창 대기중..')
+        AirWebDriver.wait_until_show_element_id('partition_transfer_partition_amount')
+        print('전송할 리워드 금액창 성공..')
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(_rewards))
 
         # 토큰 요청 버튼을 누른다.
@@ -606,6 +614,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰 입력
         # id = partition_transfer_partition_token
+        print('토큰 입력창 대기중..')
+        AirWebDriver.wait_until_show_element_id('partition_transfer_partition_token')
+        print('토큰 입력창 성공..')
         AirWebDriver.send_key_by_id('partition_transfer_partition_token', str(_REQUEST_TOKEN_VALUE))
         _REQUEST_TOKEN_VALUE = None #다음번 조회를 위해서 토큰 초기화
 
@@ -629,14 +640,20 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         transfer_commissions_total.value += _commissions
 
         # 트랜스퍼할 아이디를 입력한다.
+        print('수신자 조회창 대기중..')
+        AirWebDriver.wait_until_show_element_id('search-user')
+        print('수신자 조회창 성공..')
         AirWebDriver.send_key_by_id("search-user", str_destination_id)
 
         # 검색버튼을 누른다.
+        print('아이디 검색 버튼 대기중..')
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="search-btn"]')
+        print('아이디 검색 버튼 성공..')
         AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
         time.sleep(4)
-        print('수신자 조회창 대기중..')
+        print('수신자 검색버튼 대기중..')
         AirWebDriver.wait_until_show_element_id('transfer-to')
-        print('수신자 조회창 성공..')
+        print('수신자 검색버튼 성공..')
 
         # 커미션 지갑 선택
         # //*[@id="partition_transfer_partition_user_wallet_id"]/option[4]
@@ -644,6 +661,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         AirWebDriver.select_option_by_id_text("partition_transfer_partition_user_wallet_id", "commissions")
 
         # 전송할 커미션 금액 입력
+        print('전송할 커미션 금액창 대기중..')
+        AirWebDriver.wait_until_show_element_id('partition_transfer_partition_amount')
+        print('전송할 커미션 금액창 성공..')
         AirWebDriver.send_key_by_id('partition_transfer_partition_amount', str(_commissions))
 
         # 토큰 요청 버튼을 누른다.
@@ -664,8 +684,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
                 print("get_airbit_token_value JOB STOP!")
                 break
 
-        # 토큰 입력
-        # id = partition_transfer_partition_token
+        print('토큰 입력창 대기중..')
+        AirWebDriver.wait_until_show_element_id('partition_transfer_partition_token')
+        print('토큰 입력창 성공..')
         AirWebDriver.send_key_by_id('partition_transfer_partition_token', str(_REQUEST_TOKEN_VALUE))
         _REQUEST_TOKEN_VALUE = None  # 다음번 조회를 위해서 토큰 초기화
 
