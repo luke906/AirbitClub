@@ -433,6 +433,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         # 트랜스퍼 실행
         # //*[@id="submit-transfer"]
         print("send rewards money : %f" % _rewards )
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
         # 트랜스퍼 실행 후 잠시 대기
         time.sleep(10)
@@ -504,6 +505,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         # 트랜스퍼 실행
         # //*[@id="submit-transfer"]
         print("send commissions money : %f" % _commissions)
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
     # 트랜스퍼 실행 후 잠시 대기
