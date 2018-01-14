@@ -407,6 +407,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰 요청 버튼을 누른다.
         # //*[@id="submit-token"]
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-token"]')
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
@@ -478,6 +479,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰 요청 버튼을 누른다.
         # //*[@id="submit-token"]
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-token"]')
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
         # 토큰을 요청하고 메일에서 토큰을 받아온다.
