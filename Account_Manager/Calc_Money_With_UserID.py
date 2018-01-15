@@ -20,6 +20,7 @@ gmail_secret_json_to_clear = []
 email_kind = []
 user_telegram_id_list=[]
 user_name_list=[]
+user_english_name_list=[]
 
 repurchase_id_list = []
 
@@ -35,6 +36,8 @@ reward_fail_id_index_list = []
 
 # 커미션 진행중 실패한 아이디 목록
 commission_fail_id_index_list = []
+
+login_fail_id_index_list = []
 
 # 프로세스를 이용하여 다중 로그인을 할 경우 사용할 메모리 변수
 # shared memory 사용 (멀티 프로세스간 변수값 공유)
@@ -67,6 +70,7 @@ def get_id_password(person_name):
     global user_telegram_id_list
     global user_name_list
     global gmail_secret_json_to_clear
+    global user_english_name_list
 
     # 가비아 DB 접속
     DB = DB_Manager()
@@ -203,16 +207,16 @@ def get_airbit_token_value(secret_json_file):
                 # scheduler.shutdown_schedule()
                 break
 
-def transfer_all_money_to_main_account(start_index, end_index):
+def transfer_all_money_to_main_account(s_index, e_index):
 
     # 트랜스퍼 하기전에 메일을 청소 한다.
     try:
         for json_list in gmail_secret_json_to_clear:
             clear_mail_box_before_transfer(json_list)
-    except (Exception) as detail:
+    except Exception as detail:
         print(detail)
         print("메일인증 실패 다시 시도")
-        transfer_all_money_to_main_account(start_index, end_index)
+        transfer_all_money_to_main_account(s_index, e_index)
 
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
@@ -221,7 +225,7 @@ def transfer_all_money_to_main_account(start_index, end_index):
     #Telegram_Mng.send_message(announce_msg)
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
-    for index in range(start_index, end_index):
+    for index in range(s_index, e_index):
         print("트랜스퍼 인덱스 : %d" % index)
         result = transfer_reward_commission_money(index, id_list[0], id_list[index], password_list[index],
                                        gmail_secret_json[index])
@@ -276,12 +280,13 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         print("로그인 사이트 패스워드 입력 ...")
         AirWebDriver.send_key_by_name("user[password]", str_login_password)
 
+        print("로그인 사이트 로딩 시도 ...")
+        AirWebDriver.wait_until_show_element_xpath('//*[@id="new_user"]/button')
         AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
-        print("로그인 사이트 엔터키 입력 ...")
-        # AirWebDriver.click_keyboard('enter')
-        print('로그인 후 초기화면 로딩 성공')
 
-    except (Exception) as detail:
+        # AirWebDriver.click_keyboard('enter')
+
+    except Exception as detail:
         print('로그인 페이지 로딩 실패')
         AirWebDriver.quit_browser()
         print('처음부터 재 시도')
@@ -289,7 +294,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
                                          str_credential_filename)
         print(detail)
 
-
+    print('로그인 후 초기화면 로딩 성공')
     print('초기화면에서 비지니스데이 CSS 얻어오기 대기중..')
     # 초기화면에서 비지니스데이 데이터 CSS가 활성화 될때까지 대기한다.
     # time.sleep(5)
@@ -325,7 +330,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
             AirWebDriver.quit_browser()
             return True
 
-    except (Exception) as detail:
+    except Exception as detail:
         #실패 경우 아이디에 -1을 기록해 놓고 추후 -1인 아이디만 재시도 한다.
         AirWebDriver.quit_browser()
         print(detail)
@@ -365,7 +370,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
             AirWebDriver.quit_browser()
             return True
 
-    except (Exception) as detail:
+    except Exception as detail:
         AirWebDriver.quit_browser()
         print(detail)
         print('처음부터 재 시도')
@@ -390,9 +395,10 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         print('아이디 검색 버튼 성공..')
         AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
         time.sleep(4)
-        print('수신자 검색버튼 대기중..')
+        print('수신자 결과창 대기중..')
         AirWebDriver.wait_until_show_element_id('transfer-to')
-        print('수신자 검색버튼 성공..')
+        #AirWebDriver.wait_until_show_element_id_text('transfer-to', user_english_name_list[index])
+        print('수신자 결과창 성공..')
 
         # 리워드 지갑 선택
         # //*[@id="partition_transfer_partition_user_wallet_id"]/option[2]
@@ -407,6 +413,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰 요청 버튼을 누른다.
         # //*[@id="submit-token"]
+        print('리워드 토큰 요청')
         AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-token"]')
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
@@ -436,7 +443,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         print("send rewards money : %f" % _rewards )
         AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
-        # 트랜스퍼 실행 후 잠시 대기
+
+        # 트랜스퍼 완료시 까지 대기
+        AirWebDriver.wait_until_show_element_id_text('transfer-to', '')
         time.sleep(10)
         if _commissions <= 0:
             #AirWebDriver.mouse_click(953, 163, 3)
@@ -463,9 +472,10 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         print('아이디 검색 버튼 성공..')
         AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
         time.sleep(4)
-        print('수신자 검색버튼 대기중..')
+        print('수신자 결과창 대기중..')
         AirWebDriver.wait_until_show_element_id('transfer-to')
-        print('수신자 검색버튼 성공..')
+        #AirWebDriver.wait_until_show_element_id_text('transfer-to', user_english_name_list[index])
+        print('수신자 결과창 성공..')
 
         # 커미션 지갑 선택
         # //*[@id="partition_transfer_partition_user_wallet_id"]/option[4]
@@ -480,6 +490,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 토큰 요청 버튼을 누른다.
         # //*[@id="submit-token"]
+        print('커미션 토큰 요청')
         AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-token"]')
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-token"]')
 
@@ -509,6 +520,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
         AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')
         AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
+        # 트랜스퍼 완료시 까지 대기
+        AirWebDriver.wait_until_show_element_id_text('transfer-to', '')
+
     # 트랜스퍼 실행 후 잠시 대기
     #AirWebDriver.mouse_click(953, 163, 3)
     time.sleep(7)
@@ -524,7 +538,7 @@ def get_account_count():
 
 def report_account():
     global id_list
-    global login_fail_id_index_list
+    #global login_fail_id_index_list
     global repurchase_id_list
     global remaining_business_day_dic
     global repurchase_left_list_dic
@@ -630,6 +644,7 @@ def report_account():
     del email_kind[:]
     del user_telegram_id_list[:]
     del user_name_list[:]
+    del user_english_name_list[:]
 
 
 def get_total_bonus_money():
@@ -678,7 +693,7 @@ def get_screent_shot_with_login_id(str_login_id, str_login_password):
 
     AirWebDriver.save_screenshot("main_account.png")
 
-    Telegram_Mng = Telegram_Manager()
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
     Telegram_Mng.send_image("main_account.png")
 
 if __name__ == "__main__":
