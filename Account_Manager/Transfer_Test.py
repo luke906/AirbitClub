@@ -353,7 +353,7 @@ def transfer_reward_commission_money():
             AirWebDriver.wait_until_show_element_xpath('//*[@id="submit-transfer"]')
             AirWebDriver.send_click_event_with_xpath('//*[@id="submit-transfer"]')
 
-            # 트랜스퍼 실행 후 잠시 대기
+            # 트랜스퍼 실행 후 동료될때 까지 대기
             AirWebDriver.wait_until_show_element_id_text('transfer-to', '')
             time.sleep(10)
 
