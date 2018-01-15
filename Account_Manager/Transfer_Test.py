@@ -238,6 +238,7 @@ def transfer_reward_commission_money():
             AirWebDriver.send_key_by_id("search-user", str_destination_id)
 
             # 검색버튼을 누른다.
+            AirWebDriver.wait_until_show_element_xpath('//*[@id="search-btn"]')
             AirWebDriver.send_click_event_with_xpath('//*[@id="search-btn"]')
             time.sleep(4)
             print('수신자 검색버튼 대기중..')
