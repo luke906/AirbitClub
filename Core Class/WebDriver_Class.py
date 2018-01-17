@@ -48,7 +48,7 @@ class WebDriver_Manager:
             self.chrome_options.add_experimental_option("prefs", prefs)
             #self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False})
             self.chrome_options.add_argument("--disable-infobars")
-            #self.chrome_options.add_argument(chrome_user_path_name)
+            self.chrome_options.add_argument(chrome_user_path_name)
             print("web driver - 4")
             self.browser = webdriver.Chrome(executable_path=self.DriverPath, chrome_options=self.chrome_options)
             print("web driver - 5")
