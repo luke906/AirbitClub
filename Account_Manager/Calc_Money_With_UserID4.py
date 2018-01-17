@@ -220,9 +220,9 @@ def transfer_all_money_to_main_account(s_index, e_index):
 
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
-    #Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    #announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
-    #Telegram_Mng.send_message(announce_msg)
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    announce_msg = nowDate + " 트랜스퍼를 시작하겠습니다.\n이 채팅방은 로봇 채팅방 입니다. 대화를 하실수 없습니다.\n완료 보고서를 받기 전까지 계좌에 로그인을 하지 말아 주세요\n"
+    Telegram_Mng.send_message(announce_msg)
 
     # 메인 계좌 다음 계좌부터 리워드만 트랜스퍼 샐행.
     for index in range(s_index, e_index):
@@ -701,9 +701,7 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    transfer_all_money_to_main_account(20, end_index)
-
-    #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
+    transfer_all_money_to_main_account(1, end_index)
 
     #scheduler = Schedule_Manager()
     #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 0, 1, end_index)
