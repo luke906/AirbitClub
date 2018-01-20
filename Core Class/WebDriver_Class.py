@@ -23,7 +23,6 @@ class WebDriver_Manager:
 
     #browser_flag = chrome, firefox
     def __init__(self, browser_flag, initialize):
-        user_name = os.getlogin()
 
         if browser_flag == 'chrome':
             print("web driver - 1")
@@ -67,7 +66,7 @@ class WebDriver_Manager:
                     FF_PRF_DIR = p.communicate()[0][0:-2]
                     FF_PRF_DIR_DEFAULT = str(FF_PRF_DIR, 'utf-8')
                 elif sys.platform == 'win32':
-                    user_name = os.getlogin()
+
                     """
                     APPDATA = os.getenv('APPDATA')
                     FF_PRF_DIR = "C:/Users/" + user_name + "/AppData/Roaming/Mozilla/Firefox/Profiles/"
