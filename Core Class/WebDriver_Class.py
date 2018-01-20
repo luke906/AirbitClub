@@ -57,6 +57,8 @@ class WebDriver_Manager:
             #firefox_capabilities = DesiredCapabilities.FIREFOX
             #firefox_capabilities['marionette'] = True
 
+            geckoPath = ''
+
             try:
                 FF_PRF_DIR_DEFAULT = ""
 
@@ -65,6 +67,7 @@ class WebDriver_Manager:
                     p = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE)
                     FF_PRF_DIR = p.communicate()[0][0:-2]
                     FF_PRF_DIR_DEFAULT = str(FF_PRF_DIR, 'utf-8')
+                    geckoPath = '../Web Driver/geckodriver'
                 elif sys.platform == 'win32':
 
                     """
@@ -78,6 +81,7 @@ class WebDriver_Manager:
                     FF_PRF_DIR = "%s\\Mozilla\\Firefox\\Profiles\\" % APPDATA
                     PATTERN = FF_PRF_DIR + "*default*"
                     FF_PRF_DIR_DEFAULT = glob.glob(PATTERN)[0]
+                    geckoPath = '../Web Driver/geckodriver.exe'
 
                 firefox_user_path_name = FF_PRF_DIR_DEFAULT # "C:/Users/USER/AppData/Local/Mozilla/Firefox/Profiles/z213e3t9.default-1514972796227"
                 profile = webdriver.FirefoxProfile(firefox_user_path_name)
@@ -87,7 +91,7 @@ class WebDriver_Manager:
                 profile.set_preference("http.response.timeout", 10)
                 profile.set_preference("dom.max_script_run_time", 10)
                 profile.set_preference("intl.accept_languages", "en")
-                geckoPath = '../Web Driver/geckodriver.exe'
+                #geckoPath = '../Web Driver/geckodriver.exe'
                 caps = DesiredCapabilities.FIREFOX
                 caps["wires"] = True
 
