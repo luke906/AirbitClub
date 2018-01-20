@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
+from pyvirtualdisplay import Display
 import os
 from os.path import expanduser
 import pyautogui
@@ -56,6 +57,8 @@ class WebDriver_Manager:
 
             #firefox_capabilities = DesiredCapabilities.FIREFOX
             #firefox_capabilities['marionette'] = True
+            display = Display(visible=0, size=(1024, 768))
+            display.start()
 
             geckoPath = ''
 
