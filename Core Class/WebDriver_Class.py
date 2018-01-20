@@ -68,8 +68,15 @@ class WebDriver_Manager:
                     FF_PRF_DIR_DEFAULT = str(FF_PRF_DIR, 'utf-8')
                 elif sys.platform == 'win32':
                     user_name = os.getlogin()
+                    """
                     APPDATA = os.getenv('APPDATA')
                     FF_PRF_DIR = "C:/Users/" + user_name + "/AppData/Roaming/Mozilla/Firefox/Profiles/"
+                    PATTERN = FF_PRF_DIR + "*default*"
+                    FF_PRF_DIR_DEFAULT = glob.glob(PATTERN)[0]
+                    """
+
+                    APPDATA = os.getenv('APPDATA')
+                    FF_PRF_DIR = "%s\\Mozilla\\Firefox\\Profiles\\" % APPDATA
                     PATTERN = FF_PRF_DIR + "*default*"
                     FF_PRF_DIR_DEFAULT = glob.glob(PATTERN)[0]
 
