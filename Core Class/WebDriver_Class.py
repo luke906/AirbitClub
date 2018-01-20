@@ -88,7 +88,7 @@ class WebDriver_Manager:
                 self.browser = webdriver.Firefox(firefox_profile = profile, executable_path = geckoPath, capabilities=caps)
                 #self.browser = webdriver.Firefox(executable_path=geckoPath)
                 initialize = 1
-            except (Exception) as detail:
+            except Exception as detail:
                 print(detail)
                 print("웹 드라이버 생성 실패")
                 initialize = 0
@@ -99,7 +99,8 @@ class WebDriver_Manager:
         try:
             self.browser.implicitly_wait(2)
             self.browser.get(destination_url)
-        except Exception:
+        except Exception as detail:
+            print(detail)
             self.browser.quit()
 
 
@@ -245,7 +246,8 @@ class WebDriver_Manager:
             elif flag == -1:
                 self.browser.quit()
             self.delete_firefox_temp_addon_file()
-        except Exception:
+        except Exception as detail:
+            print(detail)
             pass
 
 
