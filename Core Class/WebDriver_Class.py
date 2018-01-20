@@ -235,14 +235,13 @@ class WebDriver_Manager:
         pyautogui.click(buttonx, buttony)  # clicks the center of where the button was found
 
     def delete_firefox_temp_addon_file(self):
-        import glob
-        import os
-        user_name = os.getlogin()
-        filepath = "C:/Users/" + user_name + "/AppData/Local/Temp/tmpaddon*"
-        filelist = glob.glob(filepath)
-        for file in filelist:
-            #print(file)
-            os.remove(file)
+        if sys.platform == 'win32':
+            user_name = os.getlogin()
+            filepath = "C:/Users/" + user_name + "/AppData/Local/Temp/tmpaddon*"
+            filelist = glob.glob(filepath)
+            for file in filelist:
+                #print(file)
+                os.remove(file)
         #for folder in os.listdir("C:/Users/" + user_name + "/AppData/Local/Temp"):
          #   if folder.find(0,3) == 'tmp':
           #      shutil.rmtree(folder)
