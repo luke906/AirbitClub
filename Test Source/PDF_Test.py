@@ -40,16 +40,16 @@ def test():
     rerport_filename = nowDate + ' 계좌현황 보고서.pdf'
     pdf.output(rerport_filename, 'F')
 
-    Telegram_Mng = Telegram_Manager()
-    Telegram_Mng.send_file(rerport_filename)
+    Telegram = Telegram_Manager()
+    Telegram.send_file(rerport_filename)
 
 
 
 if __name__ == "__main__":
     #test()
 
-    Telegram_Mng = Telegram_Manager()
-    updates = Telegram_Mng.get_update_object()
+    Telegram = Telegram_Manager()
+    updates = Telegram.get_update_object()
     for u in updates:
         print(u.message)
 
