@@ -446,7 +446,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         # 트랜스퍼 완료시 까지 대기
         AirWebDriver.wait_until_show_element_id_text('transfer-to', '')
-        time.sleep(10)
+        time.sleep(15)
         if _commissions <= 0:
             #AirWebDriver.mouse_click(953, 163, 3)
             #time.sleep(5)
