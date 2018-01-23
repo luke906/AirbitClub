@@ -284,7 +284,7 @@ def transfer_reward_commission_money():
 
             # 트랜스퍼 실행 후 잠시 대기
             AirWebDriver.wait_until_show_element_id_text('transfer-to', '')
-            time.sleep(10)
+            time.sleep(15)
 
             if _commissions <= 0:
                 #AirWebDriver.mouse_click(1865, 153, 5)
