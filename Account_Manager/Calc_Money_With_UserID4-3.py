@@ -701,11 +701,11 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    transfer_all_money_to_main_account(14, 19)
+    #transfer_all_money_to_main_account(14, 19)
 
-    #scheduler = Schedule_Manager()
-    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 0, 1, end_index)
-    #print("start scheduler transfer")
+    scheduler = Schedule_Manager()
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 0, 1, end_index)
+    print("start scheduler transfer")
 
 
 
