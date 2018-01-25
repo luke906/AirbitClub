@@ -12,7 +12,7 @@ class SMS_Manager:
         self.receivers = "['" + str_receiver + "', ]"
         self.content = str_contents
 
-        str = appid + ':' + apikey
+        str = self.appid + ':' + self.apikey
         credential = "Basic " + base64.b64encode(str.encode('UTF-8')).decode('ascii').strip()
 
         self.headers = {
