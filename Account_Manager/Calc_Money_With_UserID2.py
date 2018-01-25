@@ -548,7 +548,7 @@ def report_account():
     pdf.add_page()
 
     now = datetime.datetime.now()
-    nowDate = now.strftime('%Y-%m-%d')
+    nowDate = now.strftime('%Y-%m-%d %H:%M:%S')
 
     # 300일 비지니스 데이 보고서 작성
     # 고객이 원하는 일수를 지정해 준다 (ex: 한달이면 30일 남겨놓고 표시)
@@ -570,7 +570,7 @@ def report_account():
 
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_report = ""
-    str_transfer_date = "트랜스퍼 날짜 : " + nowDate + "\n"
+    str_transfer_date = "현재 날짜 시간 : " + nowDate + "\n"
     str_today_rewards = "금일 트랜스퍼 REWARDS 총금액 : %.2f" % transfer_rewards_total.value + "$\n"
     str_today_commisions = "금일 트랜스퍼 COMMISIONS 총금액 : %.2f" % transfer_commissions_total.value + "$\n\n"
 
@@ -677,24 +677,45 @@ def get_total_bonus_money():
 
 
 
-def get_screent_shot_with_login_id(str_login_id, str_login_password):
-
+def get_screent_shot_with_login_id(str_login_id, str_login_password, strfilename):
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
+    print("웹 드라이버 로딩 시작")
     initialize = -1
     AirWebDriver = WebDriver_Manager(browser_flag, initialize)
+    if initialize == 0:
+        print('각 아이디 별로 로그인을 하여 금액을 합산 웹 드라이버 초기 로딩 실패')
+        login_fail_id_index_list.append(index)
+        AirWebDriver.quit_browser()
 
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
-    AirWebDriver.move_to_url(str_Wallet_URL)
 
-    AirWebDriver.save_screenshot("main_account.png")
+    print('웰릿 화면 로딩 시도')
+    AirWebDriver.move_to_url(str_Wallet_URL)
+    print('웰릿 화면 로딩 성공 cash css로딩 대기중..')
+
+    # div.col-md-6:nth-child(2)>div:nth-child(1)>div:nth-child(2)>p:nth-child(2)
+    css_path = 'div.col-md-6:nth-child(2)>div:nth-child(1)>div:nth-child(2)>p:nth-child(2)'
+    time.sleep(5)
+    if (AirWebDriver.wait_until_show_element_css(css_path)) is not True:
+        print('웰릿 화면 로딩 성공 cash css로딩 실패')
+        AirWebDriver.quit_browser()
+        return False
+
+    print('웰릿 화면 로딩 성공 cash css로딩 성공')
+    time.sleep(3)
+
+    AirWebDriver.save_screenshot(strfilename)
+
+    AirWebDriver.quit_browser()
 
     Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    Telegram_Mng.send_image("main_account.png")
+    Telegram_Mng.send_image(strfilename)
+
 
 if __name__ == "__main__":
 
