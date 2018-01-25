@@ -2,35 +2,37 @@ import base64
 import http.client
 import json
 
-appid = 'MTunes_Airbitclub'
-apikey = '314ed4d400c411e8b41e0cc47a1fcfae'
-address = 'api.bluehouselab.com'
+class SMS_Manager:
 
-sender = '01087821203'        # FIXME - MUST BE CHANGED AS REAL PHONE NUMBER
-receivers = ['01087821203', ] # FIXME - MUST BE CHANGED AS REAL PHONE NUMBERS
-content = u'나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
+    def __init__(self, str_receiver, str_contents):
+        self.appid = 'MTunes_Airbitclub'
+        self.apikey = '314ed4d400c411e8b41e0cc47a1fcfae'
+        self.address = 'api.bluehouselab.com'
+        self.sender = '01087821203'  # FIXME - MUST BE CHANGED AS REAL PHONE NUMBER
+        self.receivers = "['" + str_receiver + "', ]"
+        self.content = str_contents
 
-credential = "Basic "+ base64.encodestring(('%s:%s' % (appid,apikey)).encode()).decode().strip()
+        str = appid + ':' + apikey
+        credential = "Basic " + base64.b64encode(str.encode('UTF-8')).decode('ascii').strip()
 
+        self.headers = {
+            "Content-type": "application/json;charset=utf-8",
+            "Authorization": credential,
+        }
 
-headers = {
-  "Content-type": "application/json;charset=utf-8",
-  "Authorization": credential,
-}
+    def send_sms(self):
+        c = http.client.HTTPSConnection(self.address)
 
+        path = "/smscenter/v1.0/sendsms"
+        value = {
+            'sender': self.sender,
+            'receivers': self.receivers,
+            'content': self.content,
+        }
+        data = json.dumps(value, ensure_ascii=False).encode('utf-8')
 
-c = http.client.HTTPSConnection(address)
+        c.request("POST", path, data, self.headers)
+        r = c.getresponse()
 
-path = "/smscenter/v1.0/sendsms"
-value = {
-    'sender'     : sender,
-    'receivers'  : receivers,
-    'content'    : content,
-}
-data = json.dumps(value, ensure_ascii=False).encode('utf-8')
-
-c.request("POST", path, data, headers)
-r = c.getresponse()
-
-print(r.status, r.reason)
-print(r.read())
+        print(r.status, r.reason)
+        print(r.read())
