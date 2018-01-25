@@ -57,7 +57,7 @@ class WebDriver_Manager:
 
             #firefox_capabilities = DesiredCapabilities.FIREFOX
             #firefox_capabilities['marionette'] = True
-            display = Display(visible=0, size=(1024, 768))
+            display = Display(visible=0, size=(1920, 1080))
             display.start()
 
             geckoPath = ''
