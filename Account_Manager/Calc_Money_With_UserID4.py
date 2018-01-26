@@ -11,6 +11,7 @@ from Gmail_Manager_Class import Gmail_Manager
 from Schedule_Manager_Class import Schedule_Manager
 from WebDriver_Class import WebDriver_Manager
 from PDF_Manager_Class import PDF_Manager
+from BlueHouse_SMS_Manager_Class import SMS_Manager
 
 id_list = []
 password_list = []
@@ -644,20 +645,29 @@ def report_account():
     print(str_repurchase_left_list)
     print(str_report)
 
-
+    str_SMS_contents = ""
 
     # 보고서 PDF  생성
     if len(str_remaining_business_day_list) <= 0:
         pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', "없음")
+        str_SMS_contents = "※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※\n없음"
     else:
         pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', str_remaining_business_day_list)
+        str_SMS_contents = "※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※\n"
+        str_SMS_contents += str_remaining_business_day_list
+        str_SMS_contents += "\n"
 
     if len(str_repurchase_left_list) <= 0:
         pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', "없음")
+        str_SMS_contents += "※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※\n없음"
     else:
         pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', str_repurchase_left_list)
+        str_SMS_contents += "※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※\n"
+        str_SMS_contents += str_repurchase_left_list
 
     pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_report)
+    str_SMS_contents += "※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※\n"
+    str_SMS_contents += str_report
 
     rerport_filename = nowDate +  " " + user_name_list[0] +' 계좌현황 보고서.pdf'
 
@@ -665,6 +675,10 @@ def report_account():
 
     Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
     Telegram_Mng.send_file(rerport_filename)
+
+    # SMS
+    SMS = SMS_Manager()
+    SMS.send_sms("01087821203", str_SMS_contents)
 
     # 집계를 마치고 변수를 초기화 한다.
     commissions.value = 0
