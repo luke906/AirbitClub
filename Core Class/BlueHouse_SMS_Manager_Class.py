@@ -18,16 +18,17 @@ class SMS_Manager:
             "Authorization": credential,
         }
 
-    def send_sms(self, str_receiver, str_contents):
+    def send_sms(self, receivers, str_contents):
 
-        receivers = "['" + str_receiver + "', ]"
         c = http.client.HTTPSConnection(self.address)
+        unicode_contents = u"{}".format(str_contents)
 
-        path = "/smscenter/v1.0/sendsms"
+        path = "/smscenter/v1.0/sendlms"
         value = {
             'sender': self.sender,
             'receivers': receivers,
-            'content': str_contents,
+            'subject': u'Transfer Report',
+            'content': unicode_contents,
         }
         data = json.dumps(value, ensure_ascii=False).encode('utf-8')
 

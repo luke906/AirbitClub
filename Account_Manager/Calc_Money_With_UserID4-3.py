@@ -209,7 +209,7 @@ def get_airbit_token_value(secret_json_file):
 
 def transfer_all_money_to_main_account(s_index, e_index):
 
-    get_screent_shot_with_login_id(id_list[0], password_list[0], "Before_Transfer.png")
+    #get_screent_shot_with_login_id(id_list[0], password_list[0], "Before_Transfer.png")
 
     # 트랜스퍼 하기전에 메일을 청소 한다.
     try:
@@ -234,7 +234,7 @@ def transfer_all_money_to_main_account(s_index, e_index):
 
 
     process_browser_to_get_money_with_userid(id_list[0], password_list[0])
-    get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
+    #get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
     report_account()
 
 
@@ -725,11 +725,11 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    transfer_all_money_to_main_account(14, 19)
+    #transfer_all_money_to_main_account(14, 19)
 
-    #scheduler = Schedule_Manager()
-    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 23, 0, 14, 19)
-    #print("start scheduler transfer")
+    scheduler = Schedule_Manager()
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 23, 00, 14, 19)
+    print("start scheduler transfer")
 
 
 

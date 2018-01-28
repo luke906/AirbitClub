@@ -249,7 +249,7 @@ def get_airbit_token_value(secret_json_file):
 
 def transfer_all_money_to_main_account(s_index, e_index):
 
-    get_screent_shot_with_login_id(id_list[0], password_list[0], "Before_Transfer.png")
+    #get_screent_shot_with_login_id(id_list[0], password_list[0], "Before_Transfer.png")
 
     # 트랜스퍼 하기전에 메일을 청소 한다.
     try:
@@ -274,7 +274,7 @@ def transfer_all_money_to_main_account(s_index, e_index):
 
 
     process_browser_to_get_money_with_userid(id_list[0], password_list[0])
-    get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
+    #get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
     report_account()
 
 
@@ -677,8 +677,9 @@ def report_account():
     Telegram_Mng.send_file(rerport_filename)
 
     # SMS
+    print(str_SMS_contents)
     SMS = SMS_Manager()
-    SMS.send_sms("01087821203", str_SMS_contents)
+    SMS.send_sms(['01087821203',], str_SMS_contents)
 
     # 집계를 마치고 변수를 초기화 한다.
     commissions.value = 0
@@ -730,8 +731,8 @@ def get_total_bonus_money():
     # for proc in procs:
     #   proc.join()
     report_account()
-    end_time = time.time()
-    strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
+    #end_time = time.time()
+    #strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
 
 
 
@@ -741,10 +742,14 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    transfer_all_money_to_main_account(1, 6)
+    #transfer_all_money_to_main_account(1, 6)
+    #transfer_all_money_to_main_account(1, 2)
+    process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
+    # get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
+    report_account()
 
     #scheduler = Schedule_Manager()
-    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 23, 0, 1, 6)
+    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 23, 00, 1, 6)
     #print("start scheduler transfer")
 
 
