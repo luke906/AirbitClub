@@ -1,8 +1,6 @@
 
 import time
 import datetime
-from multiprocessing import Value
-from multiprocessing import Process
 
 from DB_Manager_Class import DB_Manager
 from Telegram_Class import Telegram_Manager
@@ -11,6 +9,12 @@ from Gmail_Manager_Class import Gmail_Manager
 from Schedule_Manager_Class import Schedule_Manager
 from WebDriver_Class import WebDriver_Manager
 from PDF_Manager_Class import PDF_Manager
+
+"""
+from BlueHouse_SMS_Manager_Class import SMS_Manager
+from multiprocessing import Value
+from multiprocessing import Process
+"""
 
 id_list = []
 password_list = []
@@ -40,23 +44,14 @@ commission_fail_id_index_list = []
 login_fail_id_index_list = []
 
 # 프로세스를 이용하여 다중 로그인을 할 경우 사용할 메모리 변수
-# shared memory 사용 (멀티 프로세스간 변수값 공유)
-commissions = Value('d', 0.0)
-cash = Value('d', 0.0)
-rewards = Value('d', 0.0)
-savings = Value('d', 0.0)
-
-commissions.value = 0
-cash.value = 0
-rewards.value = 0
-savings.value = 0
+commissions_value = 0
+cash_value = 0
+rewards_value = 0
+savings_value = 0
 
 # 트랜스퍼한 금액을 집계하기 위한 변수
-transfer_rewards_total = Value('d', 0.0)
-transfer_commissions_total = Value('d', 0.0)
-
-transfer_rewards_total.value = 0
-transfer_commissions_total.value = 0
+transfer_rewards_total_value = 0
+transfer_commissions_total_value = 0
 
 
 # 트랜스퍼 하기위한 토큰 값
@@ -105,6 +100,12 @@ def get_id_password(person_name):
 
 # 각 아이디 별로 로그인을 하여 금액을 합산한다.
 def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
+
+    global commissions_value
+    global cash_value
+    global rewards_value
+    global savings_value
+
     str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
     str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
 
@@ -113,18 +114,17 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     AirWebDriver = WebDriver_Manager(browser_flag, initialize)
     if initialize == 0:
         print('각 아이디 별로 로그인을 하여 금액을 합산 웹 드라이버 초기 로딩 실패')
-        login_fail_id_index_list.append(index)
+        #login_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
 
     print("로그인 사이트 접속 시도")
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
     print('로그인 페이지 패스워드 입력란 css 대기중..')
     if (AirWebDriver.wait_until_show_element_css('#user_username')) is False:
-        reward_fail_id_index_list.append(index)
+        #reward_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
         print('처음부터 재 시도')
-        transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
-                                         str_credential_filename)
+        process_browser_to_get_money_with_userid(str_login_id, str_login_password)
 
     time.sleep(2)
     AirWebDriver.wait_until_show_element_css('#user_username')
@@ -147,18 +147,58 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
     time.sleep(5)
     print('웰릿 화면 로딩 성공 xpath 로딩 성공')
 
-    commissions.value += float(soup.find_all(class_='dll-quantity dll-container')[0].get_text())
-    cash.value += float(soup.find_all(class_='dll-quantity dll-container')[1].get_text())
-    rewards.value += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
-    savings.value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
+    commissions_value += float(soup.find_all(class_='dll-quantity dll-container')[0].get_text())
+    cash_value += float(soup.find_all(class_='dll-quantity dll-container')[1].get_text())
+    rewards_value += float(soup.find_all(class_='dll-quantity dll-container')[2].get_text())
+    savings_value += float(soup.find_all(class_='dll-quantity dll-container')[3].get_text())
 
-    print("wallet_screen : commissions = %f" % commissions.value)
-    print("wallet_screen : cash = %f" % cash.value)
-    print("wallet_screen : rewards = %f" % rewards.value)
-    print("wallet_screen : savings = %f" % savings.value)
+    print("wallet_screen : commissions = %f" % commissions_value)
+    print("wallet_screen : cash = %f" % cash_value)
+    print("wallet_screen : rewards = %f" % rewards_value)
+    print("wallet_screen : savings = %f" % savings_value)
     print("  ")
 
     AirWebDriver.quit_browser()
+
+def get_screent_shot_with_login_id(str_login_id, str_login_password, strfilename):
+    str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
+    str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
+
+    print("웹 드라이버 로딩 시작")
+    initialize = -1
+    AirWebDriver = WebDriver_Manager(browser_flag, initialize)
+    if initialize == 0:
+        print('각 아이디 별로 로그인을 하여 금액을 합산 웹 드라이버 초기 로딩 실패')
+        #login_fail_id_index_list.append(index)
+        AirWebDriver.quit_browser()
+
+    AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+    AirWebDriver.send_key_by_name("user[username]", str_login_id)
+    AirWebDriver.send_key_by_name("user[password]", str_login_password)
+    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
+
+    print('웰릿 화면 로딩 시도')
+    AirWebDriver.move_to_url(str_Wallet_URL)
+    print('웰릿 화면 로딩 성공 cash css로딩 대기중..')
+
+    # div.col-md-6:nth-child(2)>div:nth-child(1)>div:nth-child(2)>p:nth-child(2)
+    css_path = 'div.col-md-6:nth-child(2)>div:nth-child(1)>div:nth-child(2)>p:nth-child(2)'
+    time.sleep(5)
+    if (AirWebDriver.wait_until_show_element_css(css_path)) is not True:
+        print('웰릿 화면 로딩 성공 cash css로딩 실패')
+        AirWebDriver.quit_browser()
+        return False
+
+    print('웰릿 화면 로딩 성공 cash css로딩 성공')
+    time.sleep(3)
+
+    AirWebDriver.save_screenshot(strfilename)
+
+    AirWebDriver.quit_browser()
+
+    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
+    Telegram_Mng.send_image(strfilename)
+
 
 # 각 아이디 별로 남은 리워드 지급일수, 재구매일 여부 판별
 def process_browser_to_get_left_day(str_login_id, str_login_password):
@@ -257,6 +297,8 @@ def transfer_all_money_to_main_account(s_index, e_index):
     report_account()
 
 
+
+
 def transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password, str_credential_filename):
 
     global _REQUEST_TOKEN_VALUE, _rewards
@@ -264,6 +306,9 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
     global remaining_business_day_dic
     global repurchase_left_list_dic
     global reward_fail_id_index_list
+
+    global transfer_rewards_total_value
+    global transfer_commissions_total_value
 
     _rewards = -1
     _commissions = -1
@@ -368,7 +413,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
 
         print('트랜스퍼 사이트 리딩을 위한 css 대기중..')
         if (AirWebDriver.wait_until_show_element_css('div.row:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>small:nth-child(4)')) is False:
-            login_fail_id_index_list.append(index)
+            #login_fail_id_index_list.append(index)
             AirWebDriver.quit_browser()
             print('처음부터 재 시도')
             transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
@@ -403,7 +448,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
     # 리워드에 금액이 있다면 리워드 이체를 한다.
     if _rewards > 0 :
 
-        transfer_rewards_total.value += _rewards
+        transfer_rewards_total_value += _rewards
 
         # 트랜스퍼할 아이디를 입력한다.
         print('수신자 조회창 대기중..')
@@ -480,7 +525,7 @@ def transfer_reward_commission_money(index, str_destination_id, str_login_id, st
     # 커미션에 금액이 있다면 리워드 이체를 한다.
     if _commissions > 0:
 
-        transfer_commissions_total.value += _commissions
+        transfer_commissions_total_value += _commissions
 
         # 트랜스퍼할 아이디를 입력한다.
         print('수신자 조회창 대기중..')
@@ -566,6 +611,14 @@ def report_account():
     global repurchase_left_list_dic
     global user_telegram_id_list
 
+    global commissions_value
+    global cash_value
+    global rewards_value
+    global savings_value
+
+    global transfer_rewards_total_value
+    global transfer_commissions_total_value
+
     pdf = PDF_Manager()
     pdf.add_page()
 
@@ -593,17 +646,17 @@ def report_account():
     #  트랜스퍼 후 메인계좌 잔고 보고서 작성
     str_report = ""
     str_transfer_date = "현재 날짜 시간 : " + nowDate + "\n"
-    str_today_rewards = "금일 트랜스퍼 REWARDS 총금액 : %.2f" % transfer_rewards_total.value + "$\n"
-    str_today_commisions = "금일 트랜스퍼 COMMISIONS 총금액 : %.2f" % transfer_commissions_total.value + "$\n\n"
+    str_today_rewards = "금일 트랜스퍼 REWARDS 총금액 : %.2f" % transfer_rewards_total_value + "$\n"
+    str_today_commisions = "금일 트랜스퍼 COMMISIONS 총금액 : %.2f" % transfer_commissions_total_value + "$\n\n"
 
     str_total_account = "현재 계좌의 총 갯수 : %d" % (len(id_list)) + "개" + "\n"
     str_main_transfer = "트랜스퍼 완료 후 현재 메인계좌" + "(" + id_list[0] + ")" + " 잔고 현황\n"
 
-    str_rewards = "메인계좌 REWARDS : %.2f" % rewards.value + "$\n"
-    str_commisions = "메인계좌 COMMISIONS : %.2f" % commissions.value + "$\n"
-    str_cash = "메인계좌 CASH : %.2f" % cash.value  + "$\n"
-    str_savings = "메인계좌 SAVINGS : %.2f" % savings.value + "$\n"
-    str_total = "메인계좌 인출 가능 달러(커미션 + 리워드) : %.2f" % (commissions.value + rewards.value) + "$\n"
+    str_rewards = "메인계좌 REWARDS : %.2f" % rewards_value + "$\n"
+    str_commisions = "메인계좌 COMMISIONS : %.2f" % commissions_value + "$\n"
+    str_cash = "메인계좌 CASH : %.2f" % cash_value  + "$\n"
+    str_savings = "메인계좌 SAVINGS : %.2f" % savings_value + "$\n"
+    str_total = "메인계좌 인출 가능 달러(커미션 + 리워드) : %.2f" % (commissions_value + rewards_value) + "$\n"
 
     str_report += str_transfer_date
     str_report += str_today_rewards
@@ -622,20 +675,29 @@ def report_account():
     print(str_repurchase_left_list)
     print(str_report)
 
-
+    str_SMS_contents = ""
 
     # 보고서 PDF  생성
     if len(str_remaining_business_day_list) <= 0:
         pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', "없음")
+        str_SMS_contents = "※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※\n없음"
     else:
         pdf.print_chapter_user('※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※', str_remaining_business_day_list)
+        str_SMS_contents = "※ 300일 리워드 지급일 : 30일 전 계좌 리스트 ※\n"
+        str_SMS_contents += str_remaining_business_day_list
+        str_SMS_contents += "\n"
 
     if len(str_repurchase_left_list) <= 0:
         pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', "없음")
+        str_SMS_contents += "※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※\n없음"
     else:
         pdf.print_chapter_user('※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※', str_repurchase_left_list)
+        str_SMS_contents += "※ 75일 도래 전산비 납부 : 7일 전 계좌 리스트 ※\n"
+        str_SMS_contents += str_repurchase_left_list
 
     pdf.print_chapter_user('※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※', str_report)
+    str_SMS_contents += "※ 트랜스퍼 완료 후 메인계좌 잔고 보고서 ※\n"
+    str_SMS_contents += str_report
 
     rerport_filename = nowDate +  " " + user_name_list[0] +' 계좌현황 보고서.pdf'
 
@@ -645,14 +707,21 @@ def report_account():
     Telegram_Mng.send_file(rerport_filename)
 
     """
-    # 집계를 마치고 변수를 초기화 한다.
-    commissions.value = 0
-    cash.value = 0
-    rewards.value = 0
-    savings.value = 0
-    transfer_rewards_total.value = 0
-    transfer_commissions_total.value = 0
+    # SMS
+    print(str_SMS_contents)
+    SMS = SMS_Manager()
+    SMS.send_sms(['01087821203',], str_SMS_contents)
     """
+
+    # 집계를 마치고 변수를 초기화 한다.
+    commissions_value = 0
+    cash_value = 0
+    rewards_value = 0
+    savings_value = 0
+
+    transfer_rewards_total_value = 0
+    transfer_commissions_total_value = 0
+
 
     del repurchase_id_list[:]
     del reward_fail_id_index_list[:]
@@ -696,49 +765,10 @@ def get_total_bonus_money():
     # for proc in procs:
     #   proc.join()
     report_account()
-    end_time = time.time()
-    strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
+    #end_time = time.time()
+    #strmsg = "전체계좌 합산 프로세스 소요시간 : " + str(end_time - start_time)
 
 
-
-def get_screent_shot_with_login_id(str_login_id, str_login_password, strfilename):
-    str_AirBitClub_Login_URL = "https://www.bitbackoffice.com/auth/login"
-    str_Wallet_URL = "https://www.bitbackoffice.com/wallets"
-
-    print("웹 드라이버 로딩 시작")
-    initialize = -1
-    AirWebDriver = WebDriver_Manager(browser_flag, initialize)
-    if initialize == 0:
-        print('각 아이디 별로 로그인을 하여 금액을 합산 웹 드라이버 초기 로딩 실패')
-        login_fail_id_index_list.append(index)
-        AirWebDriver.quit_browser()
-
-    AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
-    AirWebDriver.send_key_by_name("user[username]", str_login_id)
-    AirWebDriver.send_key_by_name("user[password]", str_login_password)
-    AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
-
-    print('웰릿 화면 로딩 시도')
-    AirWebDriver.move_to_url(str_Wallet_URL)
-    print('웰릿 화면 로딩 성공 cash css로딩 대기중..')
-
-    # div.col-md-6:nth-child(2)>div:nth-child(1)>div:nth-child(2)>p:nth-child(2)
-    css_path = 'div.col-md-6:nth-child(2)>div:nth-child(1)>div:nth-child(2)>p:nth-child(2)'
-    time.sleep(5)
-    if (AirWebDriver.wait_until_show_element_css(css_path)) is not True:
-        print('웰릿 화면 로딩 성공 cash css로딩 실패')
-        AirWebDriver.quit_browser()
-        return False
-
-    print('웰릿 화면 로딩 성공 cash css로딩 성공')
-    time.sleep(3)
-
-    AirWebDriver.save_screenshot(strfilename)
-
-    AirWebDriver.quit_browser()
-
-    Telegram_Mng = Telegram_Manager(user_telegram_id_list[0])
-    Telegram_Mng.send_image(strfilename)
 
 
 if __name__ == "__main__":
@@ -746,12 +776,16 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    #transfer_all_money_to_main_account(14, 19)
+    #transfer_all_money_to_main_account(1, 2)
+    #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
+    # get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
+    #report_account()
 
 
     scheduler = Schedule_Manager()
-    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 16, 2, 14, 15)
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 5, 14, 19)
     print("start scheduler transfer")
+
 
 
 
