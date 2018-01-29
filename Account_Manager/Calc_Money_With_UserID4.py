@@ -702,7 +702,7 @@ def report_account():
     SMS = SMS_Manager()
     SMS.send_sms(['01087821203',], str_SMS_contents)
 
-    """
+
     # 집계를 마치고 변수를 초기화 한다.
     commissions.value = 0
     cash.value = 0
@@ -710,7 +710,7 @@ def report_account():
     savings.value = 0
     transfer_rewards_total.value = 0
     transfer_commissions_total.value = 0
-    """
+
 
     del repurchase_id_list[:]
     del reward_fail_id_index_list[:]
