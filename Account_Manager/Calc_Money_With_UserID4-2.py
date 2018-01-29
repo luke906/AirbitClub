@@ -116,9 +116,25 @@ def process_browser_to_get_money_with_userid(str_login_id, str_login_password):
         login_fail_id_index_list.append(index)
         AirWebDriver.quit_browser()
 
+    print("로그인 사이트 접속 시도")
     AirWebDriver.move_to_url(str_AirBitClub_Login_URL)
+    print('로그인 페이지 패스워드 입력란 css 대기중..')
+    if (AirWebDriver.wait_until_show_element_css('#user_username')) is False:
+        reward_fail_id_index_list.append(index)
+        AirWebDriver.quit_browser()
+        print('처음부터 재 시도')
+        transfer_reward_commission_money(index, str_destination_id, str_login_id, str_login_password,
+                                         str_credential_filename)
+
+    time.sleep(2)
+    AirWebDriver.wait_until_show_element_css('#user_username')
+    print("로그인 사이트 아이디 입력 ...")
     AirWebDriver.send_key_by_name("user[username]", str_login_id)
+    print("로그인 사이트 패스워드 입력 ...")
     AirWebDriver.send_key_by_name("user[password]", str_login_password)
+
+    print("로그인 사이트 로딩 시도 ...")
+    AirWebDriver.wait_until_show_element_xpath('//*[@id="new_user"]/button')
     AirWebDriver.send_click_event_with_xpath('//*[@id="new_user"]/button')
 
     print('웰릿 화면 로딩 시도')
@@ -736,8 +752,9 @@ if __name__ == "__main__":
 
     #transfer_all_money_to_main_account(7, 13)
 
+
     scheduler = Schedule_Manager()
-    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 15, 20, 7, 8)
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 16, 1, 7, 8)
     print("start scheduler transfer")
 
 
