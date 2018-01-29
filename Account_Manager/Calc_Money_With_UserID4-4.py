@@ -727,7 +727,7 @@ if __name__ == "__main__":
     #transfer_all_money_to_main_account(20, 29)
 
     scheduler = Schedule_Manager()
-    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 23, 00, 20, 29)
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 9, 00, 20, 29)
     print("start scheduler transfer")
 
 

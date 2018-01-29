@@ -744,13 +744,13 @@ if __name__ == "__main__":
 
     #transfer_all_money_to_main_account(1, 6)
     #transfer_all_money_to_main_account(1, 2)
-    process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
+    #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
     # get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
-    report_account()
+    #report_account()
 
-    #scheduler = Schedule_Manager()
-    #scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 23, 00, 1, 6)
-    #print("start scheduler transfer")
+    scheduler = Schedule_Manager()
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 9, 00, 1, 6)
+    print("start scheduler transfer")
 
 
 
