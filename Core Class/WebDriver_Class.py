@@ -55,14 +55,16 @@ class WebDriver_Manager:
 
         elif browser_flag == 'firefox':
 
+            print("webdriver_firefox-1")
             #firefox_capabilities = DesiredCapabilities.FIREFOX
             #firefox_capabilities['marionette'] = True
             display = Display(visible=0, size=(1920, 1080))
             display.start()
-
+            print("webdriver_firefox-2")
             geckoPath = ''
 
             try:
+                print("webdriver_firefox-3")
                 FF_PRF_DIR_DEFAULT = ""
 
                 if sys.platform in ['linux', 'linux2']:
@@ -71,6 +73,7 @@ class WebDriver_Manager:
                     FF_PRF_DIR = p.communicate()[0][0:-2]
                     FF_PRF_DIR_DEFAULT = str(FF_PRF_DIR, 'utf-8')
                     geckoPath = '../Web Driver/geckodriver'
+                    print("webdriver_firefox-4")
                 elif sys.platform == 'win32':
 
                     """
@@ -86,8 +89,10 @@ class WebDriver_Manager:
                     FF_PRF_DIR_DEFAULT = glob.glob(PATTERN)[0]
                     geckoPath = '../Web Driver/geckodriver.exe'
 
+                print("webdriver_firefox-5")
                 firefox_user_path_name = FF_PRF_DIR_DEFAULT # "C:/Users/USER/AppData/Local/Mozilla/Firefox/Profiles/z213e3t9.default-1514972796227"
                 profile = webdriver.FirefoxProfile(firefox_user_path_name)
+                print("webdriver_firefox-6")
                 profile.set_preference("permissions.default.image", 2)
                 #profile.set_preference("permissions.default.stylesheet", 2)
                 #profile.set_preference("javascript.enabled", False)
@@ -97,8 +102,10 @@ class WebDriver_Manager:
                 #geckoPath = '../Web Driver/geckodriver.exe'
                 caps = DesiredCapabilities.FIREFOX
                 caps["wires"] = True
+                print("webdriver_firefox-7")
 
                 self.browser = webdriver.Firefox(firefox_profile = profile, executable_path = geckoPath, capabilities=caps)
+                print("webdriver_firefox-8")
                 #self.browser = webdriver.Firefox(executable_path=geckoPath)
                 initialize = 1
             except Exception as detail:
