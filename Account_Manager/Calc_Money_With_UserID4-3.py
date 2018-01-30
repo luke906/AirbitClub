@@ -776,7 +776,7 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    #transfer_all_money_to_main_account(1, 2)
+    #transfer_all_money_to_main_account(14, 19)
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
     # get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
     #report_account()
@@ -785,6 +785,7 @@ if __name__ == "__main__":
     scheduler = Schedule_Manager()
     scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 5, 14, 19)
     print("start scheduler transfer")
+
 
 
 
