@@ -26,6 +26,8 @@ class WebDriver_Manager:
     def __init__(self, browser_flag, initialize):
 
         if browser_flag == 'chrome':
+            display = Display(visible=0, size=(1920, 1080))
+            display.start()
             print("web driver - 1")
             #user_name = os.getlogin()
             #chrome_user_path_name = "user-data-dir=C:/Users/" + user_name + "/AppData/Local/Google/Chrome/User Data"
@@ -44,8 +46,8 @@ class WebDriver_Manager:
             #self.chrome_options.add_argument("--proxy-server={0}".format(proxy.proxy))
             #self.chrome_options.add_argument("--start-maximized")
             #self.chrome_options.add_argument('--incognito') #시크릿모드
-            prefs = {"profile.managed_default_content_settings.images": 2}
-            self.chrome_options.add_experimental_option("prefs", prefs)
+            #prefs = {"profile.managed_default_content_settings.images": 2}
+            #self.chrome_options.add_experimental_option("prefs", prefs)
             #self.chrome_options.add_experimental_option('prefs', {'credentials_enable_service': False})
             self.chrome_options.add_argument("--disable-infobars")
             #self.chrome_options.add_argument(chrome_user_path_name)
