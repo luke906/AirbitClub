@@ -58,7 +58,7 @@ transfer_commissions_total_value = 0
 _REQUEST_TOKEN_VALUE = None
 
 #browser_flag
-browser_flag = 'firefox'
+browser_flag = 'chrome'
 
 def get_id_password(person_name):
 
@@ -776,15 +776,16 @@ if __name__ == "__main__":
     get_id_password('이성원')
     end_index = get_account_count()
 
-    #transfer_all_money_to_main_account(1, end_index)
+    transfer_all_money_to_main_account(1, 3)
     #process_browser_to_get_money_with_userid("lsw120300", "lsw8954!")
     # get_screent_shot_with_login_id(id_list[0], password_list[0], "After_Transfer.png")
     #report_account()
 
-
+    """
     scheduler = Schedule_Manager()
-    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 3, 1, end_index)
+    scheduler.start_scheduler_cron(transfer_all_money_to_main_account, 'mon-sat', 0, 44, 1, end_index)
     print("start scheduler transfer")
+    """
 
 
 
